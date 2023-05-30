@@ -1,5 +1,3 @@
 # eshop-sdk
 
 
-
-
