@@ -51,8 +51,8 @@ func (p *Client) Execute() {
 		p.Request.Params.Set("_aop_signature", p.sign())
 	}
 
-	for key, value := range p.Request.Params {
-		p.HttpReq.QueryParams.Add(key, value.(string))
+	for key := range p.Request.Params {
+		p.HttpReq.QueryParams.Add(key, p.Request.Params.Get(key))
 	}
 
 	//p.Request.Body.Set("timestamp", fmt.Sprintf("%d", time.Now().UnixMilli())).
@@ -121,7 +121,7 @@ func (p *Client) sign() string {
 	for _, k := range strs {
 		signParamsStr += k + p.Request.Params.Get(k)
 	}
-	//fmt.Println(p.PathUrl + signParamsStr)
+	fmt.Println(p.PathUrl + signParamsStr)
 
 	return strings.ToUpper(p.HmacSHA1(*p.Setting.Secret, p.PathUrl+signParamsStr))
 }

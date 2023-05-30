@@ -163,6 +163,23 @@ func (p *Api) PushedProductList(Body model.BodyMap) *model.Client {
 	return &c.Client
 }
 
+func (p *Api) GetProductInfo(Body model.BodyMap) *model.Client {
+	c := NewClient(p.Setting)
+	c.SetPath("com.alibaba.product:alibaba.cross.productInfo-1").
+		SetMethod(http.POST).
+		SetParams(Body)
+
+	if c.Err = Body.CheckEmptyError("productId"); c.Err != nil {
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+	return &c.Client
+}
+
 func (p *Api) GetProductList(Body model.BodyMap) *model.Client {
 	c := NewClient(p.Setting)
 	c.SetPath("com.alibaba.product:alibaba.cross.productList-1").
@@ -172,6 +189,78 @@ func (p *Api) GetProductList(Body model.BodyMap) *model.Client {
 	if c.Err = Body.CheckEmptyError("productIdList"); c.Err != nil {
 		return &c.Client
 	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+	return &c.Client
+}
+
+func (p *Api) CreateCrossOrder(Body model.BodyMap) *model.Client {
+	fmt.Printf("===== body:%+v\n", Body)
+	c := NewClient(p.Setting)
+	c.SetPath("com.alibaba.trade:alibaba.trade.createCrossOrder-1").
+		SetMethod(http.POST).
+		SetParams(Body)
+
+	if c.Err = Body.CheckEmptyError("flow"); c.Err != nil {
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+	return &c.Client
+}
+
+// 获取支付链接
+func (p *Api) GetPayUrl(Body model.BodyMap) *model.Client {
+	c := NewClient(p.Setting)
+	c.SetPath("com.alibaba.trade:alibaba.alipay.url.get-1").
+		SetMethod(http.POST).
+		SetParams(Body)
+
+	if c.Err = Body.CheckEmptyError("orderIdList"); c.Err != nil {
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+	return &c.Client
+}
+
+// 调用免密支付
+func (p *Api) PreparePay(Body model.BodyMap) *model.Client {
+	c := NewClient(p.Setting)
+	c.SetPath("com.alibaba.trade:alibaba.trade.pay.protocolPay.preparePay-1").
+		SetMethod(http.POST).
+		SetParams(Body)
+
+	if c.Err = Body.CheckEmptyError("tradeWithholdPreparePayParam"); c.Err != nil {
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+	return &c.Client
+}
+
+// 查看是否开启免密支付
+func (p *Api) DisPasswdIsOpen(Body model.BodyMap) *model.Client {
+	c := NewClient(p.Setting)
+	c.SetPath("com.alibaba.trade:alibaba.trade.pay.protocolPay.isopen-1").
+		SetMethod(http.POST).
+		SetParams(Body)
+
+	//if c.Err = Body.CheckEmptyError("tradeWithholdPreparePayParam"); c.Err != nil {
+	//	return &c.Client
+	//}
 
 	c.Execute()
 	if c.Err != nil {
