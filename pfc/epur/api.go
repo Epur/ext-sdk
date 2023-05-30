@@ -2,8 +2,8 @@ package epur
 
 import (
 	"fmt"
-	"github.com/tangchen2018/eshop-sdk/model"
-	"github.com/tangchen2018/eshop-sdk/utils"
+	"github.com/Epur/ext-sdk/model"
+	"github.com/Epur/ext-sdk/utils"
 )
 
 type Api struct {

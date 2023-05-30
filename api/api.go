@@ -2,12 +2,12 @@ package api
 
 import (
 	"errors"
-	"github.com/tangchen2018/eshop-sdk/model"
-	"github.com/tangchen2018/eshop-sdk/pfc/epur"
-	"github.com/tangchen2018/eshop-sdk/pfc/go1688"
-	"github.com/tangchen2018/eshop-sdk/pfc/lazada"
-	"github.com/tangchen2018/eshop-sdk/pfc/shopee"
-	"github.com/tangchen2018/eshop-sdk/pfc/tiktok"
+	"github.com/Epur/ext-sdk/model"
+	"github.com/Epur/ext-sdk/pfc/epur"
+	"github.com/Epur/ext-sdk/pfc/go1688"
+	"github.com/Epur/ext-sdk/pfc/lazada"
+	"github.com/Epur/ext-sdk/pfc/shopee"
+	"github.com/Epur/ext-sdk/pfc/tiktok"
 )
 
 type PfcApi interface {

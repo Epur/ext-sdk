@@ -1,0 +1,6 @@
+github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
+github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+github.com/shopspring/decimal v1.3.1 h1:2Usl1nmF/WZucqkFZhnfFYxxxu8LG21F6nPQBE5gKV8=
+github.com/shopspring/decimal v1.3.1/go.mod h1:DKyhrW/HYNuLGql+MJL6WCR6knT2jwCFRcu2hWCYk4o=
+github.com/tangchen2018/go-utils v1.0.4 h1:p4HxLwf1kKbob2U8zAMW7ToE1Kj71uiGbMw3nGVQMh4=
+github.com/tangchen2018/go-utils v1.0.4/go.mod h1:TVll4UyzycJxYZMq++4jQA3CDhGvyp5Tu2SFJCgvgvw=

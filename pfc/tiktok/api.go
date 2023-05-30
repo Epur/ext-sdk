@@ -2,7 +2,7 @@ package tiktok
 
 import (
 	"fmt"
-	"github.com/tangchen2018/eshop-sdk/model"
+	"github.com/Epur/ext-sdk/model"
 )
 
 type Api struct {

@@ -3,8 +3,8 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/tangchen2018/eshop-sdk/model"
-	"github.com/tangchen2018/eshop-sdk/pfc/epur"
+	"github.com/Epur/ext-sdk/model"
+	"github.com/Epur/ext-sdk/pfc/epur"
 )
 
 type EpurTest struct {

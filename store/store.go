@@ -3,9 +3,9 @@ package store
 import (
 	"errors"
 	"fmt"
-	"github.com/tangchen2018/eshop-sdk/api"
-	"github.com/tangchen2018/eshop-sdk/model"
-	"github.com/tangchen2018/eshop-sdk/utils"
+	"github.com/Epur/ext-sdk/api"
+	"github.com/Epur/ext-sdk/model"
+	"github.com/Epur/ext-sdk/utils"
 	"log"
 	"reflect"
 	"runtime"
