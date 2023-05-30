@@ -13,7 +13,7 @@ import (
 )
 
 func New() *Store {
-	return &Store{JobChan: make(chan *Job, 2048), LoopWait: 60 * 5, TimeOut: 30}
+	return &Store{JobChan: make(chan *Job, 2048), LoopWait: 60 * 2, TimeOut: 30}
 }
 
 func (p *Store) AddJob(token *Token) error {
