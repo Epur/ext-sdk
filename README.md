@@ -1,2 +1,1 @@
-# ext-sdk
-ext-sdk
+# eshop-sdk
