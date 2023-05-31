@@ -6,6 +6,7 @@ import (
 	"github.com/Epur/ext-sdk/model"
 	"github.com/Epur/ext-sdk/utils"
 	"github.com/tangchen2018/go-utils/http"
+	"net/url"
 )
 
 type Api struct {
@@ -21,7 +22,7 @@ func (p *Api) GetAuthUrl(callbackParams string) string {
 	return fmt.Sprintf("%s?%s", AuthURL, model.BodyMap{}.
 		Set("response_type", "code").
 		Set("client_id", *p.Setting.Key).
-		Set("redirect_uri", fmt.Sprintf("%s?callbackParams=%s", *p.Setting.AuthCallbackUrl, callbackParams)).EncodeURLParams())
+		Set("redirect_uri", fmt.Sprintf("%s?callbackParams=%s", *p.Setting.AuthCallbackUrl, url.QueryEscape(callbackParams))).EncodeURLParams())
 }
 
 /*

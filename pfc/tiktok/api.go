@@ -3,6 +3,7 @@ package tiktok
 import (
 	"fmt"
 	"github.com/Epur/ext-sdk/model"
+	"net/url"
 )
 
 type Api struct {
@@ -21,7 +22,7 @@ func (p *Api) GetAuthUrl(callbackParams string) string {
 
 	return fmt.Sprintf("%s%s?%s", AUTHSITE, AUTH, model.BodyMap{}.
 		Set("app_key", *p.Setting.Key).
-		Set("state", callbackParams).EncodeURLParams())
+		Set("state", url.QueryEscape(callbackParams)).EncodeURLParams())
 }
 
 /*

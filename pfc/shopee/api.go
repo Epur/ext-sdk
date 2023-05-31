@@ -6,6 +6,7 @@ import (
 	"github.com/Epur/ext-sdk/model"
 	"github.com/Epur/ext-sdk/utils"
 	"github.com/tangchen2018/go-utils/http"
+	"net/url"
 	"strconv"
 	"time"
 )
@@ -32,7 +33,7 @@ func (p *Api) GetAuthUrl(callbackParams string) string {
 		Set("partner_id", *p.Setting.Key).
 		Set("timestamp", c.timestamp).
 		Set("sign", c.sign()).
-		Set("redirect", fmt.Sprintf("%s?callbackParams=%s", *p.Setting.AuthCallbackUrl, callbackParams)).EncodeURLParams())
+		Set("redirect", fmt.Sprintf("%s?callbackParams=%s", *p.Setting.AuthCallbackUrl, url.QueryEscape(callbackParams))).EncodeURLParams())
 }
 
 /*

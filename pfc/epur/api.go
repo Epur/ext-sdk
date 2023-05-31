@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Epur/ext-sdk/model"
 	"github.com/Epur/ext-sdk/utils"
+	"net/url"
 )
 
 type Api struct {
@@ -22,7 +23,7 @@ func (p *Api) GetAuthUrl(callbackParams string) string {
 
 	return fmt.Sprintf("%s%s?%s", *p.Setting.ServerUrl, AUTHSITE, model.BodyMap{}.
 		Set("client_id", *p.Setting.Key).
-		Set("redirect_uri", fmt.Sprintf("%s?callbackParams=%s", *p.Setting.AuthCallbackUrl, callbackParams)).
+		Set("redirect_uri", fmt.Sprintf("%s?callbackParams=%s", *p.Setting.AuthCallbackUrl, url.QueryEscape(callbackParams))).
 		Set("scope", "agent_biz").
 		Set("response_type", "code").EncodeURLParams(),
 	)
