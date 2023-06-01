@@ -147,6 +147,7 @@ func (p *Api) StoreRefreshToken(Body model.BodyMap) *model.Client {
 	return c
 }
 
+// 跨境场景下将商品加入铺货列表
 func (p *Api) PushedProductList(Body model.BodyMap) *model.Client {
 	c := NewClient(p.Setting)
 	c.SetPath("com.alibaba.product.push:alibaba.cross.syncProductListPushed-1").
@@ -164,6 +165,7 @@ func (p *Api) PushedProductList(Body model.BodyMap) *model.Client {
 	return &c.Client
 }
 
+// alibaba.cross.productInfo
 func (p *Api) GetProductInfo(Body model.BodyMap) *model.Client {
 	c := NewClient(p.Setting)
 	c.SetPath("com.alibaba.product:alibaba.cross.productInfo-1").
@@ -181,6 +183,7 @@ func (p *Api) GetProductInfo(Body model.BodyMap) *model.Client {
 	return &c.Client
 }
 
+// 跨境场景获取商品列表
 func (p *Api) GetProductList(Body model.BodyMap) *model.Client {
 	c := NewClient(p.Setting)
 	c.SetPath("com.alibaba.product:alibaba.cross.productList-1").
@@ -198,8 +201,27 @@ func (p *Api) GetProductList(Body model.BodyMap) *model.Client {
 	return &c.Client
 }
 
+// 根据地址解析地区码
+func (p *Api) ParseAddressCode(Body model.BodyMap) *model.Client {
+	c := NewClient(p.Setting)
+	c.SetPath("com.alibaba.trade:alibaba.trade.addresscode.parse-1").
+		SetMethod(http.POST).
+		SetParams(Body)
+
+	if c.Err = Body.CheckEmptyError("addressInfo"); c.Err != nil {
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+	return &c.Client
+}
+
+// 跨境订单创建
 func (p *Api) CreateCrossOrder(Body model.BodyMap) *model.Client {
-	fmt.Printf("===== body:%+v\n", Body)
+	//fmt.Printf("===== body:%+v\n", Body)
 	c := NewClient(p.Setting)
 	c.SetPath("com.alibaba.trade:alibaba.trade.createCrossOrder-1").
 		SetMethod(http.POST).

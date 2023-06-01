@@ -12,6 +12,16 @@ type GetTokenResponse struct {
 	MemberId         string `json:"member_id"`
 }
 
+// 跨境场景下将商品加入铺货列表
+type PushedProductRequest struct {
+	ProductIdList []int64 `json:"productIdList"` // 1688的商品ID列表,列表长度不能超过20个
+}
+
+// 跨境场景获取商品详情
+type ProductInfoRequest struct {
+	ProductId int64 `json:"productId"` // 1688的商品ID列表,列表长度不能超过20个
+}
+
 // 创建订单
 type CreateOrderRequest struct {
 	Flow            string                  `json:"flow"`            // 流程 general（创建大市场订单），fenxiao（创建分销订单）
@@ -39,11 +49,51 @@ type CreateOrderAddressParam struct {
 	DistrictCode string `json:"districtCode"` // 地址编码
 }
 
-// 商品信息
+// 订单商品信息
 type CreateOrderCargoParam struct {
 	SpecId   string `json:"specId"`
 	Quantity int    `json:"quantity"`
 	OfferId  int64  `json:"offerId"`
+}
+
+// 解析地址返回信息
+type ParseAddressCodeResponse struct {
+	*Response
+	Result struct {
+		Address         string `json:"address"`         // 街道地址，不包括省市编码
+		AddressCode     string `json:"addressCode"`     // 地址区域编码
+		AddressCodeText string `json:"addressCodeText"` // 地址区域编码对应的文本（包括国家，省，城市）
+		AddressId       int64  `json:"addressId"`       // addressId
+		BizType         string `json:"bizType"`         // 记录收货地址的业务类型
+		IsDefault       bool   `json:"isDefault"`       // 是否为默认
+		FullName        string `json:"fullName"`        // 收货人姓名
+		Latest          bool   `json:"latest"`          // 是否是最后选择的收货地址
+		Mobile          string `json:"mobile"`          // 手机号
+		Phone           string `json:"phone"`           // 电话
+		PostCode        string `json:"postCode"`        // 邮编
+	} `json:"result"`
+}
+
+// 创建订单返回信息
+type CreateOrderResponse struct {
+	*Response
+	Result struct {
+		TotalSuccessAmount int64  `json:"totalSuccessAmount"` // 订单总金额（单位分），一次创建多个订单时，该字段为空
+		OrderId            string `json:"orderId"`            // 订单ID，一次创建多个订单时，该字段为空
+		Success            bool   `json:"success"`            // 是否成功
+		Code               string `json:"code"`               // 错误码
+		Message            string `json:"message"`            // 错误信息
+		PostFee            int64  `json:"postFee"`            // 运费，单位：分，一次创建多个订单时，该字段为空
+		OrderList          []struct {
+			PostFee                        int    `json:"postFee"`      // 运费
+			OrderAmmount                   int    `json:"orderAmmount"` // 订单实付款金额，单位为分
+			Discount                       int    `json:"discount"`     // 描述信息
+			SumPaymentNoCarriageFromClient int    `json:"sumPaymentNoCarriageFromClient"`
+			MergePay                       bool   `json:"mergePay"`
+			OrderId                        string `json:"orderId"` // 订单号
+			ChooseFreeFreight              bool   `json:"chooseFreeFreight"`
+		} `json:"orderList"` // 一次创建多个订单
+	} `json:"result"`
 }
 
 // 发起免密支付
