@@ -117,3 +117,13 @@ type IsOpenPaymentAgreements struct {
 	SignedStatus  bool   `json:"signedStatus"`  // 签约URl
 	SignUrl       string `json:"signUrl"`       // 签约单号
 }
+
+// 免密支付
+type ProtocolPayResponse struct {
+	*Response
+	Result struct {
+		PayChannel string `json:"payChannel"` // 支付成功的渠道，支付不成功渠道为null
+		PaySuccess bool   `json:"paySuccess"` // 支付结果
+	} `json:"result"` // 签约状态
+	Code string `json:"code"` // 错误码
+}
