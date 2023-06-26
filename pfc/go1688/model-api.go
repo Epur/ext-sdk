@@ -102,3 +102,18 @@ type OrderPreparePayRequest struct {
 		OrderIds []string `json:"orderIds"` // 订单ID
 	} `json:"tradeWithholdPreparePayParam"`
 }
+
+// 判断用户是否开启免密支付
+type ProtocolPayIsOpenResponse struct {
+	*Response
+	Result struct {
+		PaymentAgreements []IsOpenPaymentAgreements `json:"paymentAgreements"`
+	} `json:"result"` // 签约状态
+	Code string `json:"code"` // 错误码
+}
+type IsOpenPaymentAgreements struct {
+	BindingStatus string `json:"bindingStatus"`     // 支付宝或者诚E赊是否已设置绑定，signedStatus和bindingStatus均为true才能发起代扣
+	PayChannel    string `json:"payChannel"`        // 支付成功的渠道，支付不成功渠道为null
+	SignedStatus  string `json:"signedStatus"`      // 签约URl
+	SignUrl       string `json:"signUrl,omitempty"` // 签约单号
+}
