@@ -291,3 +291,17 @@ func (p *Api) DisPasswdIsOpen(Body model.BodyMap) *model.Client {
 	}
 	return &c.Client
 }
+
+// 图搜跨境商品
+func (p *Api) SimilarOfferSearch(Body model.BodyMap) *model.Client {
+	c := NewClient(p.Setting)
+	c.SetPath("com.alibaba.linkplus:alibaba.cross.similar.offer.search-1").
+		SetMethod(http.POST).
+		SetParams(Body)
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+	return &c.Client
+}
