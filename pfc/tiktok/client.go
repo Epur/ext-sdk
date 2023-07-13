@@ -52,6 +52,10 @@ func (p *Client) Execute() {
 		p.Request.Params.Set("shop_id", *p.Setting.ShopId)
 	}
 
+	if p.Setting.ShopCipher != nil && *p.Client.Request.Path != GETACCESS && *p.Client.Request.Path != REFRESHTOKEN {
+		p.Request.Params.Set("shop_cipher", *p.Setting.ShopCipher)
+	}
+
 	if *p.Request.Path != GETACCESS {
 		p.Request.Params.Set("sign", p.sign())
 	}
