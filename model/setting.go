@@ -10,7 +10,15 @@ type Setting struct {
 	AuthCallbackUrl *string // 授权回调地址
 	SiteNo          *string // 站点(目前Lazada切换访问域名用的)
 	MerchantId      *string // 商户
+	ShopCipher      *string // 商店密码(目前是Tk在用)
 	IsMerchant      bool
+}
+
+func (c *Setting) SetShopCipher(data string) *Setting {
+	if len(data) > 0 {
+		c.ShopCipher = &data
+	}
+	return c
 }
 
 func (c *Setting) SetIsMerchant(data bool) *Setting {
