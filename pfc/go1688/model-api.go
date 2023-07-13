@@ -112,9 +112,9 @@ type ProtocolPayIsOpenResponse struct {
 	Code string `json:"code"` // 错误码
 }
 type IsOpenPaymentAgreements struct {
-	BindingStatus bool   `json:"bindingStatus"` // 支付宝或者诚E赊是否已设置绑定，signedStatus和bindingStatus均为true才能发起代扣
+	BindingStatus string `json:"bindingStatus"` // 支付宝或者诚E赊是否已设置绑定，signedStatus和bindingStatus均为true才能发起代扣
 	PayChannel    string `json:"payChannel"`    // 支付成功的渠道，支付不成功渠道为null
-	SignedStatus  bool   `json:"signedStatus"`  // 签约URl
+	SignedStatus  string `json:"signedStatus"`  // 签约URl
 	SignUrl       string `json:"signUrl"`       // 签约单号
 }
 
