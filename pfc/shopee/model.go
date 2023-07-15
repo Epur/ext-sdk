@@ -6,6 +6,8 @@ import (
 )
 
 const (
+	HALFMONTYDAY = 24 * 60 * 60 * 15
+
 	PATH_TYPE_MERCHANT = "0"
 	PATH_TYPE_SHOP     = "1"
 	PATH_TYPE_PUBLIC   = "2"
@@ -160,4 +162,15 @@ type Item struct {
 	ProductLocationId  []string `json:"product_location_id"`  //产品位置id
 	IsPrescriptionItem bool     `json:"is_prescription_item"` //产品位置id
 	IsB2cOwnedItem     bool     `json:"is_b2c_owned_item"`    //产品位置id
+}
+
+type orderListRow struct {
+	OrderSn string `json:"order_sn"`
+}
+
+type getOrderListResponse struct {
+	OrderList  []orderListRow `json:"order_list"` //订单数据
+	Total      int            `json:"total"`
+	NextCursor string         `json:"next_cursor"`
+	More       bool           `json:"more"`
 }

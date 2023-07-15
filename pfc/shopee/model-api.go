@@ -41,3 +41,9 @@ type GetMerchantResponse struct {
 type GetOrderDetailResponse struct {
 	Details []*OrderItem `json:"order_list"` //订单列表
 }
+
+type GetOrderListResponse struct {
+	More  bool           `json:"more"`
+	Total int            `json:"total"`
+	List  []orderListRow `json:"list"`
+}

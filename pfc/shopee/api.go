@@ -184,3 +184,61 @@ func (p *Api) GetOrderDetail(Body model.BodyMap) *model.Client {
 
 	return &c.Client
 }
+
+/*
+	获取订单列表
+	Url : https://open.shopee.com/documents/v2/v2.order.get_order_list?module=94&type=1
+	Response: GetOrderListResponse
+*/
+
+func (p *Api) GetOrderList(Body model.BodyMap) *model.Client {
+
+	var (
+		cursor *string
+		result = GetOrderListResponse{}
+	)
+	c := NewClient(p.Setting)
+	c.SetPath(ORDER_LIST).
+		SetParams(Body)
+
+	if c.Err = Body.CheckEmptyError("page_size", "time_to", "time_from", "time_range_field"); c.Err != nil {
+		return &c.Client
+	}
+
+	for {
+
+		if cursor != nil && len(*cursor) > 0 {
+			c.Request.Params.Set("cursor", cursor)
+		}
+
+		//fmt.Println(c.Request.Params)
+
+		cResult := getOrderListResponse{}
+
+		c.Execute()
+		if c.Err != nil {
+			return &c.Client
+		}
+
+		if c.Err = c.Client.Response.To(&cResult); c.Err != nil {
+			return &c.Client
+		}
+
+		if cResult.OrderList != nil && len(cResult.OrderList) > 0 {
+			for index := range cResult.OrderList {
+				result.List = append(result.List, cResult.OrderList[index])
+			}
+		}
+
+		if cResult.More == false {
+			result.Total += cResult.Total
+			break
+		} else {
+			cursor = &cResult.NextCursor
+		}
+	}
+
+	c.Response.Response.DataTo = result
+
+	return &c.Client
+}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"github.com/Epur/ext-sdk/model"
 	"github.com/Epur/ext-sdk/pfc/shopee"
@@ -14,16 +15,16 @@ type ShopeeTest struct {
 func main() {
 	api := shopee.New(
 		new(model.Setting).
-			SetKey("").
-			SetSecret("").
+			SetKey("2005467").
+			SetSecret("4a7a70474173707972707366424d5654517248664a4b41776568734b706f7152").
 			SetAuthCallbackUrl("").
 			SetServerUrl("").
-			SetShopId("").
-			SetMerchantId("").
-			SetAccessToken(``),
+			SetShopId("988362252").
+			SetMerchantId("3902713").
+			SetAccessToken(`646e4a5462684f466a5263714c585265`),
 	)
 	testApi := ShopeeTest{api: api}
-	testApi.GetOrderDetail()
+	testApi.GetOrderList()
 
 	//4e6344676e4b4b6c4774474756544465
 }
@@ -83,4 +84,19 @@ func (p *ShopeeTest) GetOrderDetail() {
 	}
 	result := c.GetResponseTo().(shopee.GetOrderDetailResponse)
 	fmt.Println(utils.ToJson(result))
+}
+
+func (p *ShopeeTest) GetOrderList() {
+
+	c := p.api.GetOrderListAsc(model.BodyMap{"time_from": "1563159542", "page_size": "10", "time_to": "1689389942", "time_range_field": "create_time"})
+	if c.Err != nil {
+		panic(c.Err)
+	}
+	if !c.Response.Success {
+		panic(errors.New(c.Response.Response.Message))
+	}
+	result := c.GetResponseTo().(shopee.GetOrderListResponse)
+	for _, item := range result.List {
+		fmt.Println(item.OrderSn)
+	}
 }

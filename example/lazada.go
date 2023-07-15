@@ -86,5 +86,7 @@ func (p *LazadaTest) GetOrderList() {
 		panic(errors.New(c.Response.Response.Message))
 	}
 	result := c.GetResponseTo().(lazada.GetOrderListResponse)
-	fmt.Println(result)
+	for _, item := range result.List {
+		fmt.Println(item)
+	}
 }
