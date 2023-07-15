@@ -15,13 +15,13 @@ type LazadaTest struct {
 func main() {
 	api := lazada.New(
 		new(model.Setting).
-			SetKey("").
-			SetSecret("").
+			SetKey("113662").
+			SetSecret("ZatJNnyImZMsJyDRVqZhxWOjtV1ZheMM").
 			SetAuthCallbackUrl("").
-			SetAccessToken(``),
+			SetAccessToken(`50000701140yGScZ0jyjJyAyQfbDiufOvWhnGwLaew1GC2iprT7g1d516609wBns`),
 	)
 	testApi := LazadaTest{api: api}
-	testApi.GetOrderDetail()
+	testApi.GetOrderList()
 }
 
 func (p *LazadaTest) GetAuthUrl() {
@@ -71,5 +71,20 @@ func (p *LazadaTest) GetOrderDetail() {
 		panic(errors.New(c.Response.Response.Message))
 	}
 	result := c.GetResponseTo().(lazada.GetOrderResponse)
+	fmt.Println(result)
+}
+
+func (p *LazadaTest) GetOrderList() {
+
+	p.api.Setting.SetSiteNo("th")
+
+	c := p.api.GetOrderList(model.BodyMap{"limit": "10", "created_after": "2020-01-02T15:04:05.000+07:00"})
+	if c.Err != nil {
+		panic(c.Err)
+	}
+	if !c.Response.Success {
+		panic(errors.New(c.Response.Response.Message))
+	}
+	result := c.GetResponseTo().(lazada.GetOrderListResponse)
 	fmt.Println(result)
 }

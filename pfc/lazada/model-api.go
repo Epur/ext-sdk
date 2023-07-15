@@ -27,3 +27,14 @@ type GetSellerResponse struct {
 type GetOrderDetailResponse []OrderDetailResponse
 
 type GetOrderResponse OrderResponse
+
+type GetOrderListResponse struct {
+	Total int              `json:"total"`
+	List  []*OrderResponse `json:"orders,omitempty"` // 订单列表
+}
+
+type getOrderListResponse struct {
+	Count      int              `json:"count"`            // 数目
+	CountTotal int              `json:"countTotal"`       // 总数目
+	OrderList  []*OrderResponse `json:"orders,omitempty"` // 订单列表
+}

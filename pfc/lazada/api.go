@@ -146,6 +146,65 @@ func (p *Api) GetOrder(Body model.BodyMap) *model.Client {
 }
 
 /*
+	获取订单列表
+	Url : https://open.lazada.com/apps/doc/api?path=%2Forders%2Fget
+	Response: GetOrderDetailResponse
+*/
+
+// 获取订单列表
+
+func (p *Api) GetOrderList(Body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetPath(`/orders/get`).
+		SetBody(Body)
+	result := GetOrderListResponse{}
+
+	offset := 0
+
+	for {
+		//Body.Set("offset", fmt.Sprintf("%d", offset))
+
+		c.Request.Body.Set("offset", fmt.Sprintf("%d", offset))
+		cResult := getOrderListResponse{}
+
+		//fmt.Println("请求->", Body)
+
+		c.Execute()
+		if c.Err != nil {
+			return &c.Client
+		}
+
+		if c.Err = c.Client.Response.To(&cResult); c.Err != nil {
+			return &c.Client
+		}
+
+		if cResult.OrderList != nil && len(cResult.OrderList) > 0 {
+			for index := range cResult.OrderList {
+				result.List = append(result.List, cResult.OrderList[index])
+			}
+		}
+
+		//fmt.Println("cResult.OrderList->", cResult.OrderList)
+
+		offset += cResult.Count
+
+		if cResult.CountTotal <= offset {
+			break
+		}
+
+		if cResult.Count <= 0 || len(cResult.OrderList) <= 0 {
+			result.Total = cResult.CountTotal
+			break
+		}
+	}
+
+	c.Response.Response.DataTo = result
+
+	return &c.Client
+}
+
+/*
 	获取订单明细
 	Url : https://open.lazada.com/apps/doc/api?path=%2Forder%2Fitems%2Fget
 	Response: GetOrderDetailResponse

@@ -150,6 +150,8 @@ func (p *Client) sign() string {
 		message.WriteString(fmt.Sprintf("%s%s", key, union[key]))
 	}
 
+	//fmt.Println(message.String())
+
 	hash := hmac.New(sha256.New, []byte(*p.Setting.Secret))
 	hash.Write(message.Bytes())
 	return strings.ToUpper(hex.EncodeToString(hash.Sum(nil)))
