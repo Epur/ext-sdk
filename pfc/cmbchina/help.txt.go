@@ -1,0 +1,8 @@
+package cmbchina
+
+/*
+	用户对称密钥：JVNnhz4takBDH80A
+	用户私钥：HAyo83HmtOVVqOYgoJdTNhnXuYyVcWUJ4d3p/26blNk=
+	加密后对称：BLWvc3FhQJjoTvhnmlc/BJXfa+QjYY6zJRZq7OWR8CfARgzuhVEExUR7W2bfSIw/uHvaDvRCqq+U2jzzuttsGZiSxbzmG07ZCaaIxQ/8cs/wlJahKiR8SuNMIFquURK6dtBd2DN+BwlYs/KWk44XM6g=
+	用户公钥：BIcOU9LApxsEkmbNqQJDMgVnG4aB9Xm7Z8kLrEmHy31eAXc5hU4TypkQd0TITduL5ijjtd/jwlMeemafxuqO+ps=
+*/

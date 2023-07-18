@@ -15,10 +15,10 @@ type LazadaTest struct {
 func main() {
 	api := lazada.New(
 		new(model.Setting).
-			SetKey("113662").
-			SetSecret("ZatJNnyImZMsJyDRVqZhxWOjtV1ZheMM").
+			SetKey("").
+			SetSecret("").
 			SetAuthCallbackUrl("").
-			SetAccessToken(`50000701140yGScZ0jyjJyAyQfbDiufOvWhnGwLaew1GC2iprT7g1d516609wBns`),
+			SetAccessToken(``),
 	)
 	testApi := LazadaTest{api: api}
 	testApi.GetOrderList()

@@ -19,3 +19,8 @@ type GetOrderListResponse struct {
 type GetOrderDetailResponse struct {
 	List []OrderDetailResponse `json:"order_list"`
 }
+
+type GetProductListResponse struct {
+	List  []ProductListResponse `json:"global_products"`
+	Total int                   `json:"total"`
+}

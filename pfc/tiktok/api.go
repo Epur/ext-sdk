@@ -132,7 +132,7 @@ func (p *Api) GetOrderList(Body model.BodyMap) *model.Client {
 		cResult := getOrderListResponse{}
 
 		c.Execute()
-		if c.Err != nil {
+		if c.Err != nil || !c.Response.Success {
 			return &c.Client
 		}
 
@@ -186,5 +186,66 @@ func (p *Api) GetOrderDetail(Body model.BodyMap) *model.Client {
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+/*
+	获取站点产品列表
+	Url : https://partner.tiktokshop.com/doc/page/262788?external_id=262788
+	Response: GetOrderDetailResponse
+*/
+func (p *Api) GetProductList(Body model.BodyMap) *model.Client {
+
+	/*
+		"1": "Published",
+		"2": "Created",
+		"3": "Draft",
+		"4": "Deleted"
+	*/
+
+	c := NewClient(p.Setting)
+	c.SetPath(`/api/products/search`).
+		SetMethod("POST").
+		SetBody(Body)
+
+	if c.Err = Body.CheckEmptyError("page_number"); c.Err != nil {
+		return &c.Client
+	}
+
+	result := GetProductListResponse{}
+	page := 1
+
+	for {
+
+		c.Request.Body.Set("page_size", fmt.Sprintf("%d", page))
+
+		cResult := GetProductListResponse{}
+
+		c.Execute()
+		if c.Err != nil || !c.Response.Success {
+			return &c.Client
+		}
+
+		if c.Err = c.Client.Response.To(&cResult); c.Err != nil {
+			return &c.Client
+		}
+
+		if len(cResult.List) > 0 {
+			for index := range cResult.List {
+				result.List = append(result.List, cResult.List[index])
+			}
+		}
+
+		page++
+
+		fmt.Println(page, len(cResult.List), cResult.Total)
+
+		if len(result.List) >= cResult.Total {
+			break
+		}
+	}
+
+	c.Response.Response.DataTo = result
+
 	return &c.Client
 }

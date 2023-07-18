@@ -164,3 +164,25 @@ type RecipientAddr struct {
 	AddrLineList []string `json:"address_line_list"` //地址行列表
 	RegionCode   string   `json:"region_code"`       //地区代码
 }
+
+type ProductListResponse struct {
+
+	/*
+		{
+		"1": "Published",
+		"2": "Created",
+		"3": "Draft",
+		"4": "Deleted"
+		}
+	*/
+
+	CreateTime int64  `json:"create_time"`
+	Id         string `json:"id"`
+	Name       string `json:"name"`
+	Status     int64  `json:"status"`
+	UpdTime    int64  `json:"upd_time"`
+	Skus       []struct {
+		Id        string `json:"id"`
+		SellerSku string `json:"seller_sku"`
+	}
+}

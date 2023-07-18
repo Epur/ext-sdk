@@ -15,13 +15,13 @@ type ShopeeTest struct {
 func main() {
 	api := shopee.New(
 		new(model.Setting).
-			SetKey("2005467").
-			SetSecret("4a7a70474173707972707366424d5654517248664a4b41776568734b706f7152").
+			SetKey("").
+			SetSecret("").
 			SetAuthCallbackUrl("").
 			SetServerUrl("").
-			SetShopId("988362252").
-			SetMerchantId("3902713").
-			SetAccessToken(`646e4a5462684f466a5263714c585265`),
+			SetShopId("").
+			SetMerchantId("").
+			SetAccessToken(``),
 	)
 	testApi := ShopeeTest{api: api}
 	testApi.GetOrderList()
