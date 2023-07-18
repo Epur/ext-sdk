@@ -21,6 +21,10 @@ type GetOrderDetailResponse struct {
 }
 
 type GetProductListResponse struct {
-	List  []ProductListResponse `json:"global_products"`
+	List  []ProductListResponse `json:"products"`
 	Total int                   `json:"total"`
+}
+
+type GetProductDetailResponse struct {
+	ProductDetailResponse
 }

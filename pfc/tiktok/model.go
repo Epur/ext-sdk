@@ -186,3 +186,125 @@ type ProductListResponse struct {
 		SellerSku string `json:"seller_sku"`
 	}
 }
+
+type ProductDetailResponse struct {
+
+	/*
+		status
+			1-draft、
+			2-pending、
+			3-failed(initial creation)、
+			4-live、
+			5-seller_deactivated、
+			6-platform_deactivated、
+			7-freeze
+			8-deleted
+	*/
+	ProductId     string `json:"product_id"`
+	ProductStatus int64  `json:"product_status"`
+	ProductName   string `json:"product_name"`
+	CategoryList  []struct {
+		Id       string `json:"id"`
+		ParentId string `json:"parent_id"`
+		Leaf     bool   `json:"is_leaf"`
+		Name     string `json:"local_display_name"`
+	} `json:"category_list"`
+	Brand struct {
+		Id     string `json:"id"`
+		Name   string `json:"name"`
+		Status int64  `json:"status"`
+	} `json:"brand"`
+	Images []ImageEx `json:"images"`
+	Video  struct {
+		Id         string      `json:"id"`
+		Duration   interface{} `json:"duration"`
+		PostUrl    string      `json:"post_url"`
+		MediaType  string      `json:"media_type"`
+		VideoInfos []struct {
+			MainUrl   string `json:"main_url"`
+			BackupUrl string `json:"backup_url"`
+			UrlExpire int64  `json:"url_expire"`
+			Width     int64  `json:"width"`
+			Height    int64  `json:"height"`
+			FileHash  string `json:"file_hash"`
+			Format    string `json:"format"`
+			Size      int64  `json:"size"`
+			Bitrate   int64  `json:"bitrate"`
+		} `json:"video_infos"`
+	} `json:"video"`
+	Description    string `json:"description"`
+	WarrantyPeriod struct {
+		WarrantyId          int64  `json:"warranty_id"`
+		WarrantyDescription string `json:"warranty_description"`
+	} `json:"warranty_period"`
+	WarrantyPolicy string `json:"warranty_policy"`
+	PackageLength  int64  `json:"package_length"`
+	PackageWidth   int64  `json:"package_width"`
+	PackageHeight  int64  `json:"package_height"`
+	PackageWeight  string `json:"package_weight"`
+	Skus           []struct {
+		Id        string `json:"id"`
+		SellerSku string `json:"seller_sku"`
+		Price     struct {
+			OriginalPrice   decimal.Decimal `json:"original_price"`
+			PriceIncludeVat string          `json:"price_include_vat"`
+			Currency        string          `json:"currency"`
+		} `json:"price"`
+		StockInfos []struct {
+			AvailableStock int64  `json:"available_stock"`
+			WarehouseId    string `json:"warehouse_id"`
+		} `json:"stock_infos"`
+		SalesAttributes []struct {
+			Id        string  `json:"id"`
+			Name      string  `json:"name"`
+			ValueName string  `json:"value_name"`
+			ValueId   string  `json:"value_id"`
+			SkuImg    ImageEx `json:"sku_img"`
+		} `json:"sales_attributes"`
+	} `json:"skus"`
+	ProductCertifications []struct {
+		Files []struct {
+			Id   string   `json:"id"`
+			Name string   `json:"name"`
+			Type string   `json:"type"`
+			List []string `json:"list"`
+		}
+		Id     string    `json:"id"`
+		Title  string    `json:"title"`
+		Images []ImageEx `json:"images"`
+	} `json:"product_certifications"`
+	SizeChart         ImageEx `json:"size_chart"`
+	IsCodOpen         bool    `json:"is_cod_open"`
+	ProductAttributes []struct {
+		Id     string `json:"id"`
+		Name   string `json:"name"`
+		Values []struct {
+			Id   string `json:"id"`
+			Name string `json:"name"`
+		} `json:"values"`
+	} `json:"product_attributes"`
+	UpdateTime int64 `json:"update_time"`
+	CreateTime int64 `json:"create_time"`
+	QcReasons  []struct {
+		Reason     string   `json:"reason"`
+		SubReasons []string `json:"sub_reasons"`
+	} `json:"qc_reasons"`
+
+	DeliveryServices []struct {
+		DeliveryServiceId     interface{} `json:"delivery_service_id"`
+		DeliveryOptionName    string      `json:"delivery_option_name"`
+		DeliveryServiceStatus bool        `json:"delivery_service_status"`
+	} `json:"delivery_services"`
+	ExemptionOfIdentifierCode struct {
+		ExemptionReason []int64 `json:"exemption_reason"`
+	} `json:"exemption_of_identifier_code"`
+	PackageDimensionUnit string `json:"package_dimension_unit"`
+}
+
+type ImageEx struct {
+	Height       int64    `json:"height"`
+	Width        int64    `json:"width"`
+	ThumbUrlList []string `json:"thumb_url_list"`
+	Id           string   `json:"id"`
+	UrlList      []string `json:"url_List"`
+}

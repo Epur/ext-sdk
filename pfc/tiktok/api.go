@@ -192,7 +192,7 @@ func (p *Api) GetOrderDetail(Body model.BodyMap) *model.Client {
 /*
 	获取站点产品列表
 	Url : https://partner.tiktokshop.com/doc/page/262788?external_id=262788
-	Response: GetOrderDetailResponse
+	Response: GetProductListResponse
 */
 func (p *Api) GetProductList(Body model.BodyMap) *model.Client {
 
@@ -208,7 +208,7 @@ func (p *Api) GetProductList(Body model.BodyMap) *model.Client {
 		SetMethod("POST").
 		SetBody(Body)
 
-	if c.Err = Body.CheckEmptyError("page_number"); c.Err != nil {
+	if c.Err = Body.CheckEmptyError("page_size"); c.Err != nil {
 		return &c.Client
 	}
 
@@ -217,7 +217,7 @@ func (p *Api) GetProductList(Body model.BodyMap) *model.Client {
 
 	for {
 
-		c.Request.Body.Set("page_size", fmt.Sprintf("%d", page))
+		c.Request.Body.Set("page_number", fmt.Sprintf("%d", page))
 
 		cResult := GetProductListResponse{}
 
@@ -238,7 +238,7 @@ func (p *Api) GetProductList(Body model.BodyMap) *model.Client {
 
 		page++
 
-		fmt.Println(page, len(cResult.List), cResult.Total)
+		//fmt.Println(page, len(cResult.List), cResult.Total)
 
 		if len(result.List) >= cResult.Total {
 			break
@@ -247,5 +247,35 @@ func (p *Api) GetProductList(Body model.BodyMap) *model.Client {
 
 	c.Response.Response.DataTo = result
 
+	return &c.Client
+}
+
+/*
+	获取产品详情
+	Url : https://partner.tiktokshop.com/doc/page/277904?external_id=277904
+	Response: GetProductDetailResponse
+*/
+
+func (p *Api) GetProductDetail(Body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetPath(`/api/products/details`).
+		SetMethod("GET").
+		SetParams(Body)
+
+	if c.Err = Body.CheckEmptyError("product_id"); c.Err != nil {
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+
+	response := GetProductDetailResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
 	return &c.Client
 }
