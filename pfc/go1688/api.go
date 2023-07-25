@@ -238,6 +238,24 @@ func (p *Api) CreateCrossOrder(Body model.BodyMap) *model.Client {
 	return &c.Client
 }
 
+// 获取买家视角订单信息
+func (p *Api) GetBuyerView(Body model.BodyMap) *model.Client {
+	c := NewClient(p.Setting)
+	c.SetPath("com.alibaba.trade:alibaba.trade.get.buyerView-1").
+		SetMethod(http.POST).
+		SetParams(Body)
+
+	if c.Err = Body.CheckEmptyError("webSite", "orderId"); c.Err != nil {
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+	return &c.Client
+}
+
 // 获取支付链接
 func (p *Api) GetPayUrl(Body model.BodyMap) *model.Client {
 	c := NewClient(p.Setting)
