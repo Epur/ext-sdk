@@ -1,3 +1,5 @@
+github.com/farmerx/gorsa v0.0.0-20161211100049-3ae06f674f40 h1:OgoboV484kN/ngW4apHvSw8iy9YhhQusAKSLT8nGl94=
+github.com/farmerx/gorsa v0.0.0-20161211100049-3ae06f674f40/go.mod h1:Gdtd77IQrjXqFfiourWpNnE1jDPC4opZPDPxPLWFlr0=
 github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
 github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/shopspring/decimal v1.3.1 h1:2Usl1nmF/WZucqkFZhnfFYxxxu8LG21F6nPQBE5gKV8=

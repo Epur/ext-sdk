@@ -12,6 +12,31 @@ type Setting struct {
 	MerchantId      *string // 商户
 	ShopCipher      *string // 商店密码(目前是Tk在用)
 	IsMerchant      bool
+	UserId          *string
+
+	RsaPublicKey  *string
+	RsaPrivateKey *string
+}
+
+func (c *Setting) SetRsaPrivateKey(data string) *Setting {
+	if len(data) > 0 {
+		c.RsaPrivateKey = &data
+	}
+	return c
+}
+
+func (c *Setting) SetRsaPublicKey(data string) *Setting {
+	if len(data) > 0 {
+		c.RsaPublicKey = &data
+	}
+	return c
+}
+
+func (c *Setting) SetUserId(data string) *Setting {
+	if len(data) > 0 {
+		c.UserId = &data
+	}
+	return c
 }
 
 func (c *Setting) SetShopCipher(data string) *Setting {
