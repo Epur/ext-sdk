@@ -129,11 +129,16 @@ func (p *Client) sign() string {
 	path := p.urlParse()
 	s, _ := url.Parse(path)
 
+	body := p.Request.Body.JsonBody()
+	if body == "{}" {
+		body = ""
+	}
+
 	payload := fmt.Sprintf("%s&%s&%d&%s%s",
 		*p.Request.Method,
 		s.Path,
 		p.t,
-		p.Request.Body.JsonBody(),
+		body,
 		query_params,
 	)
 

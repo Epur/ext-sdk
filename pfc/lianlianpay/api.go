@@ -332,7 +332,7 @@ func (p *Api) GetCollectionKyc(Body model.BodyMap) *model.Client {
 
 	c := NewClient(p.Setting)
 	c.SetPath(`/collection/v1/kyc/status`).
-		SetMethod("POST").
+		SetMethod("GET").
 		SetBody(Body)
 
 	//if c.Err = Body.CheckEmptyError("externalTransId", "withdrawCurrency", "arrivalCurrency", "cardId", "captcha", "withdrawDetailList"); c.Err != nil {
