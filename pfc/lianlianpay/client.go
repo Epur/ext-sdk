@@ -101,18 +101,11 @@ func (p *Client) Execute() {
 
 func (p *Client) urlParse() string {
 
-	var apiServerURL string
-
 	if p.Request.Path == nil {
 		panic("apiPath is void...")
 	}
 
-	if *p.Request.Path == AccessTokenURL {
-		apiServerURL = AccessTokenURL
-	} else {
-		apiServerURL = APIGateway
-	}
-	return fmt.Sprintf("%s%s", apiServerURL, *p.Request.Path)
+	return fmt.Sprintf("%s%s", *p.Setting.ServerUrl, *p.Request.Path)
 }
 
 func (p *Client) sign() string {

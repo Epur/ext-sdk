@@ -1,8 +1,14 @@
 package utils
 
 import (
+	"crypto/hmac"
+	"crypto/md5"
+	"crypto/sha256"
+	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"math/rand"
 	"time"
 )
 
@@ -40,4 +46,38 @@ func ConvertToString(v interface{}) (str string) {
 	}
 	str = string(bs)
 	return
+}
+
+func GetRandLimitInt(s int, e int) int {
+	if s == e {
+		return s
+	}
+	rand.Seed(time.Now().UnixNano())
+	a := rand.Intn(e-s) + s
+	return a
+}
+
+func EncodeMD5(value string) string {
+	m := md5.New()
+	m.Write([]byte(value))
+	return hex.EncodeToString(m.Sum(nil))
+}
+
+func HmacSha256(key string, data string) []byte {
+	mac := hmac.New(sha256.New, []byte(key))
+	_, _ = mac.Write([]byte(data))
+
+	return mac.Sum(nil)
+}
+
+func HmacSha256ToBase64(key string, data string) string {
+	return Base64UrlEncode(HmacSha256(key, data))
+}
+
+func Base64UrlEncode(data []byte) string {
+	return base64.URLEncoding.EncodeToString(data)
+}
+
+func Base64Encode(data []byte) string {
+	return base64.StdEncoding.EncodeToString(data)
 }
