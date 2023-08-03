@@ -38,3 +38,32 @@ func (p *Api) DCLISMOD(Body model.BodyMap) *model.Client {
 	c.Response.Response.DataTo = response
 	return &c.Client
 }
+
+/*
+	账户详细信息查询NTQACINF
+	Repsonse : NTQACINFResponse
+*/
+
+func (p *Api) NTQACINF(Body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetPath(`NTQACINF`).
+		SetMethod("POST").
+		SetBody(Body)
+
+	//if c.Err = Body.CheckEmptyError("buscod"); c.Err != nil {
+	//	return &c.Client
+	//}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+
+	response := NTQACINFResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+	return &c.Client
+}
