@@ -1,4 +1,4 @@
-package ksher
+package rsa
 
 import (
 	"bytes"

@@ -1,5 +1,11 @@
 package model
 
+type SM4 struct {
+	PrivateKey    string // 客户私钥
+	PublicKey     string // 客户公钥
+	BankPublicKey string // 银行公钥
+	SymKey        string // 对称密钥
+}
 type Setting struct {
 	Key             *string // Key
 	Secret          *string // 密钥
@@ -16,6 +22,12 @@ type Setting struct {
 
 	RsaPublicKey  *string
 	RsaPrivateKey *string
+	SM4           *SM4
+}
+
+func (c *Setting) SetSM4(data *SM4) *Setting {
+	c.SM4 = data
+	return c
 }
 
 func (c *Setting) SetRsaPrivateKey(data string) *Setting {

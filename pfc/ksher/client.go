@@ -7,14 +7,16 @@ import (
 	"github.com/Epur/ext-sdk/model"
 	"github.com/Epur/ext-sdk/utils"
 	"github.com/Epur/ext-sdk/utils/aes"
+	"github.com/Epur/ext-sdk/utils/rsa"
 	"github.com/tangchen2018/go-utils/http"
+	"strconv"
 	"time"
 )
 
 type Client struct {
 	SignMethod string
 	model.Client
-	sig           *Rsa
+	sig           *rsa.Rsa
 	t             int64
 	e, p, s, c, k string
 }
@@ -34,7 +36,7 @@ func NewClient(setting *model.Setting) *Client {
 	//if setting.RsaPublicKey == nil {
 	//	setting.RsaPublicKey = utils.PString("")
 	//}
-	a.sig = NewRsa(*setting.RsaPublicKey, *setting.RsaPrivateKey)
+	a.sig = rsa.NewRsa(*setting.RsaPublicKey, *setting.RsaPrivateKey)
 	return a
 }
 
@@ -177,17 +179,18 @@ func (p *Client) D(r *R) (string, error) {
 	//aaaaa := D.JsonBody()
 	//fmt.Println(strconv.QuoteToASCII(aaaaa))
 
-	D1 := utils.Base64UrlEncode([]byte(D.JsonBody()))
+	D1 := utils.Base64UrlEncode([]byte(strconv.QuoteToASCII(D.JsonBody())))
 
+	//fmt.Println(strconv.QuoteToASCII(D.JsonBody()))
 	//D1 := utils.Base64UrlEncode(
-	//	[]byte(`{"code":"SUCCESS","data":{"items":[],"limit":1,"page":1,"total":0},"message":"\\u6210\\u529f","timestamp":"2023-07-27T14:32:23+08:00"}`))
+	//	[]byte(`{"code":"SUCCESS","data":{"items":[],"limit":1,"page":1,"total":0},"message":"\u6210\u529f","timestamp":"2023-07-27T14:32:23+08:00"}`))
 
-	//fmt.Println(D1)
+	fmt.Println(D1)
 
 	S1 := utils.HmacSha256ToBase64(*p.Setting.Secret, D1)
 
 	if S1 != string(S) {
-		//fmt.Println(S1, string(S))
+		fmt.Println(S1, string(S))
 		//return "", errors.New("解包签名失败")
 	}
 

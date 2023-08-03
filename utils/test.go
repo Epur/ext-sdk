@@ -8,6 +8,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"math/rand"
 	"time"
 )
@@ -80,4 +81,27 @@ func Base64UrlEncode(data []byte) string {
 
 func Base64Encode(data []byte) string {
 	return base64.StdEncoding.EncodeToString(data)
+}
+
+//
+//  ZeroFillByStr
+//  @Description: 字符串补零
+//  @param str :需要操作的字符串
+//  @param resultLen 结果字符串的长度
+//  @param reverse true 为前置补零，false 为后置补零
+//  @return string
+//
+func ZeroFillByStr(str string, resultLen int, reverse bool) string {
+	if len(str) > resultLen || resultLen <= 0 {
+		return str
+	}
+	if reverse {
+		return fmt.Sprintf("%0*s", resultLen, str) //不足前置补零
+	}
+	result := str
+	for i := 0; i < resultLen-len(str); i++ {
+		result += "0"
+	}
+	return result
+
 }

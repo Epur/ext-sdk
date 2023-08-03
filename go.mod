@@ -3,14 +3,15 @@ module github.com/Epur/ext-sdk
 go 1.18
 
 require (
+	github.com/ZZMarquis/gm v1.3.2
+	github.com/deatil/go-cryptobin v1.0.2021
 	github.com/google/uuid v1.3.0
 	github.com/shopspring/decimal v1.3.1
 	github.com/tangchen2018/go-utils v1.0.4
+	github.com/tjfoc/gmsm v1.4.1
 )
 
 require (
-	github.com/farmerx/gorsa v0.0.0-20161211100049-3ae06f674f40 // indirect
-	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
-	github.com/modern-go/reflect2 v1.0.2 // indirect
+	golang.org/x/crypto v0.8.0 // indirect
+	golang.org/x/sys v0.7.0 // indirect
 )
