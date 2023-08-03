@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"crypto/cipher"
 	"encoding/base64"
+	"encoding/hex"
+	"fmt"
 	"github.com/Epur/ext-sdk/utils"
 	cryptobin_sm2 "github.com/deatil/go-cryptobin/cryptobin/sm2"
 	"github.com/tjfoc/gmsm/sm4"
@@ -45,10 +47,13 @@ func (p *SM4) Verify(sm2signdata string, data string) bool {
 
 	sm2keyBytes, _ := base64.StdEncoding.DecodeString(p.BankPublicKey)
 
-	return cryptobin_sm2.NewSM2().
-		FromBase64String(sm2signdata).
-		FromPublicKey(sm2keyBytes).
-		VerifyHex([]byte(data), []byte(p.UserId)).ToVerify()
+	sssss := cryptobin_sm2.NewSM2().FromBase64String(sm2signdata).
+		FromPublicKeyString(hex.EncodeToString(sm2keyBytes)).
+		VerifyHex([]byte(data), []byte(p.UserId))
+
+	fmt.Println(sssss.Error())
+
+	return sssss.ToVerify()
 }
 
 func (p *SM4) CbcSm4Encrypt(data string) ([]byte, error) {

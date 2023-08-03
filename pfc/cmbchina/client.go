@@ -115,8 +115,10 @@ func (p *Client) responseParams() (model.BodyMap, error) {
 
 	row["signature"].(map[string]interface{})["sigdat"] = "__signature_sigdat__"
 
+	if !p.sig.Verify(signature, row.JsonBody()) {
+		return nil, errors.New("验签失败")
+	}
 	fmt.Println(body)
-	fmt.Println(p.sig.Verify(signature, row.JsonBody()), string(row.JsonBody()))
 
 	return row, nil
 }
