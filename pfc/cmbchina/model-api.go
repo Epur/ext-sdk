@@ -31,6 +31,17 @@ type DCLISACCNtqpyaccz struct {
 }
 
 // 3.账户详细信息查询NTQACINF
+type NTQACINFRequest struct {
+	Ntqacinfx []NTQACINFNtqacinfx `json:"ntqacinfx"`
+}
+
+// 3.账户详细信息查询NTQACINF
+type NTQACINFNtqacinfx struct {
+	Accnbr string `json:"accnbr"`
+	Bbknbr string `json:"bbknbr"`
+}
+
+// 3.账户详细信息查询NTQACINF
 type NTQACINFResponse struct {
 	Ntqacinfz []NTQACINFNtqacinfz `json:"ntqacinfz"`
 }
