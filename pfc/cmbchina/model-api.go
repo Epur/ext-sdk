@@ -88,14 +88,20 @@ type QueryAccountBalHistory2 struct {
 
 // 5. 查询分行号信息NTACCBBK 账户信息ntaccbbkz（多记录）
 type QueryAcctOpenBankResponse struct {
-	Ntaccbbky []QueryAcctOpenBankInfo `json:"ntaccbbky"` // 续传接口ntaccbbky，当响应报文中含有ntaccbbky接口且该接口中ctnkey字段不为空时标明需要续传，将响应报文中ntaccbbky接口中的内容放入下次请求的请求报文中获取后续数据。
-	Ntaccbbkz []QueryAcctOpenBankInfo `json:"ntaccbbkz"` // 账户信息ntaccbbkz（多记录）
+	Ntaccbbky []QueryAcctOpenBankNtaccbbky `json:"ntaccbbky"` // 续传接口ntaccbbky，当响应报文中含有ntaccbbky接口且该接口中ctnkey字段不为空时标明需要续传，将响应报文中ntaccbbky接口中的内容放入下次请求的请求报文中获取后续数据。
+	Ntaccbbkz []QueryAcctOpenBankInfo      `json:"ntaccbbkz"` // 账户信息ntaccbbkz（多记录）
 }
 
 // 5. 查询分行号信息NTACCBBK
 type QueryAcctOpenBankInfo struct {
 	Bbknbr string `json:"bbknbr"` // 分行号
 	Fctval string `json:"fctval"` // 账号
+}
+
+// 5. 查询分行号信息NTACCBBK
+type QueryAcctOpenBankNtaccbbky struct {
+	Fcttyp string `json:"fcttyp"`
+	Fctval string `json:"fctval"`
 }
 
 // 6. 批量查询余额NTQADINF

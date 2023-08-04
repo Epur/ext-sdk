@@ -79,7 +79,7 @@ func (p *Client) Execute() {
 	////
 	//result := new(Response)
 
-	fmt.Println("url:", p.HttpReq.Url)
+	//fmt.Println("url:", p.HttpReq.Url)
 
 	data, _ := json.Marshal(response["response"].(map[string]interface{})["body"])
 

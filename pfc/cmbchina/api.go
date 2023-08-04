@@ -135,11 +135,11 @@ func (p *Api) NTACCBBK(Body model.BodyMap) *model.Client {
 		return &c.Client
 	}
 
-	response := QueryAcctOpenBankResponse{}
-	if c.Err = c.Client.Response.To(&response); c.Err != nil {
-		return &c.Client
-	}
-	c.Response.Response.DataTo = response
+	//response := QueryAcctOpenBankResponse{}
+	//if c.Err = c.Client.Response.To(&response); c.Err != nil {
+	//	return &c.Client
+	//}
+	//c.Response.Response.DataTo = response
 	return &c.Client
 }
 
