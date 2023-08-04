@@ -62,6 +62,7 @@ func (p *Client) Execute() {
 	}
 
 	if p.Err = p.Client.Execute(); p.Err != nil {
+		fmt.Println("ERROR:", p.Err.Error())
 		return
 	}
 
@@ -78,7 +79,7 @@ func (p *Client) Execute() {
 	////
 	//result := new(Response)
 
-	fmt.Println(p.HttpReq.Url)
+	fmt.Println("url:", p.HttpReq.Url)
 
 	data, _ := json.Marshal(response["response"].(map[string]interface{})["body"])
 
@@ -118,7 +119,7 @@ func (p *Client) responseParams() (model.BodyMap, error) {
 	if !p.sig.Verify(signature, row.JsonBody()) {
 		return nil, errors.New("验签失败")
 	}
-	fmt.Println(body)
+	fmt.Println(string(body))
 
 	return row, nil
 }

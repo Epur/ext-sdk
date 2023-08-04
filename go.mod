@@ -1,9 +1,8 @@
 module github.com/Epur/ext-sdk
 
-go 1.18
+go 1.20
 
 require (
-	github.com/ZZMarquis/gm v1.3.2
 	github.com/deatil/go-cryptobin v1.0.2021
 	github.com/google/uuid v1.3.0
 	github.com/shopspring/decimal v1.3.1
