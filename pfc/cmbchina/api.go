@@ -492,3 +492,178 @@ func (p *Api) BB1PAYQB(Body model.BodyMap) *model.Client {
 	c.Response.Response.DataTo = response
 	return &c.Client
 }
+
+// 1.待授权个人户口信息录入ADDPREAUTHINFO
+func (p *Api) ADDPREAUTHINFO(Body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetPath(`ADDPREAUTHINFO`).
+		SetMethod("POST").
+		SetBody(Body)
+
+	if c.Err = Body.CheckEmptyError("PreAuthInfoX1"); c.Err != nil {
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+
+	//response := BusiQueryReturnListResponse{}
+	//if c.Err = c.Client.Response.To(&response); c.Err != nil {
+	//	return &c.Client
+	//}
+	//c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+// 2.待授权信息查询QUERYPREAUTHINFO
+func (p *Api) QUERYPREAUTHINFO(Body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetPath(`QUERYPREAUTHINFO`).
+		SetMethod("POST").
+		SetBody(Body)
+
+	if c.Err = Body.CheckEmptyError("QPreAuthInfoX1"); c.Err != nil {
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+
+	response := QueryPrivateAuthInfoResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+// 3.已授权信息查询QUERYAUTHINFO
+func (p *Api) QUERYAUTHINFO(Body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetPath(`QUERYAUTHINFO`).
+		SetMethod("POST").
+		SetBody(Body)
+
+	if c.Err = Body.CheckEmptyError("QAuthInfoX1"); c.Err != nil {
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+
+	response := QueryAuthInfoResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+// 4.查询个人账户人民币余额QUERYAUTHACCBALAMT
+func (p *Api) QUERYAUTHACCBALAMT(Body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetPath(`QUERYAUTHACCBALAMT`).
+		SetMethod("POST").
+		SetBody(Body)
+
+	if c.Err = Body.CheckEmptyError("QAuthAccBalAmtX1"); c.Err != nil {
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+
+	response := QueryPrivateAcctInfoResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+// 5.查询个人账户交易明细QUERYAUTHACCTRA
+func (p *Api) QUERYAUTHACCTRA(Body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetPath(`QUERYAUTHACCTRA`).
+		SetMethod("POST").
+		SetBody(Body)
+
+	if c.Err = Body.CheckEmptyError("QAuthAccTraX1"); c.Err != nil {
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+
+	response := QueryPrivateAcctTranListResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+// 6.公私一网通支付经办提交PAYOPR
+func (p *Api) PAYOPR(Body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetPath(`PAYOPR`).
+		SetMethod("POST").
+		SetBody(Body)
+
+	if c.Err = Body.CheckEmptyError("FBPayOprX1"); c.Err != nil {
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+
+	//response := QueryPrivateAcctTranListResponse{}
+	//if c.Err = c.Client.Response.To(&response); c.Err != nil {
+	//	return &c.Client
+	//}
+	//c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+// 7.公私一网通支付结果查询PAYQUERY
+func (p *Api) PAYQUERY(Body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetPath(`PAYQUERY`).
+		SetMethod("POST").
+		SetBody(Body)
+
+	if c.Err = Body.CheckEmptyError("FBPayQueryX1"); c.Err != nil {
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+
+	//response := QueryPrivateAcctTranListResponse{}
+	//if c.Err = c.Client.Response.To(&response); c.Err != nil {
+	//	return &c.Client
+	//}
+	//c.Response.Response.DataTo = response
+	return &c.Client
+}

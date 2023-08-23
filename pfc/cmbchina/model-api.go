@@ -422,7 +422,7 @@ type BusiPayQueryBb1Payqrx1 struct {
 
 // 3.企银支付业务查询BB1PAYQR
 type BusiPayQueryResponse struct {
-	Z1 []BusiPayQrz1 `json:"bb1payqrz1"` // 业务类型 N02030
+	Z1 []BusiPayQrz1 `json:"bb1Payqrz1"` // 业务类型 N02030
 }
 
 // 3.企银支付业务查询BB1PAYQR
@@ -708,4 +708,174 @@ type BusiQueryReturnListPBZ1 struct {
 	RtnTxt string          `json:"rtnTxt"` // 退票原因
 	SplC80 string          `json:"splC80"` // 特殊码
 
+}
+
+// 1.待授权个人户口信息录入ADDPREAUTHINFO
+type AuthPrivateInfoRequest struct {
+	PAIX1 []PreAuthInfoX1 `json:"PreAuthInfoX1"` // 授权信息
+}
+
+// 1.待授权个人户口信息录入ADDPREAUTHINFO
+type PreAuthInfoX1 struct {
+	Eacnbr string `json:"eacnbr"` // 个人户口号
+	Eacnam string `json:"eacnam"` // 个人户口名称（姓名）
+}
+
+// 2.待授权信息查询QUERYPREAUTHINFO
+type QueryPrivateAuthInfoRequest struct {
+	QPAIX1 []QPreAuthInfoX1 `json:"QPreAuthInfoX1"` // 授权信息
+	//QPAIY1 []QPreAuthInfoY1 `json:"QPreAuthInfoY1"` // 续传接口
+}
+
+// 2.待授权信息查询QUERYPREAUTHINFO
+type QPreAuthInfoX1 struct {
+	Eacnbr string `json:"eacnbr"` // 个人户口号
+	Stadat string `json:"stadat"` // 录入开始日期yyyy-mm-dd
+	Enddat string `json:"enddat"` // 录入结束日期yyyy-mm-dd
+}
+
+// 2.待授权信息查询QUERYPREAUTHINFO
+type QueryPrivateAuthInfoResponse struct {
+	QPAIZ1 []QPreAuthInfoZ1 `json:"QPreAuthInfoZ1"` // 授权信息
+	//QPAIY1 []QPreAuthInfoY1 `json:"QPreAuthInfoY1"` // 续传接口
+}
+
+// 2.待授权信息查询QUERYPREAUTHINFO
+type QPreAuthInfoZ1 struct {
+	Eacnbr string `json:"eacnbr"` // 个人户口号
+	Eacnam string `json:"eacnam"` // 个人户口名称（姓名）
+	Crtdat string `json:"crtdat"` // 录入日期
+}
+
+// 3.已授权信息查询QUERYAUTHINFO
+type QueryAuthInfoRequest struct {
+	QAIX1 []QAuthInfoX1 `json:"QAuthInfoX1"` // 授权信息
+	//QPAIY1 []QPreAuthInfoY1 `json:"QPreAuthInfoY1"` // 续传接口
+}
+
+// 3.已授权信息查询QUERYAUTHINFO
+type QAuthInfoX1 struct {
+	Athqry string `json:"athqry"` // 是否授权账户查询
+	Athpay string `json:"athpay"` // 是否授权支付
+	Athapa string `json:"athapa"` // 是否授权资金上划规则
+	Ctlrcv string `json:"ctlrcv"` // 是否限定收方范围
+	Eacnbr string `json:"eacnbr"` // 个人户口号
+	Stadat string `json:"stadat"` // 授权开始日期
+	Enddat string `json:"enddat"` // 授权结束日期
+
+}
+
+// 3.已授权信息查询QUERYAUTHINFO
+type QueryAuthInfoResponse struct {
+	QAIZ1 []QAuthInfoZ1 `json:"QAuthInfoZ1"` // 授权信息
+	//QPAIY1 []QPreAuthInfoY1 `json:"QPreAuthInfoY1"` // 续传接口
+}
+
+// 3.已授权信息查询QUERYAUTHINFO
+type QAuthInfoZ1 struct {
+	Eacnbr string `json:"eacnbr"` // 个人户口号
+	Eacnam string `json:"eacnam"` // 个人户口名称（姓名）
+	Athqry string `json:"athqry"` // 是否授权账户查询
+	Athpay string `json:"athpay"` // 是否授权支付
+	Athapa string `json:"athapa"` // 是否授权资金上划规则设置
+	Ctlrcv string `json:"ctlrcv"` // 是否限定收方范围
+	Athdat string `json:"athdat"` // 录入日期
+
+}
+
+// 4.查询个人账户人民币余额QUERYAUTHACCBALAMT
+type QueryPrivateAcctInfoRequest struct {
+	QAUBAX1 []QAuthAccBalAmtX1 `json:"QAuthAccBalAmtX1"` // 授权信息
+	//QPAIY1 []QPreAuthInfoY1 `json:"QPreAuthInfoY1"` // 续传接口
+}
+
+// 4.查询个人账户人民币余额QUERYAUTHACCBALAMT
+type QAuthAccBalAmtX1 struct {
+	Eacnbr string `json:"eacnbr"` // 个人户口号
+}
+
+// 4.查询个人账户人民币余额QUERYAUTHACCBALAMT
+type QueryPrivateAcctInfoResponse struct {
+	QAUBAZ1 []QAuthAccBalAmtZ1 `json:"QAuthAccBalAmtZ1"` // 授权信息
+	//QPAIY1 []QPreAuthInfoY1 `json:"QPreAuthInfoY1"` // 续传接口
+}
+
+// 4.查询个人账户人民币余额QUERYAUTHACCBALAMT
+type QAuthAccBalAmtZ1 struct {
+	Eacnbr string `json:"eacnbr"` // 个人户口号
+	Eacnam string `json:"eacnam"` // 个人户口名称（姓名）
+	Balamt string `json:"balamt"` // 账户人民币余额
+}
+
+// 5.查询个人账户交易明细QUERYAUTHACCTRA
+type QueryPrivateAcctTranListRequest struct {
+	QAATX1 []QAuthAccTraX1 `json:"QAuthAccTraX1"` // 查询接口
+	//QPAIY1 []QPreAuthInfoY1 `json:"QPreAuthInfoY1"` // 续传接口
+}
+
+// 5.查询个人账户交易明细QUERYAUTHACCTRA
+type QAuthAccTraX1 struct {
+	Eacnbr string `json:"eacnbr"` // 个人户口号
+	Stadat string `json:"stadat"` // 授权开始日期
+	Enddat string `json:"enddat"` // 授权结束日期
+}
+
+// 5.查询个人账户交易明细QUERYAUTHACCTRA
+type QueryPrivateAcctTranListResponse struct {
+	QAATZ1 []QAuthAccTraZ1 `json:"QAuthAccTraZ1"` // 授权信息
+	//QAATY1 []QAuthAccTraY1 `json:"QAuthAccTraY1"` // 续传接口
+}
+
+// 5.查询个人账户交易明细QUERYAUTHACCTRA
+type QAuthAccTraZ1 struct {
+	Eacnbr           string `json:"eacnbr"`           // 个人户口号
+	AcctNbr          string `json:"acctNbr"`          // 账户号码
+	TransSequenceReq string `json:"transSequenceReq"` // 交易流水
+	TransDate        string `json:"transDate"`        // 交易日期
+	Direction        string `json:"direction"`        // 交易方向
+	TransAmount      string `json:"transAmount"`      // 交易金额
+	AcctOnlineBal    string `json:"acctOnlineBal"`    // 联机余额
+	CtpAcctBankName  string `json:"ctpAcctBankName"`  // 对方开户行
+	CtpAcctNbr       string `json:"ctpAcctNbr"`       // 对方账号
+	CtpAcctName      string `json:"ctpAcctName"`      // 对方名称
+	TextCode         string `json:"textCode"`         // 摘要代码
+	RemarkTextClt    string `json:"remarkTextClt"`    // 客户摘要
+}
+
+// 6.公私一网通支付经办提交PAYOPR
+type PrivateAcctPayRequest struct {
+	FBPOX1 []FBPayOprX1 `json:"FBPayOprX1"` // 查询接口
+	//QPAIY1 []QPreAuthInfoY1 `json:"QPreAuthInfoY1"` // 续传接口
+}
+
+// 6.公私一网通支付经办提交PAYOPR
+type FBPayOprX1 struct {
+	Cltref string `json:"cltref"` // 业务参考号
+	Sndeac string `json:"sndeac"` // 付方户口号
+	Sndean string `json:"sndean"` // 付方户名
+	Sndeab string `json:"sndeab"` // 付方开户支行
+	Sndeaa string `json:"sndeaa"` // 付方开户地
+	Rcveac string `json:"rcveac"` // 收方户口号
+	Rcvean string `json:"rcvean"` // 收方户名
+	Rcveab string `json:"rcveab"` // 收方开户行
+	Rcveaa string `json:"rcveaa"` // 收方开户地
+	Rcvbrd string `json:"rcvbrd"` // 收方联行号
+	Sysflg string `json:"sysflg"` // 收方系统内外标志 Y:系统内（招行），N:系统外（跨行）
+	Trxamt string `json:"trxamt"` // 交易金额
+	Trxtxt string `json:"trxtxt"` // 摘要
+}
+
+// 7.公私一网通支付结果查询PAYQUERY
+type QueryPrivateAcctPayRequest struct {
+	FBPQX1 []FBPayQueryX1 `json:"FBPayQueryX1"` // 查询接口
+	//QPAIY1 []QPreAuthInfoY1 `json:"QPreAuthInfoY1"` // 续传接口
+}
+
+// 7.公私一网通支付结果查询PAYQUERY
+type FBPayQueryX1 struct {
+	Cltref string `json:"cltref"` // 业务参考号
+	Sndeac string `json:"sndeac"` // 付方户口号
+	Rcveac string `json:"rcveac"` // 收方户口号
+	Stadat string `json:"stadat"` // 开始日期
+	Enddat string `json:"enddat"` // 结束日期
 }
