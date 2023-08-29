@@ -879,3 +879,31 @@ type FBPayQueryX1 struct {
 	Stadat string `json:"stadat"` // 开始日期
 	Enddat string `json:"enddat"` // 结束日期
 }
+
+// 7.公私一网通支付结果查询PAYQUERY
+type QueryPrivateAcctPayResponse struct {
+	FBPQZ1 []FBPayQueryZ1 `json:"FBPayQueryZ1"` // 查询接口
+	//QPAIY1 []FBPayQueryY1 `json:"QPreAuthInfoY1"` // 续传接口
+}
+
+// 7.公私一网通支付结果查询PAYQUERY
+type FBPayQueryZ1 struct {
+	Cornbr string `json:"cornbr"` // 网银企业编号
+	Trsact string `json:"trsact"` // 企业经办用户编号
+	Cltref string `json:"cltref"` // 业务参考号
+	Sndeac string `json:"sndeac"` // 付方户口号
+	Sndean string `json:"sndean"` // 付方户名
+	Sndeab string `json:"sndeab"` // 付方开户支行
+	Sndeaa string `json:"sndeaa"` // 付方开户地
+	Rcveac string `json:"rcveac"` // 收方户口号
+	Rcvean string `json:"rcvean"` // 收方户名
+	Rcveab string `json:"rcveab"` // 收方开户行
+	Rcveaa string `json:"rcveaa"` // 收方开户地
+	Rcvbrd string `json:"rcvbrd"` // 收方联行号
+	Sysflg string `json:"sysflg"` // 收方系统内外标志 Y:系统内（招行），N:系统外（跨行）
+	Trxamt string `json:"trxamt"` // 交易金额
+	Trxtxt string `json:"trxtxt"` // 摘要
+	Trsste string `json:"trsste"` // 支付状态 OP已提交待支付数据 SU已经办 AC系统自动撤销 CL已撤销经办 CK已复核通过 RJ已复核驳回 OK主机已受理 FA主机返回失败 UK待确认(异常交易） F1交易检查未通过 S支付已完成 F银行撤消 E支付被退票
+	Remark string `json:"remark"` // 备注
+	Trsdte string `json:"trsdte"` // 更新时间
+}
