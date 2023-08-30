@@ -850,19 +850,19 @@ type PrivateAcctPayRequest struct {
 
 // 6.公私一网通支付经办提交PAYOPR
 type FBPayOprX1 struct {
-	Cltref string `json:"cltref"` // 业务参考号
-	Sndeac string `json:"sndeac"` // 付方户口号
-	Sndean string `json:"sndean"` // 付方户名
-	Sndeab string `json:"sndeab"` // 付方开户支行
-	Sndeaa string `json:"sndeaa"` // 付方开户地
-	Rcveac string `json:"rcveac"` // 收方户口号
-	Rcvean string `json:"rcvean"` // 收方户名
-	Rcveab string `json:"rcveab"` // 收方开户行
-	Rcveaa string `json:"rcveaa"` // 收方开户地
-	Rcvbrd string `json:"rcvbrd"` // 收方联行号
-	Sysflg string `json:"sysflg"` // 收方系统内外标志 Y:系统内（招行），N:系统外（跨行）
-	Trxamt string `json:"trxamt"` // 交易金额
-	Trxtxt string `json:"trxtxt"` // 摘要
+	Cltref string `json:"cltref"`           // 业务参考号
+	Sndeac string `json:"sndeac"`           // 付方户口号
+	Sndean string `json:"sndean"`           // 付方户名
+	Sndeab string `json:"sndeab,omitempty"` // 付方开户支行
+	Sndeaa string `json:"sndeaa,omitempty"` // 付方开户地
+	Rcveac string `json:"rcveac"`           // 收方户口号
+	Rcvean string `json:"rcvean"`           // 收方户名
+	Rcveab string `json:"rcveab,omitempty"` // 收方开户行
+	Rcveaa string `json:"rcveaa,omitempty"` // 收方开户地
+	Rcvbrd string `json:"rcvbrd,omitempty"` // 收方联行号
+	Sysflg string `json:"sysflg"`           // 收方系统内外标志 Y:系统内（招行），N:系统外（跨行）
+	Trxamt string `json:"trxamt"`           // 交易金额
+	Trxtxt string `json:"trxtxt"`           // 摘要
 }
 
 // 7.公私一网通支付结果查询PAYQUERY
