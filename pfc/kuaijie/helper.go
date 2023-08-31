@@ -13,18 +13,16 @@ import (
 )
 
 type Key struct {
-	PrivateKey string // 私钥
-	PublicKey  string // 公钥
-	//KuaijiePublicKey  string // 快接公钥
-	//KauijiePrivateKey string // 快接私钥
+	PrivateKey []byte // 私钥
+	PublicKey  []byte // 公钥
 }
 
-func KeyNew(PrivateKey, PublicKey string) *Key {
-	s := &Key{
-		PrivateKey: PrivateKey,
-		PublicKey:  PublicKey,
+// new
+func KeyNew(privateKey, publicKey string) *Key {
+	return &Key{
+		PrivateKey: []byte(privateKey),
+		PublicKey:  []byte(publicKey),
 	}
-	return s
 }
 
 // 报文发送方签名
@@ -35,7 +33,7 @@ func KeyNew(PrivateKey, PublicKey string) *Key {
 // 数字签名(sign) = Base64.encode( SHA256withRSA.sign( #{body} ) )
 func (p *Key) Sign(data string) (string, error) {
 
-	b, err := p.RsaWithSHA256([]byte(data), []byte(p.PrivateKey))
+	b, err := p.RsaWithSHA256([]byte(data), p.PrivateKey)
 	if err != nil {
 		fmt.Println("ERROR:", err.Error())
 		return "", err
