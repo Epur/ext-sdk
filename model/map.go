@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/Epur/ext-sdk/logger"
 	"net/url"
 	"sort"
 	"strings"
@@ -127,6 +128,7 @@ func (bm BodyMap) CheckEmptyError(keys ...string) error {
 		}
 	}
 	if len(emptyKeys) > 0 {
+		logger.SdkLogger.Errorf("[%w], %v", errors.New("missing required parameter"), strings.Join(emptyKeys, ", "))
 		return fmt.Errorf("[%w], %v", errors.New("missing required parameter"), strings.Join(emptyKeys, ", "))
 	}
 	return nil

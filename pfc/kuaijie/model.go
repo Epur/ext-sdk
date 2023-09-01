@@ -11,11 +11,13 @@ type PublicRequest struct {
 }
 
 type Response struct {
-	Code      string          `json:"code"`
-	Message   string          `json:"message"`
-	RequestID string          `json:"request_id"`
-	Data      json.RawMessage `json:"data"`
-	Result    json.RawMessage `json:"result"`
+	//Code      string          `json:"code"`
+	//Message   string          `json:"message"`
+	//RequestID string          `json:"request_id"`
+	//Data      json.RawMessage `json:"data"`
+	//Result    json.RawMessage `json:"result"`
+	MsgPublic  PublicResponse  `json:"msgPublic"`
+	MsgPrivate json.RawMessage `json:"msgPrivate"`
 }
 
 // 公共应答报文

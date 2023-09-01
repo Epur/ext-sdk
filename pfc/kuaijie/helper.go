@@ -55,14 +55,14 @@ func (p *Key) RsaWithSHA256(origData, prvKey []byte) ([]byte, error) {
 	}
 	privateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 	if err != nil {
-		fmt.Println("ParsePKCS8PrivateKey err", err)
+		fmt.Println("ParsePKCS8PrivateKey err", err.Error())
 		panic(err)
 	}
 
 	hashed := h.Sum(nil)
 	signature, err := rsa.SignPKCS1v15(rand.Reader, privateKey, crypto.SHA256, hashed)
 	if err != nil {
-		fmt.Printf("Error from signing: %s\n", err)
+		fmt.Printf("Error from signing: %s\n", err.Error())
 		panic(err)
 	}
 
@@ -70,27 +70,42 @@ func (p *Key) RsaWithSHA256(origData, prvKey []byte) ([]byte, error) {
 }
 
 // 验签
-func (p *Key) Verify(data, signData string) bool {
+// 验签结果 = SHA256withRSA.verifySign( #{body}, Base64.decode( #{sign} ) )
+func (p *Key) Verify(data, sign string) bool {
+	//return true
 
-	return p.RsaVerySignWithSha256([]byte(data), []byte(signData), []byte(p.PublicKey))
+	tmpData, err := base64.StdEncoding.DecodeString(sign)
+	if err != nil {
+		fmt.Printf("Error signData DecodeString: %s\n", err.Error())
+		panic(err.Error())
+	}
+	fmt.Println("sign:\n", sign)
+	//fmt.Println("\n", string(tmpData))
+	return p.RsaVerySignWithSha256([]byte(data), tmpData, p.PublicKey)
+	//return p.RsaVerySignWithSha256([]byte(data), []byte(sign), p.PublicKey)
+
 }
 
 // 验证
 func (p *Key) RsaVerySignWithSha256(data, signData, keyBytes []byte) bool {
+	//fmt.Printf("808080:\n%s\n%s", string(data), string(signData))
 	block, _ := pem.Decode(keyBytes)
 	if block == nil {
 		panic(errors.New("public key error"))
 	}
 	pubKey, err := x509.ParsePKIXPublicKey(block.Bytes)
 	if err != nil {
+		fmt.Println("509 ERROR:", err.Error())
 		panic(err)
 	}
 
 	hashed := sha256.Sum256(data)
 	err = rsa.VerifyPKCS1v15(pubKey.(*rsa.PublicKey), crypto.SHA256, hashed[:], signData)
 	if err != nil {
+		fmt.Println("15 ERROR:", err.Error())
 		panic(err)
 	}
+	fmt.Println("RsaVerySignWithSha256 End True")
 	return true
 }
 

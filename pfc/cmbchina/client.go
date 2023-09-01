@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/Epur/ext-sdk/logger"
 	"github.com/Epur/ext-sdk/model"
 	"github.com/Epur/ext-sdk/utils"
 	"github.com/tangchen2018/go-utils/http"
@@ -73,6 +74,7 @@ func (p *Client) Execute() {
 
 	response, err := p.responseParams()
 	if err != nil {
+		logger.CmbcLogger.Error("ERROR:", err.Error())
 		p.Err = err
 		return
 	}
@@ -110,6 +112,7 @@ func (p *Client) responseParams() (model.BodyMap, error) {
 
 	row := model.BodyMap{}
 	_ = json.Unmarshal(body, &row)
+	logger.KuaijieLoger.Infof("返回报文:%s", row.JsonBody())
 
 	//拿到signature
 	signature := row["signature"].(map[string]interface{})["sigdat"].(string)
@@ -144,18 +147,21 @@ func (p *Client) requestParams() (model.BodyMap, error) {
 	//签名
 	t1, err := p.sig.Sign(data)
 	if err != nil {
+		logger.CmbcLogger.Error("ERROR:", err.Error())
 		return nil, err
 	}
 	signature.Set("sigdat", t1)
 
 	request.Set("signature", signature)
 
+	logger.CmbcLogger.Infof("请求报文:%s \n签名:%s", request.JsonBody(), t1)
 	fmt.Println(request.JsonBody())
 	fmt.Println(t1)
 
 	//加密
 	t2, err := p.sig.CbcSm4Encrypt(request.JsonBody())
 	if err != nil {
+		logger.CmbcLogger.Error("ERROR:", err.Error())
 		return nil, err
 	}
 

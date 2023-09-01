@@ -2,6 +2,8 @@ package model
 
 import (
 	"encoding/json"
+	"github.com/Epur/ext-sdk/logger"
+	"github.com/Epur/ext-sdk/utils"
 	"github.com/tangchen2018/go-utils/http"
 )
 
@@ -47,12 +49,15 @@ type Client struct {
 }
 
 func (p *Client) Execute() error {
+	logger.SdkLogger.Infof("请求URL:%s\n请求报文:%v", p.HttpReq.Url, utils.ToJson(p.HttpReq.Body))
 
 	p.Response.Success = false
-
 	if err := p.HttpReq.Do(); err != nil {
+		logger.SdkLogger.Error("ERROR:", err.Error())
 		return err
 	} else {
+		logger.SdkLogger.Infof("响应报文:%v", string(p.HttpReq.Result))
+		//fmt.Println("Response:", p.Response)
 		p.Response.HttpStatus = p.HttpReq.Response.StatusCode
 	}
 

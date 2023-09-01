@@ -1,12 +1,17 @@
 package cmbchina
 
-import "github.com/Epur/ext-sdk/model"
+import (
+	"github.com/Epur/ext-sdk/logger"
+	"github.com/Epur/ext-sdk/model"
+)
 
 type Api struct {
 	Setting *model.Setting
 }
 
 func New(setting *model.Setting) *Api {
+	// 初始化日志服务
+	logger.New("logs", "info")
 	return &Api{Setting: setting}
 }
 
@@ -16,6 +21,7 @@ func New(setting *model.Setting) *Api {
 */
 
 func (p *Api) DCLISMOD(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("可经办业务模式查询DCLISMOD...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`DCLISMOD`).
@@ -23,16 +29,19 @@ func (p *Api) DCLISMOD(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("buscod"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := DCLISMODResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -41,6 +50,7 @@ func (p *Api) DCLISMOD(Body model.BodyMap) *model.Client {
 
 // 2.查询可经办的账户列表 DCLISACC
 func (p *Api) DCLISACC(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("查询可经办的账户列表DCLISACC...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`DCLISACC`).
@@ -48,16 +58,19 @@ func (p *Api) DCLISACC(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("buscod", "busmod"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := DCLISACCResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -70,6 +83,7 @@ func (p *Api) DCLISACC(Body model.BodyMap) *model.Client {
 */
 
 func (p *Api) NTQACINF(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("账户详细信息查询NTQACINF...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`NTQACINF`).
@@ -82,11 +96,13 @@ func (p *Api) NTQACINF(Body model.BodyMap) *model.Client {
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := NTQACINFResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -95,6 +111,7 @@ func (p *Api) NTQACINF(Body model.BodyMap) *model.Client {
 
 // 4.查询账户历史余额 NTQABINF
 func (p *Api) NTQABINF(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("查询账户历史余额NTQABINF...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`NTQABINF`).
@@ -102,16 +119,19 @@ func (p *Api) NTQABINF(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("ntqabinfy"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := NTQABINFResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -120,6 +140,7 @@ func (p *Api) NTQABINF(Body model.BodyMap) *model.Client {
 
 // 5. 查询分行号信息NTACCBBK
 func (p *Api) NTACCBBK(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("查询分行号信息NTACCBBK...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`NTACCBBK`).
@@ -127,11 +148,13 @@ func (p *Api) NTACCBBK(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("fctval"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
@@ -145,6 +168,7 @@ func (p *Api) NTACCBBK(Body model.BodyMap) *model.Client {
 
 // 6. 批量查询余额NTQADINF
 func (p *Api) NTQADINF(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("批量查询余额NTQADINF...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`NTQADINF`).
@@ -152,16 +176,19 @@ func (p *Api) NTQADINF(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("ntqadinfx"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := QueryAcctBalBatchResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -170,6 +197,7 @@ func (p *Api) NTQADINF(Body model.BodyMap) *model.Client {
 
 // 7.账户交易信息查询trsQryByBreakPoint
 func (p *Api) TrsQryByBreakPoint(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("账户交易信息查询trsQryByBreakPoint...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`trsQryByBreakPoint`).
@@ -182,11 +210,13 @@ func (p *Api) TrsQryByBreakPoint(Body model.BodyMap) *model.Client {
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := QueryAccountTranInfoResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -195,6 +225,7 @@ func (p *Api) TrsQryByBreakPoint(Body model.BodyMap) *model.Client {
 
 // 8.PDF文件对账单获取DCTRSPDF
 func (p *Api) DCTRSPDF(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("PDF文件对账单获取DCTRSPDF...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`DCTRSPDF`).
@@ -202,16 +233,19 @@ func (p *Api) DCTRSPDF(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("sdktsinfx"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := CheckOrderPdfResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -220,6 +254,7 @@ func (p *Api) DCTRSPDF(Body model.BodyMap) *model.Client {
 
 // 9.OFD文件对账单获取issueBillOfd
 func (p *Api) IssueBillOfd(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("OFD文件对账单获取issueBillOfd...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`issueBillOfd`).
@@ -227,16 +262,19 @@ func (p *Api) IssueBillOfd(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("CprDirectIssueBillOfdX1"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := IssueBillOfdResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -245,6 +283,7 @@ func (p *Api) IssueBillOfd(Body model.BodyMap) *model.Client {
 
 // 10.OFD文件对账单获取结果查询queryBillOfd
 func (p *Api) QueryBillOfd(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("OFD文件对账单获取结果查询queryBillOfd...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`queryBillOfd`).
@@ -252,16 +291,19 @@ func (p *Api) QueryBillOfd(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("CprDirectQueryBillOfdX1"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := QueryBillOfdResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -270,6 +312,7 @@ func (p *Api) QueryBillOfd(Body model.BodyMap) *model.Client {
 
 // 11.单笔回单查询DCSIGREC
 func (p *Api) DCSIGREC(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("单笔回单查询DCSIGREC...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`DCSIGREC`).
@@ -277,16 +320,19 @@ func (p *Api) DCSIGREC(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("eacnbr", "quedat", "trsseq"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := DCSIGRECResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -295,6 +341,7 @@ func (p *Api) DCSIGREC(Body model.BodyMap) *model.Client {
 
 // 12. 电子回单异步查询ASYCALHD
 func (p *Api) ASYCALHD(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("电子回单异步查询ASYCALHD...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`ASYCALHD`).
@@ -307,11 +354,13 @@ func (p *Api) ASYCALHD(Body model.BodyMap) *model.Client {
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := ASYCALHDResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -320,6 +369,7 @@ func (p *Api) ASYCALHD(Body model.BodyMap) *model.Client {
 
 // 13. 异步打印结果查询DCTASKID
 func (p *Api) DCTASKID(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("异步打印结果查询DCTASKID...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`DCTASKID`).
@@ -327,6 +377,7 @@ func (p *Api) DCTASKID(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("taskid"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
@@ -337,6 +388,7 @@ func (p *Api) DCTASKID(Body model.BodyMap) *model.Client {
 
 	response := DCTASKIDResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -345,6 +397,7 @@ func (p *Api) DCTASKID(Body model.BodyMap) *model.Client {
 
 // 2. 企银支付单笔经办BB1PAYOP
 func (p *Api) BB1PAYOP(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("企银支付单笔经办BB1PAYOP...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`BB1PAYOP`).
@@ -352,6 +405,7 @@ func (p *Api) BB1PAYOP(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("bb1paybmx1", "bb1payopx1"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
@@ -362,6 +416,7 @@ func (p *Api) BB1PAYOP(Body model.BodyMap) *model.Client {
 
 	response := BusiPayResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -370,6 +425,7 @@ func (p *Api) BB1PAYOP(Body model.BodyMap) *model.Client {
 
 // 3.企银支付业务查询BB1PAYQR
 func (p *Api) BB1PAYQR(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("企银支付业务查询BB1PAYQR...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`BB1PAYQR`).
@@ -377,16 +433,19 @@ func (p *Api) BB1PAYQR(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("bb1payqrx1"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := BusiPayQueryResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -395,6 +454,7 @@ func (p *Api) BB1PAYQR(Body model.BodyMap) *model.Client {
 
 // 4. 企银支付批量经办BB1PAYBH
 func (p *Api) BB1PAYBH(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("企银支付批量经办BB1PAYBH...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`BB1PAYBH`).
@@ -402,16 +462,19 @@ func (p *Api) BB1PAYBH(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("bb1bmdbhx1", "bb1paybhx1"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := BusiPayBatchResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -420,6 +483,7 @@ func (p *Api) BB1PAYBH(Body model.BodyMap) *model.Client {
 
 // 5. 企银批量支付批次查询BB1QRYBT
 func (p *Api) BB1QRYBT(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("企银批量支付批次查询BB1QRYBT...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`BB1QRYBT`).
@@ -427,16 +491,19 @@ func (p *Api) BB1QRYBT(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("bb1qrybtx1"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := BusiQueryBatchResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -445,6 +512,7 @@ func (p *Api) BB1QRYBT(Body model.BodyMap) *model.Client {
 
 // 6.企银批量支付明细查询BB1QRYBD
 func (p *Api) BB1QRYBD(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("企银批量支付明细查询BB1QRYBD...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`BB1QRYBD`).
@@ -452,16 +520,19 @@ func (p *Api) BB1QRYBD(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("bb1qrybdy1"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := BusiQueryBatchPayListResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -470,6 +541,7 @@ func (p *Api) BB1QRYBD(Body model.BodyMap) *model.Client {
 
 // 7. 支付退票明细查询BB1PAYQB
 func (p *Api) BB1PAYQB(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("支付退票明细查询BB1PAYQB...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`BB1PAYQB`).
@@ -477,16 +549,19 @@ func (p *Api) BB1PAYQB(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("bb1payqby1"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := BusiQueryReturnListResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -495,6 +570,7 @@ func (p *Api) BB1PAYQB(Body model.BodyMap) *model.Client {
 
 // 1.待授权个人户口信息录入ADDPREAUTHINFO
 func (p *Api) ADDPREAUTHINFO(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("待授权个人户口信息录入ADDPREAUTHINFO...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`ADDPREAUTHINFO`).
@@ -502,11 +578,13 @@ func (p *Api) ADDPREAUTHINFO(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("PreAuthInfoX1"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
@@ -520,6 +598,7 @@ func (p *Api) ADDPREAUTHINFO(Body model.BodyMap) *model.Client {
 
 // 2.待授权信息查询QUERYPREAUTHINFO
 func (p *Api) QUERYPREAUTHINFO(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("待授权信息查询QUERYPREAUTHINFO...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`QUERYPREAUTHINFO`).
@@ -527,16 +606,19 @@ func (p *Api) QUERYPREAUTHINFO(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("QPreAuthInfoX1"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := QueryPrivateAuthInfoResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -545,6 +627,7 @@ func (p *Api) QUERYPREAUTHINFO(Body model.BodyMap) *model.Client {
 
 // 3.已授权信息查询QUERYAUTHINFO
 func (p *Api) QUERYAUTHINFO(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("已授权信息查询QUERYAUTHINFO...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`QUERYAUTHINFO`).
@@ -552,16 +635,19 @@ func (p *Api) QUERYAUTHINFO(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("QAuthInfoX1"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := QueryAuthInfoResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -570,6 +656,7 @@ func (p *Api) QUERYAUTHINFO(Body model.BodyMap) *model.Client {
 
 // 4.查询个人账户人民币余额QUERYAUTHACCBALAMT
 func (p *Api) QUERYAUTHACCBALAMT(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("查询个人账户人民币余额QUERYAUTHACCBALAMT...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`QUERYAUTHACCBALAMT`).
@@ -577,16 +664,19 @@ func (p *Api) QUERYAUTHACCBALAMT(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("QAuthAccBalAmtX1"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := QueryPrivateAcctInfoResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -595,6 +685,7 @@ func (p *Api) QUERYAUTHACCBALAMT(Body model.BodyMap) *model.Client {
 
 // 5.查询个人账户交易明细QUERYAUTHACCTRA
 func (p *Api) QUERYAUTHACCTRA(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("查询个人账户交易明细QUERYAUTHACCTRA...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`QUERYAUTHACCTRA`).
@@ -602,16 +693,19 @@ func (p *Api) QUERYAUTHACCTRA(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("QAuthAccTraX1"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	response := QueryPrivateAcctTranListResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
@@ -620,6 +714,7 @@ func (p *Api) QUERYAUTHACCTRA(Body model.BodyMap) *model.Client {
 
 // 6.公私一网通支付经办提交PAYOPR
 func (p *Api) PAYOPR(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("公私一网通支付经办提交PAYOPR...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`PAYOPR`).
@@ -627,11 +722,13 @@ func (p *Api) PAYOPR(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("FBPayOprX1"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
@@ -645,6 +742,7 @@ func (p *Api) PAYOPR(Body model.BodyMap) *model.Client {
 
 // 7.公私一网通支付结果查询PAYQUERY
 func (p *Api) PAYQUERY(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("公私一网通支付结果查询PAYQUERY...")
 
 	c := NewClient(p.Setting)
 	c.SetPath(`PAYQUERY`).
@@ -652,11 +750,13 @@ func (p *Api) PAYQUERY(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("FBPayQueryX1"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
 	c.Execute()
 	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
 
