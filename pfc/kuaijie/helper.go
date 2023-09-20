@@ -2,6 +2,8 @@ package kuaijie
 
 import (
 	"crypto"
+	"crypto/aes"
+	"crypto/cipher"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/sha256"
@@ -10,6 +12,7 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
+	uaes "github.com/Epur/ext-sdk/utils/aes"
 )
 
 type Key struct {
@@ -79,7 +82,7 @@ func (p *Key) Verify(data, sign string) bool {
 		fmt.Printf("Error signData DecodeString: %s\n", err.Error())
 		panic(err.Error())
 	}
-	fmt.Println("sign:\n", sign)
+	//fmt.Println("sign:\n", sign)
 	//fmt.Println("\n", string(tmpData))
 	return p.RsaVerySignWithSha256([]byte(data), tmpData, p.PublicKey)
 	//return p.RsaVerySignWithSha256([]byte(data), []byte(sign), p.PublicKey)
@@ -110,7 +113,7 @@ func (p *Key) RsaVerySignWithSha256(data, signData, keyBytes []byte) bool {
 }
 
 // 公钥加密
-func (p *Key) RsaEncrypt(data []byte) []byte {
+func (p *Key) RsaEncrypt(data []byte) ([]byte, error) {
 	//解密pem格式的公钥
 	block, _ := pem.Decode([]byte(p.PublicKey))
 	if block == nil {
@@ -119,6 +122,7 @@ func (p *Key) RsaEncrypt(data []byte) []byte {
 	// 解析公钥
 	pubInterface, err := x509.ParsePKIXPublicKey(block.Bytes)
 	if err != nil {
+		fmt.Printf("ERROR:%s", err.Error())
 		panic(err)
 	}
 	// 类型断言
@@ -126,9 +130,10 @@ func (p *Key) RsaEncrypt(data []byte) []byte {
 	//加密
 	ciphertext, err := rsa.EncryptPKCS1v15(rand.Reader, pub, data)
 	if err != nil {
+		fmt.Printf("ERROR:%s", err.Error())
 		panic(err)
 	}
-	return ciphertext
+	return ciphertext, nil
 }
 
 // 私钥解密
@@ -149,4 +154,29 @@ func (p *Key) RsaDecrypt(ciphertext []byte) []byte {
 		panic(err)
 	}
 	return data
+}
+
+// 保护体签名
+func (p *Key) SignProtected(data string) (string, error) {
+
+	b := AesEncryptCBCPKCS5([]byte(data), p.PublicKey)
+	//if err != nil {
+	//	fmt.Println("ERROR:", err.Error())
+	//	return "", err
+	//}
+	sign := base64.StdEncoding.EncodeToString(b)
+
+	return sign, nil
+}
+
+func AesEncryptCBCPKCS5(origData []byte, key []byte) (encrypted []byte) {
+	// 分组秘钥
+	// NewCipher该函数限制了输入k的长度必须为16, 24或者32
+	block, _ := aes.NewCipher(key)
+	blockSize := block.BlockSize()                              // 获取秘钥块的长度
+	origData = uaes.PKCS5Padding(origData, blockSize)           // 补全码
+	blockMode := cipher.NewCBCEncrypter(block, key[:blockSize]) // 加密模式
+	encrypted = make([]byte, len(origData))                     // 创建数组
+	blockMode.CryptBlocks(encrypted, origData)                  // 加密
+	return encrypted
 }

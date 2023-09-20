@@ -112,7 +112,7 @@ func (p *Client) responseParams() (model.BodyMap, error) {
 
 	row := model.BodyMap{}
 	_ = json.Unmarshal(body, &row)
-	logger.KuaijieLoger.Infof("返回报文:%s", row.JsonBody())
+	logger.KuaijieLoger.Infof("响应报文:%s", row.JsonBody())
 
 	//拿到signature
 	signature := row["signature"].(map[string]interface{})["sigdat"].(string)

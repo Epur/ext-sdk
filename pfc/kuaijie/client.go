@@ -35,6 +35,9 @@ func (p *Client) Execute() {
 	if p.Request.Body == nil {
 		p.SetBody(make(model.BodyMap))
 	}
+	if p.Request.Protected == nil {
+		p.SetProtected(make(model.BodyMap))
+	}
 	if p.Request.Path == nil {
 		logger.KuaijieLoger.Error("ERROR:Path is null..")
 		p.Err = utils.Err("Path is null..")
@@ -115,7 +118,7 @@ func (p *Client) responseParams() (model.BodyMap, error) {
 	row := model.BodyMap{}
 	_ = json.Unmarshal(p.HttpReq.Result, &row)
 	//fmt.Printf("response:\n%+v\n", row)
-	logger.KuaijieLoger.Infof("返回报文:%s", row.JsonBody())
+	logger.KuaijieLoger.Infof("响应报文:%s", row.JsonBody())
 
 	//拿到signature
 	if row["sign"] != nil {
@@ -143,7 +146,7 @@ func (p *Client) responseParams() (model.BodyMap, error) {
 func (p *Client) requestParams() (model.BodyMap, error) {
 	msgPublic := model.BodyMap{}
 	msgPrivate := model.BodyMap{}
-	//msgProtected := model.BodyMap{}
+	msgProtected := model.BodyMap{}
 	//secretKey := model.BodyMap{}
 
 	//head.Set("funcode", *p.Request.Path)
@@ -163,6 +166,12 @@ func (p *Client) requestParams() (model.BodyMap, error) {
 		//Set("msgProtected", msgProtected).
 		//Set("secretKey", secretKey).
 		Set("msgPrivate", msgPrivate)
+	if msgProtected != nil {
+		logger.KuaijieLoger.Info("protected:", p.Request.Protected.JsonBody())
+		protected, _ := p.key.SignProtected(p.Request.Protected.JsonBody())
+		logger.KuaijieLoger.Info("protected:", protected)
+		bodyMsg = bodyMsg.Set("msgProtected", protected)
+	}
 
 	data := bodyMsg.JsonBody() //待签名字符串
 	//fmt.Println("body:", data)

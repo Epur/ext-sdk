@@ -34,10 +34,11 @@ func (p *Response) To(row interface{}) error {
 }
 
 type Request struct {
-	Path   *string
-	Method *string
-	Params BodyMap
-	Body   BodyMap
+	Path      *string
+	Method    *string
+	Params    BodyMap
+	Body      BodyMap
+	Protected BodyMap
 }
 
 type Client struct {
@@ -85,5 +86,10 @@ func (c *Client) SetParams(data BodyMap) *Client {
 
 func (c *Client) SetBody(data BodyMap) *Client {
 	c.Request.Body = data
+	return c
+}
+
+func (c *Client) SetProtected(data BodyMap) *Client {
+	c.Request.Protected = data
 	return c
 }

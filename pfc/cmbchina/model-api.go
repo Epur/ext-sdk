@@ -9,8 +9,8 @@ type DCLISMODResponse struct {
 
 // 1.可经办业务模式查询DCLISMOD
 type DCLISMODNtqmdlstz struct {
-	Busmod string `json:"busmod"`
-	Modals string `json:"modals"`
+	Busmod string `json:"busmod,omitempty"`
+	Modals string `json:"modals,omitempty"`
 }
 
 // 2.查询可经办的账户列表 DCLISACC
@@ -37,8 +37,8 @@ type NTQACINFRequest struct {
 
 // 3.账户详细信息查询NTQACINF
 type NTQACINFNtqacinfx struct {
-	Accnbr string `json:"accnbr"`
-	Bbknbr string `json:"bbknbr"`
+	Accnbr string `json:"accnbr,omitempty"`
+	Bbknbr string `json:"bbknbr,omitempty"`
 }
 
 // 3.账户详细信息查询NTQACINF
@@ -122,8 +122,8 @@ type QueryAcctBalBatchRequest struct {
 
 // 6. 批量查询余额NTQADINF
 type QueryAcctBalBatchNX struct {
-	Accnbr string `json:"accnbr"` // 账号
-	Bbknbr string `json:"bbknbr"` // 分行号
+	Accnbr string `json:"accnbr,omitempty"` // 账号
+	Bbknbr string `json:"bbknbr,omitempty"` // 分行号
 }
 
 // 6. 批量查询余额NTQADINF
@@ -170,13 +170,13 @@ type QueryAccountTranInfoRequest struct {
 
 // 7.账户交易信息查询trsQryByBreakPoint
 type TranPointX struct {
-	CardNbr             string `json:"cardNbr"`             // 账号 网银账务查询业务模式下的可用账号
-	BeginDate           string `json:"beginDate"`           // 开始日期 查询交易时间段的开始日期
-	EndDate             string `json:"endDate"`             // 结束日期
-	TransactionSequence string `json:"transactionSequence"` // 起始记账序号 仅在不传入续传键值时有效，表示初始查询从第几笔开始查询，默认从第1笔开始查询。
-	CurrencyCode        string `json:"currencyCode"`        // 币种
-	QueryAcctNbr        string `json:"queryAcctNbr"`        // 继续查询账号
-	Reserve             string `json:"reserve"`             // 保留字段
+	CardNbr             string `json:"cardNbr,omitempty"`             // 账号 网银账务查询业务模式下的可用账号
+	BeginDate           string `json:"beginDate,omitempty"`           // 开始日期 查询交易时间段的开始日期
+	EndDate             string `json:"endDate,omitempty"`             // 结束日期
+	TransactionSequence string `json:"transactionSequence,omitempty"` // 起始记账序号 仅在不传入续传键值时有效，表示初始查询从第几笔开始查询，默认从第1笔开始查询。
+	CurrencyCode        string `json:"currencyCode,omitempty"`        // 币种
+	QueryAcctNbr        string `json:"queryAcctNbr,omitempty"`        // 继续查询账号
+	Reserve             string `json:"reserve,omitempty"`             // 保留字段
 }
 
 // 7.账户交易信息查询trsQryByBreakPoint
@@ -238,14 +238,14 @@ type CheckOrderPdfRequest struct {
 
 // 8.PDF文件对账单获取DCTRSPDF
 type CheckOrderPdfNFX struct {
-	Bbknbr string `json:"bbknbr"` // 分行号
-	Accnbr string `json:"accnbr"` // 账号 网银账务查询业务模式下的可用账号
-	Bgndat string `json:"bgndat"` // 开始日期 查询交易时间段的开始日期
-	Enddat string `json:"enddat"` // 结束日期
-	Lowamt string `json:"lowamt"` // 最小金额
-	Hghamt string `json:"hghamt"` // 最大金额
-	Amtcdr string `json:"amtcdr"` // 借贷码 C:贷；D:借
-	Genble string `json:"genble"` // 通知地址URL类型
+	Bbknbr string `json:"bbknbr,omitempty"` // 分行号
+	Accnbr string `json:"accnbr,omitempty"` // 账号 网银账务查询业务模式下的可用账号
+	Bgndat string `json:"bgndat,omitempty"` // 开始日期 查询交易时间段的开始日期
+	Enddat string `json:"enddat,omitempty"` // 结束日期
+	Lowamt string `json:"lowamt,omitempty"` // 最小金额
+	Hghamt string `json:"hghamt,omitempty"` // 最大金额
+	Amtcdr string `json:"amtcdr,omitempty"` // 借贷码 C:贷；D:借
+	Genble string `json:"genble,omitempty"` // 通知地址URL类型
 }
 
 // 8.PDF文件对账单获取DCTRSPDF
@@ -271,10 +271,10 @@ type IssueBillOfdRequest struct {
 	CprDirectIssueBillOfdX1 []IssueBillOfdOfdX1 `json:"CprDirectIssueBillOfdX1"`
 }
 type IssueBillOfdOfdX1 struct {
-	Accnbr    string `json:"accnbr"`
-	Ccynbr    string `json:"ccynbr"`
-	BillYear  string `json:"billYear"`
-	BillMonth string `json:"billMonth"`
+	Accnbr    string `json:"accnbr,omitempty"`
+	Ccynbr    string `json:"ccynbr,omitempty"`
+	BillYear  string `json:"billYear,omitempty"`
+	BillMonth string `json:"billMonth,omitempty"`
 }
 
 // 9.OFD文件对账单获取issueBillOfd
@@ -351,8 +351,8 @@ type BusiPayRequest struct {
 
 // 2. 企银支付单笔经办BB1PAYOP
 type BusiPayBmx1 struct {
-	BusMod string `json:"busMod"` // 业务模式（模式编号） 可通过“可经办业务模式查询(DCLISMOD)”接口获得，也可通过前置机获得。
-	BusCod string `json:"busCod"` // 业务类型（业务代码） N02030:支付
+	BusMod string `json:"busMod,omitempty"` // 业务模式（模式编号） 可通过“可经办业务模式查询(DCLISMOD)”接口获得，也可通过前置机获得。
+	BusCod string `json:"busCod,omitempty"` // 业务类型（业务代码） N02030:支付
 }
 
 // 2. 企银支付单笔经办BB1PAYOP
@@ -361,34 +361,34 @@ type BusiPayBmx1 struct {
 // 3、若同时输入行名和联行号，则以联行号为准进行汇出；
 // 4、若收方非招行户，请尽量补充完整账户信息以提高支付成功率; 若客户未填写收方开户行联行号，计费将根据系统识别的行号进行开户地判断，可能存在同城异地的误判，请知悉
 type BusiPayOpx1 struct {
-	DbtAcc string          `json:"dbtAcc"` // 转出帐号
-	DmaNbr string          `json:"dmaNbr"` // 记账子单元编号
-	CrtAcc string          `json:"crtAcc"` // 收方帐号
-	CrtNam string          `json:"crtNam"` // 收方户名
-	CrtBnk string          `json:"crtBnk"` // 收方开户行名称 1、非标准银联卡，必须要填行名称或者联行号；其他情况可空，但优先使用客户传入； 2、若设置了收方限制，则行名联行号都必传；3、若同时输入行名和联行号，则以联行号为准进行汇出；4、若收方非招行户，请尽量补充完整账户信息以提高支付成功率；
-	CrtAdr string          `json:"crtAdr"` // 收方开户行地址 以下任意情况，收方开户行地址可不传： a.收方为招行账户；b.已输入收方开户行名称或收方开户行联行号（若客户未填写开户地，计费将根据行名/行号判断开户地进行同城异地判断，若行名中不含明确的地址信息，可能存在同城异地的误判，请知悉）；
-	BrdNbr string          `json:"brdNbr"` // 收方行联行号
-	CcyNbr string          `json:"ccyNbr"` // 币种 只支持10人民币
-	TrsAmt decimal.Decimal `json:"trsAmt"` // 交易金额
-	BnkFlg string          `json:"bnkFlg"` // 系统内标志 收方为招行户：传空或Y； 收方为他行户：传N；
-	EptDat string          `json:"eptDat"` // 期望日
-	EptTim string          `json:"eptTim"` // 期望时间
-	StlChn string          `json:"stlChn"` // 结算通道
-	NusAge string          `json:"nusAge"` // 用途
-	CrtSqn string          `json:"crtSqn"` // 收方编号
-	YurRef string          `json:"yurRef"` // 业务参考号 业务参考号，必须唯一。 业务参考号（YURREF）是每笔交易的唯一编号，是防止重复提交的重要手段，如需重复发送请求，请务必保证同一笔交易的业务参考号不变，否则会存在重复提交风险。
-	BusNar string          `json:"busNar"` // 业务摘要
-	NtfCh1 string          `json:"ntfCh1"` // 通知方式一（邮箱）
-	NtfCh2 string          `json:"ntfCh2"` // 通知方式二（手机号）
-	TrsTyp string          `json:"trsTyp"` // 业务种类 100001    普通汇兑 （默认值） 101001    慈善捐款 101002    其他 注：只有结算通道为“G 普通”或者“Q 快速”时，才支持101001、101002方式优惠手续费。
-	RcvChk string          `json:"rcvChk"` // 行内收方账号户名校验 1：校验 空或者其他值：不校验 如果为1，行内收方账号与户名不相符则支付经办失败。
-	DrpFlg string          `json:"drpFlg"` // 直汇普通标志 空时为A； A-普通 B-直汇（失败后不落人工处理）。 注：只有结算通道为“G 普通”或者“Q 快速”时，才支持。
+	DbtAcc string          `json:"dbtAcc,omitempty"` // 转出帐号
+	DmaNbr string          `json:"dmaNbr,omitempty"` // 记账子单元编号
+	CrtAcc string          `json:"crtAcc,omitempty"` // 收方帐号
+	CrtNam string          `json:"crtNam,omitempty"` // 收方户名
+	CrtBnk string          `json:"crtBnk,omitempty"` // 收方开户行名称 1、非标准银联卡，必须要填行名称或者联行号；其他情况可空，但优先使用客户传入； 2、若设置了收方限制，则行名联行号都必传；3、若同时输入行名和联行号，则以联行号为准进行汇出；4、若收方非招行户，请尽量补充完整账户信息以提高支付成功率；
+	CrtAdr string          `json:"crtAdr,omitempty"` // 收方开户行地址 以下任意情况，收方开户行地址可不传： a.收方为招行账户；b.已输入收方开户行名称或收方开户行联行号（若客户未填写开户地，计费将根据行名/行号判断开户地进行同城异地判断，若行名中不含明确的地址信息，可能存在同城异地的误判，请知悉）；
+	BrdNbr string          `json:"brdNbr,omitempty"` // 收方行联行号
+	CcyNbr string          `json:"ccyNbr,omitempty"` // 币种 只支持10人民币
+	TrsAmt decimal.Decimal `json:"trsAmt,omitempty"` // 交易金额
+	BnkFlg string          `json:"bnkFlg,omitempty"` // 系统内标志 收方为招行户：传空或Y； 收方为他行户：传N；
+	EptDat string          `json:"eptDat,omitempty"` // 期望日
+	EptTim string          `json:"eptTim,omitempty"` // 期望时间
+	StlChn string          `json:"stlChn,omitempty"` // 结算通道
+	NusAge string          `json:"nusAge,omitempty"` // 用途
+	CrtSqn string          `json:"crtSqn,omitempty"` // 收方编号
+	YurRef string          `json:"yurRef,omitempty"` // 业务参考号 业务参考号，必须唯一。 业务参考号（YURREF）是每笔交易的唯一编号，是防止重复提交的重要手段，如需重复发送请求，请务必保证同一笔交易的业务参考号不变，否则会存在重复提交风险。
+	BusNar string          `json:"busNar,omitempty"` // 业务摘要
+	NtfCh1 string          `json:"ntfCh1,omitempty"` // 通知方式一（邮箱）
+	NtfCh2 string          `json:"ntfCh2,omitempty"` // 通知方式二（手机号）
+	TrsTyp string          `json:"trsTyp,omitempty"` // 业务种类 100001    普通汇兑 （默认值） 101001    慈善捐款 101002    其他 注：只有结算通道为“G 普通”或者“Q 快速”时，才支持101001、101002方式优惠手续费。
+	RcvChk string          `json:"rcvChk,omitempty"` // 行内收方账号户名校验 1：校验 空或者其他值：不校验 如果为1，行内收方账号与户名不相符则支付经办失败。
+	DrpFlg string          `json:"drpFlg,omitempty"` // 直汇普通标志 空时为A； A-普通 B-直汇（失败后不落人工处理）。 注：只有结算通道为“G 普通”或者“Q 快速”时，才支持。
 
 }
 
 // 2. 企银支付单笔经办BB1PAYOP
 type BusiPayOpx5 struct {
-	CopNbr string `json:"copNbr"` // 优惠券编号
+	CopNbr string `json:"copNbr,omitempty"` // 优惠券编号
 }
 
 // 2. 企银支付单笔经办BB1PAYOP
@@ -398,15 +398,15 @@ type BusiPayResponse struct {
 
 // 2. 企银支付单笔经办BB1PAYOP
 type BusiPayOpz1 struct {
-	ReqNbr string `json:"reqNbr"` // 流程实例号
-	EvtIst string `json:"evtIst"` // 事件实例号
-	ReqSts string `json:"reqSts"` // 请求状态 AUT	等待审批 NTE	终审完毕 BNK，WRF	银行处理中 FIN	完成 OPR	数据接收中
-	RtnFlg string `json:"rtnFlg"` // 业务处理结果 reqSts =’FIN’时，rtnFlg才有意义； reqSts =’FIN’并且RTNFLG=’F’，表示支付失败；否则表示支付已被银行受理。返回结果：S	成功	银行支付成功 F	失败	银行支付失败 B	退票	银行支付被退票 R	否决	企业审批否决 D	过期	企业过期不审批 C	撤消	企业撤销 U	银行挂账
-	OprSqn string `json:"oprSqn"` // 待处理操作序列
-	OprAls string `json:"oprAls"` // 操作别名
-	ErrCod string `json:"errCod"` // 错误码
-	ErrTxt string `json:"errTxt"` // 错误文本
-	MsgTxt string `json:"msgTxt"` // 提示文本
+	ReqNbr string `json:"reqNbr,omitempty"` // 流程实例号
+	EvtIst string `json:"evtIst,omitempty"` // 事件实例号
+	ReqSts string `json:"reqSts,omitempty"` // 请求状态 AUT	等待审批 NTE	终审完毕 BNK，WRF	银行处理中 FIN	完成 OPR	数据接收中
+	RtnFlg string `json:"rtnFlg,omitempty"` // 业务处理结果 reqSts =’FIN’时，rtnFlg才有意义； reqSts =’FIN’并且RTNFLG=’F’，表示支付失败；否则表示支付已被银行受理。返回结果：S	成功	银行支付成功 F	失败	银行支付失败 B	退票	银行支付被退票 R	否决	企业审批否决 D	过期	企业过期不审批 C	撤消	企业撤销 U	银行挂账
+	OprSqn string `json:"oprSqn,omitempty"` // 待处理操作序列
+	OprAls string `json:"oprAls,omitempty"` // 操作别名
+	ErrCod string `json:"errCod,omitempty"` // 错误码
+	ErrTxt string `json:"errTxt,omitempty"` // 错误文本
+	MsgTxt string `json:"msgTxt,omitempty"` // 提示文本
 }
 
 // 3.企银支付业务查询BB1PAYQR
@@ -416,8 +416,8 @@ type BusiPayQueryRequest struct {
 
 // 3.企银支付业务查询BB1PAYQR
 type BusiPayQueryBb1Payqrx1 struct {
-	BusCod string `json:"busCod"` // 业务类型 N02030
-	YurRef string `json:"yurRef"` // 业务参考号
+	BusCod string `json:"busCod,omitempty"` // 业务类型 N02030
+	YurRef string `json:"yurRef,omitempty"` // 业务参考号
 }
 
 // 3.企银支付业务查询BB1PAYQR
@@ -474,48 +474,48 @@ type BusiPayBatchRequest struct {
 
 // 4. 企银支付批量经办BB1PAYBH
 type BusiPayBatchBX1 struct {
-	BusMod string `json:"busMod"` // 业务模式
-	BusCod string `json:"busCod"` // 业务编码 N02030:支付
-	BthNbr string `json:"bthNbr"` // 批次编号
-	DtlNbr string `json:"dtlNbr"` // 总明细笔数
-	CtnFlg string `json:"ctnFlg"` // 总明细笔数 大于1000笔需要做续传 Y N
-	CtnSts string `json:"ctnSts"` // 续传状态 当续传标志 =Y时必输； 1 批次开始 2 续传中3 批次结束
+	BusMod string `json:"busMod,omitempty"` // 业务模式
+	BusCod string `json:"busCod,omitempty"` // 业务编码 N02030:支付
+	BthNbr string `json:"bthNbr,omitempty"` // 批次编号
+	DtlNbr string `json:"dtlNbr,omitempty"` // 总明细笔数
+	CtnFlg string `json:"ctnFlg,omitempty"` // 总明细笔数 大于1000笔需要做续传 Y N
+	CtnSts string `json:"ctnSts,omitempty"` // 续传状态 当续传标志 =Y时必输； 1 批次开始 2 续传中3 批次结束
 }
 
 // 4. 企银支付批量经办BB1PAYBH
 type BusiPayBatchPX1 struct {
-	DbtAcc string          `json:"dbtAcc"` // 转出帐号
-	DmaNbr string          `json:"dmaNbr"` // 记账子单元编号 目前生产上记账子单元编号为10位
-	CrtAcc string          `json:"crtAcc"` // 收方帐号
-	CrtNam string          `json:"crtNam"` // 收方户名
-	CrtBnk string          `json:"crtBnk"` // 收方开户行名称 1、非标准银联卡，必须要填行名称或者联行号；其他情况可空，但优先使用客户传入； 2、若设置了收方限制，则行名联行号都必传； 3、若同时输入行名和联行号，则以联行号为准进行汇出；4、若收方非招行户，请尽量补充完整账户信息以提高支付成功率；
-	CrtAdr string          `json:"crtAdr"` // 收方开户行地址 以下任意情况，收方开户行地址可不传： a.收方为招行账户；b.已输入收方开户行名称或收方开户行联行号（若客户未填写开户地，计费将根据行名/行号判断开户地进行同城异地判断，若行名中不含明确的地址信息，可能存在同城异地的误判，请知悉）。
-	BrdNbr string          `json:"brdNbr"` // 收方行联行号
-	CcyNbr string          `json:"ccyNbr"` // 币种
-	TrsAmt decimal.Decimal `json:"trsAmt"` // 交易金额
-	EptDat string          `json:"eptDat"` // 期望日
-	EptTim string          `json:"eptTim"` // 期望时间
-	BnkFlg string          `json:"bnkFlg"` // 系统内标志 收方为招行户：传空或Y； 收方为他行户：传N
-	StlChn string          `json:"stlChn"` // 结算通道
-	NusAge string          `json:"nusAge"` // 用途
-	CrtSqn string          `json:"crtSqn"` // 收方编号
-	YurRef string          `json:"yurRef"` // 业务参考号，必须唯一。 业务参考号（YURREF）是每笔交易的唯一编号，是防止重复提交的重要手段，如需重复发送请求，请务必保证同一笔交易的业务参考号不变，否则会存在重复提交风险。
-	BusNar string          `json:"busNar"` // 业务摘要
-	NtfCh1 string          `json:"ntfCh1"` // 通知方式一（邮箱）
-	NtfCh2 string          `json:"ntfCh2"` // 通知方式二（手机号）
-	TrsTyp string          `json:"trsTyp"` // 业务种类
-	RcvChk string          `json:"rcvChk"` // 行内收方账号户名校验
-	DrpFlg string          `json:"drpFlg"` // 直汇普通标志
-	TrxAmt string          `json:"trxAmt"` // 相应金额
-	CtrNbr string          `json:"ctrNbr"` // 合同号
-	InvNbr string          `json:"invNbr"` // 发票号
-	RsvAmt string          `json:"rsvAmt"` // 预留金额
-	RsvNa1 string          `json:"rsvNa1"` // 预留摘要１
-	RsvNa2 string          `json:"rsvNa2"` // 预留摘要２
-	RsvNb1 string          `json:"rsvNb1"` // 预留编号１
-	RsvNb2 string          `json:"rsvNb2"` // 预留编号２
-	RemNbr string          `json:"remNbr"` // 非居民附言编号
-	SplC80 string          `json:"splC80"` // 特殊码
+	DbtAcc string          `json:"dbtAcc,omitempty"` // 转出帐号
+	DmaNbr string          `json:"dmaNbr,omitempty"` // 记账子单元编号 目前生产上记账子单元编号为10位
+	CrtAcc string          `json:"crtAcc,omitempty"` // 收方帐号
+	CrtNam string          `json:"crtNam,omitempty"` // 收方户名
+	CrtBnk string          `json:"crtBnk,omitempty"` // 收方开户行名称 1、非标准银联卡，必须要填行名称或者联行号；其他情况可空，但优先使用客户传入； 2、若设置了收方限制，则行名联行号都必传； 3、若同时输入行名和联行号，则以联行号为准进行汇出；4、若收方非招行户，请尽量补充完整账户信息以提高支付成功率；
+	CrtAdr string          `json:"crtAdr,omitempty"` // 收方开户行地址 以下任意情况，收方开户行地址可不传： a.收方为招行账户；b.已输入收方开户行名称或收方开户行联行号（若客户未填写开户地，计费将根据行名/行号判断开户地进行同城异地判断，若行名中不含明确的地址信息，可能存在同城异地的误判，请知悉）。
+	BrdNbr string          `json:"brdNbr,omitempty"` // 收方行联行号
+	CcyNbr string          `json:"ccyNbr,omitempty"` // 币种
+	TrsAmt decimal.Decimal `json:"trsAmt,omitempty"` // 交易金额
+	EptDat string          `json:"eptDat,omitempty"` // 期望日
+	EptTim string          `json:"eptTim,omitempty"` // 期望时间
+	BnkFlg string          `json:"bnkFlg,omitempty"` // 系统内标志 收方为招行户：传空或Y； 收方为他行户：传N
+	StlChn string          `json:"stlChn,omitempty"` // 结算通道
+	NusAge string          `json:"nusAge,omitempty"` // 用途
+	CrtSqn string          `json:"crtSqn,omitempty"` // 收方编号
+	YurRef string          `json:"yurRef,omitempty"` // 业务参考号，必须唯一。 业务参考号（YURREF）是每笔交易的唯一编号，是防止重复提交的重要手段，如需重复发送请求，请务必保证同一笔交易的业务参考号不变，否则会存在重复提交风险。
+	BusNar string          `json:"busNar,omitempty"` // 业务摘要
+	NtfCh1 string          `json:"ntfCh1,omitempty"` // 通知方式一（邮箱）
+	NtfCh2 string          `json:"ntfCh2,omitempty"` // 通知方式二（手机号）
+	TrsTyp string          `json:"trsTyp,omitempty"` // 业务种类
+	RcvChk string          `json:"rcvChk,omitempty"` // 行内收方账号户名校验
+	DrpFlg string          `json:"drpFlg,omitempty"` // 直汇普通标志
+	TrxAmt string          `json:"trxAmt,omitempty"` // 相应金额
+	CtrNbr string          `json:"ctrNbr,omitempty"` // 合同号
+	InvNbr string          `json:"invNbr,omitempty"` // 发票号
+	RsvAmt string          `json:"rsvAmt,omitempty"` // 预留金额
+	RsvNa1 string          `json:"rsvNa1,omitempty"` // 预留摘要１
+	RsvNa2 string          `json:"rsvNa2,omitempty"` // 预留摘要２
+	RsvNb1 string          `json:"rsvNb1,omitempty"` // 预留编号１
+	RsvNb2 string          `json:"rsvNb2,omitempty"` // 预留编号２
+	RemNbr string          `json:"remNbr,omitempty"` // 非居民附言编号
+	SplC80 string          `json:"splC80,omitempty"` // 特殊码
 }
 
 // 4. 企银支付批量经办BB1PAYBH
@@ -540,10 +540,10 @@ type BusiQueryBatchRequest struct {
 
 // 5. 企银批量支付批次查询BB1QRYBT
 type BusiQueryBatchQX1 struct {
-	BegDat string `json:"begDat"` // 起始日期 当前日期-1个月
-	EndDat string `json:"endDat"` // 结束日期 默认当前日期
-	AutStr string `json:"autStr"` // 请求状态 为空时不控制，查全部； OPR接收中 NTE待处理 FIN经办受理完成
-	RtnStr string `json:"rtnStr"` // 处理结果 为空时不控制，查全部； F失败 S成功
+	BegDat string `json:"begDat,omitempty"` // 起始日期 当前日期-1个月
+	EndDat string `json:"endDat,omitempty"` // 结束日期 默认当前日期
+	AutStr string `json:"autStr,omitempty"` // 请求状态 为空时不控制，查全部； OPR接收中 NTE待处理 FIN经办受理完成
+	RtnStr string `json:"rtnStr,omitempty"` // 处理结果 为空时不控制，查全部； F失败 S成功
 }
 
 // 5. 企银批量支付批次查询BB1QRYBT
@@ -574,10 +574,10 @@ type BusiQueryBatchPayListRequest struct {
 
 // 6.企银批量支付明细查询BB1QRYBD
 type BusiQueryBatchQY1 struct {
-	BthNbr string `json:"bthNbr"` // 批次编号
-	AutStr string `json:"autStr"` // 请求状态 为空时不控制，查全部； OPR接收中 NTE待处理 FIN经办受理完成
-	RtnStr string `json:"rtnStr"` // 处理结果 为空时不控制，查全部； F失败 S成功
-	CtnKey string `json:"ctnKey"` // 续传键值 当返回报文有bb1qrybdy1接口返回且ctnKey字段有值时需要续传。请将返回报文的bb1qrybdy1内容放到下次请求报文中继续查询
+	BthNbr string `json:"bthNbr,omitempty"` // 批次编号
+	AutStr string `json:"autStr,omitempty"` // 请求状态 为空时不控制，查全部； OPR接收中 NTE待处理 FIN经办受理完成
+	RtnStr string `json:"rtnStr,omitempty"` // 处理结果 为空时不控制，查全部； F失败 S成功
+	CtnKey string `json:"ctnKey,omitempty"` // 续传键值 当返回报文有bb1qrybdy1接口返回且ctnKey字段有值时需要续传。请将返回报文的bb1qrybdy1内容放到下次请求报文中继续查询
 }
 
 // 6.企银批量支付明细查询BB1QRYBD
@@ -717,8 +717,8 @@ type AuthPrivateInfoRequest struct {
 
 // 1.待授权个人户口信息录入ADDPREAUTHINFO
 type PreAuthInfoX1 struct {
-	Eacnbr string `json:"eacnbr"` // 个人户口号
-	Eacnam string `json:"eacnam"` // 个人户口名称（姓名）
+	Eacnbr string `json:"eacnbr,omitempty"` // 个人户口号
+	Eacnam string `json:"eacnam,omitempty"` // 个人户口名称（姓名）
 }
 
 // 2.待授权信息查询QUERYPREAUTHINFO
@@ -729,9 +729,9 @@ type QueryPrivateAuthInfoRequest struct {
 
 // 2.待授权信息查询QUERYPREAUTHINFO
 type QPreAuthInfoX1 struct {
-	Eacnbr string `json:"eacnbr"` // 个人户口号
-	Stadat string `json:"stadat"` // 录入开始日期yyyy-mm-dd
-	Enddat string `json:"enddat"` // 录入结束日期yyyy-mm-dd
+	Eacnbr string `json:"eacnbr,omitempty"` // 个人户口号
+	Stadat string `json:"stadat,omitempty"` // 录入开始日期yyyy-mm-dd
+	Enddat string `json:"enddat,omitempty"` // 录入结束日期yyyy-mm-dd
 }
 
 // 2.待授权信息查询QUERYPREAUTHINFO
@@ -755,13 +755,13 @@ type QueryAuthInfoRequest struct {
 
 // 3.已授权信息查询QUERYAUTHINFO
 type QAuthInfoX1 struct {
-	Athqry string `json:"athqry"` // 是否授权账户查询
-	Athpay string `json:"athpay"` // 是否授权支付
-	Athapa string `json:"athapa"` // 是否授权资金上划规则
-	Ctlrcv string `json:"ctlrcv"` // 是否限定收方范围
-	Eacnbr string `json:"eacnbr"` // 个人户口号
-	Stadat string `json:"stadat"` // 授权开始日期
-	Enddat string `json:"enddat"` // 授权结束日期
+	Athqry string `json:"athqry,omitempty"` // 是否授权账户查询
+	Athpay string `json:"athpay,omitempty"` // 是否授权支付
+	Athapa string `json:"athapa,omitempty"` // 是否授权资金上划规则
+	Ctlrcv string `json:"ctlrcv,omitempty"` // 是否限定收方范围
+	Eacnbr string `json:"eacnbr,omitempty"` // 个人户口号
+	Stadat string `json:"stadat,omitempty"` // 授权开始日期
+	Enddat string `json:"enddat,omitempty"` // 授权结束日期
 
 }
 
@@ -815,9 +815,9 @@ type QueryPrivateAcctTranListRequest struct {
 
 // 5.查询个人账户交易明细QUERYAUTHACCTRA
 type QAuthAccTraX1 struct {
-	Eacnbr string `json:"eacnbr"` // 个人户口号
-	Stadat string `json:"stadat"` // 授权开始日期
-	Enddat string `json:"enddat"` // 授权结束日期
+	Eacnbr string `json:"eacnbr,omitempty"` // 个人户口号
+	Stadat string `json:"stadat,omitempty"` // 授权开始日期
+	Enddat string `json:"enddat,omitempty"` // 授权结束日期
 }
 
 // 5.查询个人账户交易明细QUERYAUTHACCTRA
@@ -850,19 +850,19 @@ type PrivateAcctPayRequest struct {
 
 // 6.公私一网通支付经办提交PAYOPR
 type FBPayOprX1 struct {
-	Cltref string `json:"cltref"`           // 业务参考号
-	Sndeac string `json:"sndeac"`           // 付方户口号
-	Sndean string `json:"sndean"`           // 付方户名
+	Cltref string `json:"cltref,omitempty"` // 业务参考号
+	Sndeac string `json:"sndeac,omitempty"` // 付方户口号
+	Sndean string `json:"sndean,omitempty"` // 付方户名
 	Sndeab string `json:"sndeab,omitempty"` // 付方开户支行
 	Sndeaa string `json:"sndeaa,omitempty"` // 付方开户地
-	Rcveac string `json:"rcveac"`           // 收方户口号
-	Rcvean string `json:"rcvean"`           // 收方户名
+	Rcveac string `json:"rcveac,omitempty"` // 收方户口号
+	Rcvean string `json:"rcvean,omitempty"` // 收方户名
 	Rcveab string `json:"rcveab,omitempty"` // 收方开户行
 	Rcveaa string `json:"rcveaa,omitempty"` // 收方开户地
 	Rcvbrd string `json:"rcvbrd,omitempty"` // 收方联行号
-	Sysflg string `json:"sysflg"`           // 收方系统内外标志 Y:系统内（招行），N:系统外（跨行）
-	Trxamt string `json:"trxamt"`           // 交易金额
-	Trxtxt string `json:"trxtxt"`           // 摘要
+	Sysflg string `json:"sysflg,omitempty"` // 收方系统内外标志 Y:系统内（招行），N:系统外（跨行）
+	Trxamt string `json:"trxamt,omitempty"` // 交易金额
+	Trxtxt string `json:"trxtxt,omitempty"` // 摘要
 }
 
 // 7.公私一网通支付结果查询PAYQUERY
@@ -873,11 +873,11 @@ type QueryPrivateAcctPayRequest struct {
 
 // 7.公私一网通支付结果查询PAYQUERY
 type FBPayQueryX1 struct {
-	Cltref string `json:"cltref"` // 业务参考号
-	Sndeac string `json:"sndeac"` // 付方户口号
-	Rcveac string `json:"rcveac"` // 收方户口号
-	Stadat string `json:"stadat"` // 开始日期
-	Enddat string `json:"enddat"` // 结束日期
+	Cltref string `json:"cltref,omitempty"` // 业务参考号
+	Sndeac string `json:"sndeac,omitempty"` // 付方户口号
+	Rcveac string `json:"rcveac,omitempty"` // 收方户口号
+	Stadat string `json:"stadat,omitempty"` // 开始日期
+	Enddat string `json:"enddat,omitempty"` // 结束日期
 }
 
 // 7.公私一网通支付结果查询PAYQUERY
