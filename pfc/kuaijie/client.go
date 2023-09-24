@@ -146,7 +146,7 @@ func (p *Client) responseParams() (model.BodyMap, error) {
 func (p *Client) requestParams() (model.BodyMap, error) {
 	msgPublic := model.BodyMap{}
 	msgPrivate := model.BodyMap{}
-	msgProtected := model.BodyMap{}
+	//msgProtected := model.BodyMap{}
 	//secretKey := model.BodyMap{}
 
 	//head.Set("funcode", *p.Request.Path)
@@ -166,7 +166,7 @@ func (p *Client) requestParams() (model.BodyMap, error) {
 		//Set("msgProtected", msgProtected).
 		//Set("secretKey", secretKey).
 		Set("msgPrivate", msgPrivate)
-	if msgProtected != nil {
+	if p.Request.Protected == nil {
 		logger.KuaijieLoger.Info("protected:", p.Request.Protected.JsonBody())
 		protected, _ := p.key.SignProtected(p.Request.Protected.JsonBody())
 		logger.KuaijieLoger.Info("protected:", protected)
