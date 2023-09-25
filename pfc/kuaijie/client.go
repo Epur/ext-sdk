@@ -158,7 +158,8 @@ func (p *Client) requestParams() (model.BodyMap, error) {
 		Set("cusReqTime", time.Now().Format("20060102150405")).
 		Set("cusCode", p.CusCode)
 
-	if len(p.CusCode) > 0 {
+	//logger.KuaijieLoger.Infof("客户查询流水号[%s]", p.CusTraceNo)
+	if len(p.CusTraceNo) > 0 {
 		msgPublic.Set("cusTraceNo", p.CusTraceNo)
 	} else {
 		msgPublic.Set("cusTraceNo", time.Now().Format("20060102150405798385")+utils.EncodeMD5(fmt.Sprintf("%d", utils.GetRandLimitInt(1, 9999999)))[:6])
