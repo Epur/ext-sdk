@@ -16,10 +16,13 @@ func New(setting *model.Setting) *Api {
 	return &Api{Setting: setting}
 }
 
+// 设置用户信息
 func (p *Api) SetUserId(userId string) error {
 	p.Setting.SetUserId(userId)
 	return nil
 }
+
+// 设置客户流水号
 func (p *Api) SetCustomTraceNo(traceNo string) {
 	p.Setting.CustomTraceNo = traceNo
 }
