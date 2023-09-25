@@ -20,6 +20,9 @@ func (p *Api) SetUserId(userId string) error {
 	p.Setting.SetUserId(userId)
 	return nil
 }
+func (p *Api) SetCustomTraceNo(traceNo string) {
+	p.Setting.CustomTraceNo = traceNo
+}
 
 /*
 	账户余额查询

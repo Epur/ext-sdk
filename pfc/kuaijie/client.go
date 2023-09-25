@@ -13,15 +13,17 @@ import (
 
 type Client struct {
 	model.Client
-	CusCode string
-	t       int64
-	key     *Key
+	CusCode    string
+	CusTraceNo string
+	t          int64
+	key        *Key
 }
 
 func NewClient(setting *model.Setting) *Client {
 	a := &Client{Client: model.Client{
 		Setting: setting}}
 
+	a.CusTraceNo = setting.CustomTraceNo
 	a.CusCode = *setting.UserId
 	a.key = KeyNew(*setting.RsaPrivateKey, *setting.RsaPublicKey)
 
@@ -154,8 +156,13 @@ func (p *Client) requestParams() (model.BodyMap, error) {
 	//	Set("reqid", time.Now().Format("20060102150405798385")+utils.EncodeMD5(fmt.Sprintf("%d", utils.GetRandLimitInt(1, 9999999)))[:6])
 	msgPublic.Set("version", "2.0").
 		Set("cusReqTime", time.Now().Format("20060102150405")).
-		Set("cusTraceNo", time.Now().Format("20060102150405798385")+utils.EncodeMD5(fmt.Sprintf("%d", utils.GetRandLimitInt(1, 9999999)))[:6]).
 		Set("cusCode", p.CusCode)
+
+	if len(p.CusCode) > 0 {
+		msgPublic.Set("cusTraceNo", p.CusTraceNo)
+	} else {
+		msgPublic.Set("cusTraceNo", time.Now().Format("20060102150405798385")+utils.EncodeMD5(fmt.Sprintf("%d", utils.GetRandLimitInt(1, 9999999)))[:6])
+	}
 
 	msgPrivate = p.Request.Body
 	//signature.Set("sigtim", time.Now().Format("20060102150405")).

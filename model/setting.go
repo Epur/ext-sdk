@@ -19,6 +19,7 @@ type Setting struct {
 	ShopCipher      *string // 商店密码(目前是Tk在用)
 	IsMerchant      bool
 	UserId          *string
+	CustomTraceNo   string
 
 	RsaPublicKey  *string
 	RsaPrivateKey *string
