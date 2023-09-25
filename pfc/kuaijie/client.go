@@ -164,6 +164,7 @@ func (p *Client) requestParams() (model.BodyMap, error) {
 	} else {
 		msgPublic.Set("cusTraceNo", time.Now().Format("20060102150405798385")+utils.EncodeMD5(fmt.Sprintf("%d", utils.GetRandLimitInt(1, 9999999)))[:6])
 	}
+	logger.KuaijieLoger.Infof("客户查询流水号[%s]", msgPublic.Get("cusTraceNo"))
 
 	msgPrivate = p.Request.Body
 	//signature.Set("sigtim", time.Now().Format("20060102150405")).
