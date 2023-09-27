@@ -1,6 +1,7 @@
 package kuaijie
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -26,6 +27,12 @@ func NewClient(setting *model.Setting) *Client {
 	a.CusTraceNo = setting.CustomTraceNo
 	a.CusCode = *setting.UserId
 	a.key = KeyNew(*setting.RsaPrivateKey, *setting.RsaPublicKey)
+	if setting.RsaEncryptKey != nil {
+		a.key.EncryptKey = []byte(*setting.RsaEncryptKey)
+	}
+	if setting.RsaEncryptIV != nil {
+		a.key.EncryptIV = []byte(*setting.RsaEncryptIV)
+	}
 
 	return a
 }
@@ -37,6 +44,7 @@ func (p *Client) Execute() {
 	if p.Request.Body == nil {
 		p.SetBody(make(model.BodyMap))
 	}
+	logger.KuaijieLoger.Infof("Protected:%+v", p.Request.Protected)
 	if p.Request.Protected == nil {
 		p.SetProtected(make(model.BodyMap))
 	}
@@ -164,7 +172,7 @@ func (p *Client) requestParams() (model.BodyMap, error) {
 	} else {
 		msgPublic.Set("cusTraceNo", time.Now().Format("20060102150405798385")+utils.EncodeMD5(fmt.Sprintf("%d", utils.GetRandLimitInt(1, 9999999)))[:6])
 	}
-	logger.KuaijieLoger.Infof("客户查询流水号[%s]", msgPublic.Get("cusTraceNo"))
+	//logger.KuaijieLoger.Infof("客户查询流水号[%s]", msgPublic.Get("cusTraceNo"))
 
 	msgPrivate = p.Request.Body
 	//signature.Set("sigtim", time.Now().Format("20060102150405")).
@@ -175,11 +183,23 @@ func (p *Client) requestParams() (model.BodyMap, error) {
 		//Set("msgProtected", msgProtected).
 		//Set("secretKey", secretKey).
 		Set("msgPrivate", msgPrivate)
-	if p.Request.Protected == nil {
-		logger.KuaijieLoger.Info("protected:", p.Request.Protected.JsonBody())
+	if len(p.Request.Protected) > 0 {
+		logger.KuaijieLoger.Info("保护体内容:\n", p.Request.Protected.JsonBody())
 		protected, _ := p.key.SignProtected(p.Request.Protected.JsonBody())
-		logger.KuaijieLoger.Info("protected:", protected)
-		bodyMsg = bodyMsg.Set("msgProtected", protected)
+		logger.KuaijieLoger.Info("加密后的保护体:\n", protected)
+		bodyMsg.Set("msgProtected", protected)
+
+		secretKey := model.BodyMap{}
+		logger.KuaijieLoger.Info("EncryptKey:\n", string(p.key.EncryptKey))
+		kkk, err := p.key.RsaEncrypt(p.key.EncryptKey)
+		if err != nil {
+			logger.KuaijieLoger.Error("ERROR:", err.Error())
+			panic(err)
+		}
+
+		//logger.KuaijieLoger.Info("RsaDecrypt:\n", p.key.RsaDecrypt(kkk))
+		secretKey.Set("encryptKey", base64.StdEncoding.EncodeToString(kkk))
+		bodyMsg.Set("secretKey", secretKey)
 	}
 
 	data := bodyMsg.JsonBody() //待签名字符串

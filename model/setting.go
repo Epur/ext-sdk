@@ -23,6 +23,8 @@ type Setting struct {
 
 	RsaPublicKey  *string
 	RsaPrivateKey *string
+	RsaEncryptKey *string // 对称加密密钥明文
+	RsaEncryptIV  *string // 对称加密初始向量明文
 	SM4           *SM4
 }
 
@@ -41,6 +43,19 @@ func (c *Setting) SetRsaPrivateKey(data string) *Setting {
 func (c *Setting) SetRsaPublicKey(data string) *Setting {
 	if len(data) > 0 {
 		c.RsaPublicKey = &data
+	}
+	return c
+}
+
+func (c *Setting) SetRsaEncryptKey(data string) *Setting {
+	if len(data) > 0 {
+		c.RsaEncryptKey = &data
+	}
+	return c
+}
+func (c *Setting) SetRsaEncryptIV(data string) *Setting {
+	if len(data) > 0 {
+		c.RsaEncryptIV = &data
 	}
 	return c
 }

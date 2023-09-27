@@ -1,6 +1,7 @@
 package kuaijie
 
 import (
+	"bytes"
 	"crypto"
 	"crypto/aes"
 	"crypto/cipher"
@@ -12,12 +13,15 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
-	uaes "github.com/Epur/ext-sdk/utils/aes"
+	"github.com/Epur/ext-sdk/logger"
+	ursa "github.com/Epur/ext-sdk/utils/rsa"
 )
 
 type Key struct {
 	PrivateKey []byte // 私钥
 	PublicKey  []byte // 公钥
+	EncryptKey []byte // 对称加密密钥明文
+	EncryptIV  []byte // 对称加密初始向量明文
 }
 
 // new
@@ -25,6 +29,8 @@ func KeyNew(privateKey, publicKey string) *Key {
 	return &Key{
 		PrivateKey: []byte(privateKey),
 		PublicKey:  []byte(publicKey),
+		//EncryptKey: []byte(encryptKey),
+		//EncryptIV:  []byte(encryptIV),
 	}
 }
 
@@ -158,25 +164,140 @@ func (p *Key) RsaDecrypt(ciphertext []byte) []byte {
 
 // 保护体签名
 func (p *Key) SignProtected(data string) (string, error) {
+	//logger.KuaijieLoger.Info("PrivateKey:\n", string(p.PrivateKey))
+	//logger.KuaijieLoger.Info("PublicKey:\n", string(p.PublicKey))
+	//logger.KuaijieLoger.Info("EncryptKey:\n", string(p.EncryptKey))
 
-	b := AesEncryptCBCPKCS5([]byte(data), p.PublicKey)
-	//if err != nil {
-	//	fmt.Println("ERROR:", err.Error())
-	//	return "", err
-	//}
+	b, err := AesEncryptECBPKCS5([]byte(data), p.EncryptKey)
+	if err != nil {
+		logger.KuaijieLoger.Error("ERROR:", err.Error())
+		panic(err)
+	}
+	//b := uaes.AesEncryptECB([]byte(data), p.EncryptKey)
 	sign := base64.StdEncoding.EncodeToString(b)
 
 	return sign, nil
 }
 
-func AesEncryptCBCPKCS5(origData []byte, key []byte) (encrypted []byte) {
-	// 分组秘钥
-	// NewCipher该函数限制了输入k的长度必须为16, 24或者32
-	block, _ := aes.NewCipher(key)
-	blockSize := block.BlockSize()                              // 获取秘钥块的长度
-	origData = uaes.PKCS5Padding(origData, blockSize)           // 补全码
-	blockMode := cipher.NewCBCEncrypter(block, key[:blockSize]) // 加密模式
-	encrypted = make([]byte, len(origData))                     // 创建数组
-	blockMode.CryptBlocks(encrypted, origData)                  // 加密
-	return encrypted
+//func AesEncryptCBCPKCS5(origData []byte, key []byte) (encrypted []byte) {
+//	// 分组秘钥
+//	if len(origData) == 0 {
+//		logger.KuaijieLoger.Error("ERROR:数据为空")
+//		panic("加密数据为空")
+//	}
+//	// NewCipher该函数限制了输入k的长度必须为16, 24或者32
+//	block, err := aes.NewCipher(key)
+//	if err != nil {
+//		logger.KuaijieLoger.Error("ERROR:", err)
+//		panic(err.Error())
+//	}
+//	blockSize := block.BlockSize()                              // 获取秘钥块的长度
+//	origData = uaes.PKCS5Padding(origData, blockSize)           // 补全码
+//	blockMode := cipher.NewCBCEncrypter(block, key[:blockSize]) // 加密模式
+//	encrypted = make([]byte, len(origData))                     // 创建数组
+//	blockMode.CryptBlocks(encrypted, origData)                  // 加密
+//
+//	return encrypted
+//}
+
+// 公钥加密
+func (p *Key) RsaECBEncrypt(data []byte) ([]byte, error) {
+	//解密pem格式的公钥
+	aaa := ursa.NewRsa(string(p.PublicKey), string(p.PrivateKey))
+	b, err := aaa.Encrypt(data)
+	if err != nil {
+		logger.KuaijieLoger.Error("ERROR:", err.Error())
+		panic(err.Error())
+	}
+	return b, nil
+}
+
+func pKCS5Padding(ciphertext []byte, blockSize int) []byte {
+	padding := blockSize - len(ciphertext)%blockSize
+	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
+	return append(ciphertext, padtext...)
+}
+
+func pKCS5UnPadding(origData []byte) []byte {
+	length := len(origData)
+	// 去掉最后一个字节 unpadding 次
+	unpadding := int(origData[length-1])
+	return origData[:(length - unpadding)]
+}
+
+type ecb struct {
+	b         cipher.Block
+	blockSize int
+}
+
+func newECB(b cipher.Block) *ecb {
+	return &ecb{
+		b:         b,
+		blockSize: b.BlockSize(),
+	}
+}
+
+// 引入golang官方 https://codereview.appspot.com/7860047/
+type ecbEncrypter ecb
+
+// NewECBEncrypter returns a BlockMode which encrypts in electronic code book
+// mode, using the given Block.
+func NewECBEncrypter(b cipher.Block) cipher.BlockMode {
+	return (*ecbEncrypter)(newECB(b))
+}
+func (x *ecbEncrypter) BlockSize() int { return x.blockSize }
+func (x *ecbEncrypter) CryptBlocks(dst, src []byte) {
+	if len(src)%x.blockSize != 0 {
+		panic("crypto/cipher: input not full blocks")
+	}
+	if len(dst) < len(src) {
+		panic("crypto/cipher: output smaller than input")
+	}
+	for len(src) > 0 {
+		x.b.Encrypt(dst, src[:x.blockSize])
+		src = src[x.blockSize:]
+		dst = dst[x.blockSize:]
+	}
+}
+
+type ecbDecrypter ecb
+
+// NewECBDecrypter returns a BlockMode which decrypts in electronic code book
+// mode, using the given Block.
+func NewECBDecrypter(b cipher.Block) cipher.BlockMode {
+	return (*ecbDecrypter)(newECB(b))
+}
+func (x *ecbDecrypter) BlockSize() int { return x.blockSize }
+func (x *ecbDecrypter) CryptBlocks(dst, src []byte) {
+	if len(src)%x.blockSize != 0 {
+		panic("crypto/cipher: input not full blocks")
+	}
+	if len(dst) < len(src) {
+		panic("crypto/cipher: output smaller than input")
+	}
+	for len(src) > 0 {
+		x.b.Decrypt(dst, src[:x.blockSize])
+		src = src[x.blockSize:]
+		dst = dst[x.blockSize:]
+	}
+}
+
+func AesEncryptECBPKCS5(origData []byte, key []byte) ([]byte, error) {
+
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		logger.KuaijieLoger.Error("ERROR:", err.Error())
+		panic(err.Error())
+	}
+	if len(origData) == 0 {
+		logger.KuaijieLoger.Error("ERROR:未检测到源数据")
+		fmt.Println("plain content empty")
+		return nil, errors.New("未检测到数据")
+	}
+	ecb1 := NewECBEncrypter(block)
+	content := pKCS5Padding(origData, block.BlockSize())
+	crypted := make([]byte, len(content))
+	ecb1.CryptBlocks(crypted, content)
+
+	return crypted, nil
 }

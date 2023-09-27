@@ -24,14 +24,14 @@ type CustomBankAcctBindRequest struct {
 
 // 银行账户绑定
 type CustomBankAcctBindProtected struct {
-	BankCode           string `json:"bankCode"`           // 开户行代码
-	BankName           string `json:"bankName"`           // 开户行名称
-	BankAcctType       string `json:"bankAcctType"`       // 账户类型 pCard：个人借记卡（户名为法人姓名） eGeneral：对公一般户（户名为企业证照名称）
-	BankAcctNo         string `json:"bankAcctNo"`         // 账号
-	BankAcctName       string `json:"bankAcctName"`       // 户名
-	BankProvince       string `json:"bankProvince"`       // 开户省份
-	BankCity           string `json:"bankCity"`           // 开户城市
-	BankAcctBindMobile string `json:"bankAcctBindMobile"` // 银行预留的 手机号
+	BankCode           string `json:"bankCode,omitempty"`           // 开户行代码
+	BankName           string `json:"bankName,omitempty"`           // 开户行名称
+	BankAcctType       string `json:"bankAcctType,omitempty"`       // 账户类型 pCard：个人借记卡（户名为法人姓名） eGeneral：对公一般户（户名为企业证照名称）
+	BankAcctNo         string `json:"bankAcctNo,omitempty"`         // 账号
+	BankAcctName       string `json:"bankAcctName,omitempty"`       // 户名
+	BankProvince       string `json:"bankProvince,omitempty"`       // 开户省份
+	BankCity           string `json:"bankCity,omitempty"`           // 开户城市
+	BankAcctBindMobile string `json:"bankAcctBindMobile,omitempty"` // 银行预留的 手机号
 }
 
 // 银行账户绑定
