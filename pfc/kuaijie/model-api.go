@@ -19,7 +19,7 @@ type QueryCustomAcctInfoResponse struct {
 
 // 银行账户绑定
 type CustomBankAcctBindRequest struct {
-	AcctNo string `json:"acctNo"` // 平台账户号， 业务账户，用于资金处理
+	AcctNo string `json:"acctNo,omitempty"` // 平台账户号， 业务账户，用于资金处理
 }
 
 // 银行账户绑定
@@ -42,7 +42,7 @@ type CustomBankAcctBindResponse struct {
 
 // 银行账户绑定查询
 type QueryCustomBankAcctBindInfoRequest struct {
-	AcctNo string `json:"acctNo"` // 平台账户号， 业务账户，用于资金处理
+	AcctNo string `json:"acctNo,omitempty"` // 平台账户号， 业务账户，用于资金处理
 }
 
 // 银行账户绑定查询
