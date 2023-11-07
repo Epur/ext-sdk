@@ -60,19 +60,25 @@ func (p *Key) RsaWithSHA256(origData, prvKey []byte) ([]byte, error) {
 	if block == nil {
 		fmt.Printf("prvKey\n%s", prvKey)
 		//return nil, errors.New("private key error")
-		panic(errors.New("private key error"))
+		//panic(errors.New("private key error"))
+		logger.KuaijieLoger.Error("Error:private key error")
+		return nil, errors.New("private key error")
 	}
 	privateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 	if err != nil {
-		fmt.Println("ParsePKCS8PrivateKey err", err.Error())
-		panic(err)
+		//fmt.Println("ParsePKCS8PrivateKey err", err.Error())
+		//panic(err)
+		logger.KuaijieLoger.Error("ParsePKCS1PrivateKey Error:%s", err.Error())
+		return nil, err
 	}
 
 	hashed := h.Sum(nil)
 	signature, err := rsa.SignPKCS1v15(rand.Reader, privateKey, crypto.SHA256, hashed)
 	if err != nil {
-		fmt.Printf("Error from signing: %s\n", err.Error())
-		panic(err)
+		//fmt.Printf("Error from signing: %s\n", err.Error())
+		//panic(err)
+		logger.KuaijieLoger.Error("SignPKCS1v15 Error:%s", err.Error())
+		return nil, err
 	}
 
 	return signature, nil
@@ -86,7 +92,9 @@ func (p *Key) Verify(data, sign string) bool {
 	tmpData, err := base64.StdEncoding.DecodeString(sign)
 	if err != nil {
 		fmt.Printf("Error signData DecodeString: %s\n", err.Error())
-		panic(err.Error())
+		//panic(err.Error())
+		logger.KuaijieLoger.Errorf("Error signData DecodeString: %s\n", err.Error())
+		return false
 	}
 	//fmt.Println("sign:\n", sign)
 	//fmt.Println("\n", string(tmpData))
@@ -104,15 +112,19 @@ func (p *Key) RsaVerySignWithSha256(data, signData, keyBytes []byte) bool {
 	}
 	pubKey, err := x509.ParsePKIXPublicKey(block.Bytes)
 	if err != nil {
-		fmt.Println("509 ERROR:", err.Error())
-		panic(err)
+		//fmt.Println("509 ERROR:", err.Error())
+		//panic(err)
+		logger.KuaijieLoger.Errorf("509 ERROR:%v", err.Error())
+		return false
 	}
 
 	hashed := sha256.Sum256(data)
 	err = rsa.VerifyPKCS1v15(pubKey.(*rsa.PublicKey), crypto.SHA256, hashed[:], signData)
 	if err != nil {
-		fmt.Println("15 ERROR:", err.Error())
-		panic(err)
+		//fmt.Println("15 ERROR:", err.Error())
+		//panic(err)
+		logger.KuaijieLoger.Errorf("VerifyPKCS1v15 ERROR:%v", err.Error())
+		return false
 	}
 	fmt.Println("RsaVerySignWithSha256 End True")
 	return true
@@ -128,22 +140,26 @@ func (p *Key) RsaEncrypt(data []byte) ([]byte, error) {
 	// 解析公钥
 	pubInterface, err := x509.ParsePKIXPublicKey(block.Bytes)
 	if err != nil {
-		fmt.Printf("ERROR:%s", err.Error())
-		panic(err)
+		//fmt.Printf("ERROR:%s", err.Error())
+		//panic(err)
+		logger.KuaijieLoger.Errorf("ParsePKIXPublicKey ERROR:%v", err.Error())
+		return nil, err
 	}
 	// 类型断言
 	pub := pubInterface.(*rsa.PublicKey)
 	//加密
 	ciphertext, err := rsa.EncryptPKCS1v15(rand.Reader, pub, data)
 	if err != nil {
-		fmt.Printf("ERROR:%s", err.Error())
-		panic(err)
+		//fmt.Printf("ERROR:%s", err.Error())
+		//panic(err)
+		logger.KuaijieLoger.Errorf("EncryptPKCS1v15 ERROR:%v", err.Error())
+		return nil, err
 	}
 	return ciphertext, nil
 }
 
 // 私钥解密
-func (p *Key) RsaDecrypt(ciphertext []byte) []byte {
+func (p *Key) RsaDecrypt(ciphertext []byte) ([]byte, error) {
 	//获取私钥
 	block, _ := pem.Decode([]byte(p.PrivateKey))
 	if block == nil {
@@ -152,14 +168,18 @@ func (p *Key) RsaDecrypt(ciphertext []byte) []byte {
 	//解析PKCS1格式的私钥
 	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 	if err != nil {
-		panic(err)
+		//panic(err)
+		logger.KuaijieLoger.Errorf("ParsePKCS1PrivateKey ERROR:%v", err.Error())
+		return nil, err
 	}
 	// 解密
 	data, err := rsa.DecryptPKCS1v15(rand.Reader, priv, ciphertext)
 	if err != nil {
-		panic(err)
+		//panic(err)
+		logger.KuaijieLoger.Errorf("DecryptPKCS1v15 ERROR:%v", err.Error())
+		return nil, err
 	}
-	return data
+	return data, err
 }
 
 // 保护体签名
@@ -207,7 +227,8 @@ func (p *Key) RsaECBEncrypt(data []byte) ([]byte, error) {
 	b, err := aaa.Encrypt(data)
 	if err != nil {
 		logger.KuaijieLoger.Error("ERROR:", err.Error())
-		panic(err.Error())
+		//panic(err.Error())
+		return nil, err
 	}
 	return b, nil
 }
@@ -287,11 +308,12 @@ func AesEncryptECBPKCS5(origData []byte, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		logger.KuaijieLoger.Error("ERROR:", err.Error())
-		panic(err.Error())
+		//panic(err.Error())
+		return nil, err
 	}
 	if len(origData) == 0 {
+		//fmt.Println("plain content empty")
 		logger.KuaijieLoger.Error("ERROR:未检测到源数据")
-		fmt.Println("plain content empty")
 		return nil, errors.New("未检测到数据")
 	}
 	ecb1 := NewECBEncrypter(block)
