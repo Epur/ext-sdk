@@ -368,3 +368,135 @@ func (p *Api) CashSweepQueryAcctBalInfo(Body model.BodyMap) *model.Client {
 
 	return &c.Client
 }
+
+/*
+	文件上传
+	Response: FileUploadResponse
+*/
+
+func (p *Api) FileUpload(Body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetPath(`/forward/innet/txn/v2/cus/innet/upload`).
+		SetMethod("POST").
+		SetBody(Body)
+
+	if c.Err = Body.CheckEmptyError("fileName", "fileData"); c.Err != nil {
+		logger.KuaijieLoger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		logger.KuaijieLoger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	response := FileUploadResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.KuaijieLoger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+
+	return &c.Client
+}
+
+/*
+	客户入网(企业/个体)
+	Response: CustomInNetEntResponse
+*/
+
+func (p *Api) CustomInNetEnt(Body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetPath(`/forward/innet/txn/v2/cus/innet/net`).
+		SetMethod("POST").
+		SetBody(Body)
+
+	if c.Err = Body.CheckEmptyError("innetOwner", "innetJuridical", "innetContact", "innetAddress", "innetIndustry", "innetAccount"); c.Err != nil {
+		logger.KuaijieLoger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		logger.KuaijieLoger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	response := CustomInNetEntResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.KuaijieLoger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+
+	return &c.Client
+}
+
+/*
+	客户入网(小微)
+	Response: CustomInNetMicroResponse
+*/
+
+func (p *Api) CustomInNetMicro(Body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetPath(`/forward/innet/txn/v2/cus/innet/micro`).
+		SetMethod("POST").
+		SetBody(Body)
+
+	if c.Err = Body.CheckEmptyError("innetOwner", "innetJuridical", "innetAddress", "innetAccount"); c.Err != nil {
+		logger.KuaijieLoger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		logger.KuaijieLoger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	response := CustomInNetMicroResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.KuaijieLoger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+
+	return &c.Client
+}
+
+/*
+	客户入网结果查询
+	Response: CustomInNetResultResponse
+*/
+
+func (p *Api) CustomInNetQuery(Body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetPath(`/forward/innet/txn/v2/cus/innet/query`).
+		SetMethod("POST").
+		SetBody(Body)
+
+	if c.Err = Body.CheckEmptyError("origTxnDate", "origCusTraceNo"); c.Err != nil {
+		logger.KuaijieLoger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		logger.KuaijieLoger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	response := CustomInNetResultResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.KuaijieLoger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+
+	return &c.Client
+}
