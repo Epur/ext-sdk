@@ -66,9 +66,10 @@ func (p *Client) Execute() {
 		return
 	}
 
-	for key := range row {
-		p.HttpReq.QueryParams.Add(key, row.Get(key))
-	}
+	// 将报文添加到请求url中
+	//for key := range row {
+	//	p.HttpReq.QueryParams.Add(key, row.Get(key))
+	//}
 	p.HttpReq.Header.Set("Content-Type", "application/json")
 	http.WithRequestType(http.TypeJSON)(p.HttpReq)
 	p.HttpReq.Body = row

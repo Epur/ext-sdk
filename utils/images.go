@@ -32,9 +32,12 @@ func GetUrlImgBase64(path string) (baseImg string, err error) {
 	mimeType := http.DetectContentType(imgByte)
 	switch mimeType {
 	case "image/jpeg":
-		baseImg = "data:image/jpeg;base64," + base64.StdEncoding.EncodeToString(imgByte)
+		//baseImg = "data:image/jpeg;base64," + base64.StdEncoding.EncodeToString(imgByte)
+		baseImg = base64.StdEncoding.EncodeToString(imgByte)
 	case "image/png":
-		baseImg = "data:image/png;base64," + base64.StdEncoding.EncodeToString(imgByte)
+		//baseImg = "data:image/png;base64," + base64.StdEncoding.EncodeToString(imgByte)
+		baseImg = base64.StdEncoding.EncodeToString(imgByte)
+
 	}
 
 	return

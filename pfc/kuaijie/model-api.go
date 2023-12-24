@@ -297,8 +297,8 @@ type CustomInNetEntAccount struct {
 type CustomInNetEntProduct struct {
 	ProductCode string `json:"productCode,required"` // 产品代码 详见附录
 	SettPeriod  string `json:"settPeriod,omitempty"` // 结算周期 默认 T1 D1：D+1 T1：T+1 M：手动结算
-	SceneCode   string `json:"sceneCode,required"`   // 场景代码 付款产品必填 详见附录
-	SceneFile   string `json:"sceneFile,required"`   // 场景资质文件 付款产品必填 调用“文件上传接口”后返回的文件 id
+	SceneCode   string `json:"sceneCode,omitempty"`  // 场景代码 付款产品必填 详见附录
+	SceneFile   string `json:"sceneFile,omitempty"`  // 场景资质文件 付款产品必填 调用“文件上传接口”后返回的文件 id
 }
 
 // 企业入网 -- 产品功能信息
