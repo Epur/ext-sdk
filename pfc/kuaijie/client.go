@@ -129,7 +129,7 @@ func (p *Client) responseParams() (model.BodyMap, error) {
 	row := model.BodyMap{}
 	_ = json.Unmarshal(p.HttpReq.Result, &row)
 	//fmt.Printf("response:\n%+v\n", row)
-	logger.KuaijieLoger.Infof("响应报文:%s", row.JsonBody())
+	//logger.KuaijieLoger.Infof("响应报文:%s", row.JsonBody())
 
 	//拿到signature
 	if row["sign"] != nil {
@@ -185,13 +185,13 @@ func (p *Client) requestParams() (model.BodyMap, error) {
 		//Set("secretKey", secretKey).
 		Set("msgPrivate", msgPrivate)
 	if len(p.Request.Protected) > 0 {
-		logger.KuaijieLoger.Info("保护体内容:\n", p.Request.Protected.JsonBody())
+		//logger.KuaijieLoger.Info("保护体内容:\n", p.Request.Protected.JsonBody())
 		protected, _ := p.key.SignProtected(p.Request.Protected.JsonBody())
-		logger.KuaijieLoger.Info("加密后的保护体:\n", protected)
+		//logger.KuaijieLoger.Info("加密后的保护体:\n", protected)
 		bodyMsg.Set("msgProtected", protected)
 
 		secretKey := model.BodyMap{}
-		logger.KuaijieLoger.Info("EncryptKey:\n", string(p.key.EncryptKey))
+		//logger.KuaijieLoger.Info("EncryptKey:\n", string(p.key.EncryptKey))
 		kkk, err := p.key.RsaEncrypt(p.key.EncryptKey)
 		if err != nil {
 			logger.KuaijieLoger.Error("ERROR:", err.Error())
@@ -219,7 +219,7 @@ func (p *Client) requestParams() (model.BodyMap, error) {
 		Set("sign", sign)
 
 	//fmt.Println(request.JsonBody())
-	logger.KuaijieLoger.Infof("请求报文:%s", request.JsonBody())
+	//logger.KuaijieLoger.Infof("请求报文:%s", request.JsonBody())
 	//fmt.Println(sign)
 
 	////加密
