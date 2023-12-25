@@ -410,7 +410,7 @@ func (p *Api) FileUpload(Body model.BodyMap) *model.Client {
 func (p *Api) CustomInNetEnt(Body model.BodyMap) *model.Client {
 
 	c := NewClient(p.Setting)
-	c.SetPath(`/forward/innet/txn/v2/cus/innet/net`).
+	c.SetPath(`/forward/innet/txn/v2/cus/innet/ent`).
 		SetMethod("POST").
 		SetBody(Body)
 

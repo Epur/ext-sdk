@@ -278,7 +278,7 @@ type CustomInNetEntAddress struct {
 type CustomInNetEntIndustry struct {
 	IndustryCategory string `json:"industryCategory,required"` // 一级行业分类 按照实际经营场景选择对应的行业分类编码 具体编码详见附录
 	IndustryType     string `json:"industryType,required"`     // 一级行业分类 按照实际经营场景选择对应的行业分类编码 具体编码详见附录
-	Mcc              string `json:"mcc,required"`              // 银联商户 类型代码
+	Mcc              string `json:"mcc,omitempty"`             // 银联商户 类型代码
 }
 
 // 企业入网 -- 结算账户
