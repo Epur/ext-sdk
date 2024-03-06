@@ -1,11 +1,19 @@
 package model
 
+import "github.com/tjfoc/gmsm/sm2"
+
 type SM4 struct {
 	PrivateKey    string // 客户私钥
 	PublicKey     string // 客户公钥
 	BankPublicKey string // 银行公钥
 	SymKey        string // 对称密钥
 }
+
+type SM2 struct {
+	PrivateKey *sm2.PrivateKey //合利宝商户私钥
+	PublicKey  *sm2.PublicKey  //合利宝公钥
+}
+
 type Setting struct {
 	Key             *string // Key
 	Secret          *string // 密钥
@@ -26,10 +34,16 @@ type Setting struct {
 	RsaEncryptKey *string // 对称加密密钥明文
 	RsaEncryptIV  *string // 对称加密初始向量明文
 	SM4           *SM4
+	SM2           *SM2
 }
 
 func (c *Setting) SetSM4(data *SM4) *Setting {
 	c.SM4 = data
+	return c
+}
+
+func (c *Setting) SetSM2(data *SM2) *Setting {
+	c.SM2 = data
 	return c
 }
 
