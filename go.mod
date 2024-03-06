@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/deatil/go-cryptobin v1.0.2021
 	github.com/google/uuid v1.3.0
+	github.com/jinzhu/copier v0.4.0
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5
 	github.com/shopspring/decimal v1.3.1

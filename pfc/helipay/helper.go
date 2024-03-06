@@ -24,22 +24,23 @@ type SM2 struct {
 	UserId string
 }
 
-func NewSM2(privateKeypath, password, publicKey string) *SM2 {
-	//根据私钥存放路径以及口令，导出私钥
-	priKey, err := LoadPrivateKey(privateKeypath, password)
-	if err != nil {
-		return nil
-	}
-	//根据合利宝公钥字符串导出合利宝公钥
-	pubKey := LoadPublicKey(publicKey)
-	if err != nil {
-		return nil
-	}
+func NewSM2(privateKey *sm2.PrivateKey, publicKey *sm2.PublicKey) *SM2 {
+	////根据私钥存放路径以及口令，导出私钥
+	//priKey, err := LoadPrivateKey(privateKeypath, password)
+	//if err != nil {
+	//	return nil
+	//}
+	////根据合利宝公钥字符串导出合利宝公钥
+	//pubKey := LoadPublicKey(publicKey)
+	//if err != nil {
+	//	return nil
+	//}
 	return &SM2{
-		PrivateKey: priKey,
-		PublicKey:  pubKey,
+		PrivateKey: privateKey,
+		PublicKey:  publicKey,
 		UserId:     "",
 	}
+
 }
 
 var certCAs []*x509.Certificate
