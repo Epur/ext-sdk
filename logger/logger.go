@@ -22,6 +22,7 @@ var (
 	LianlianLogger = logrus.New()
 	KuaijieLoger   = logrus.New()
 	ErrorLogger    = logrus.New()
+	HeliLogger     = logrus.New()
 	RdsLogger      *RdsLoggerWriter
 )
 
@@ -49,6 +50,7 @@ func New(LogFilePath string, RunMode string) {
 		{File: "alibaba.log", Logger: AlibabaLogger},
 		{File: "lianlian.log", Logger: LianlianLogger},
 		{File: "kuaijie.log", Logger: KuaijieLoger},
+		{File: "heli.log", Logger: HeliLogger},
 	} {
 		loggerToFile(LogFilePath, item.File, item.Logger, RunMode)
 	}
