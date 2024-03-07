@@ -6,6 +6,7 @@ import (
 	"encoding/pem"
 	"fmt"
 	"github.com/Epur/ext-sdk/logger"
+	"github.com/Epur/ext-sdk/model"
 	"github.com/deatil/go-cryptobin/gm/sm2"
 	"github.com/deatil/go-cryptobin/pkcs12"
 	"github.com/jinzhu/copier"
@@ -17,14 +18,16 @@ import (
 	"sync"
 )
 
-type SM2 struct {
-	//PrivateKey string
-	//PublicKey  string
-	PrivateKey *sm2.PrivateKey // 商户私钥，商户加签
-	PublicKey  *sm2.PublicKey  // 合利宝公钥，验签
+type SM2 model.SM2
 
-	UserId string
-}
+//type SM2 struct {
+//	//PrivateKey string
+//	//PublicKey  string
+//	PrivateKey *sm2.PrivateKey // 商户私钥，商户加签
+//	PublicKey  *sm2.PublicKey  // 合利宝公钥，验签
+//
+//	UserId string
+//}
 
 func NewSM2(privateKeypath, password, publicKey string) *SM2 {
 	//根据私钥存放路径以及口令，导出私钥
