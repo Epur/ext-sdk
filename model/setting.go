@@ -1,6 +1,6 @@
 package model
 
-import "github.com/tjfoc/gmsm/sm2"
+import "github.com/deatil/go-cryptobin/gm/sm2"
 
 type SM4 struct {
 	PrivateKey    string // 客户私钥
