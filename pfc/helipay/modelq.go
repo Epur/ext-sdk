@@ -32,3 +32,16 @@ type P6Ext struct {
 	SplitBillRules    []json.RawMessage `json:"splitBillRules,omitempty"`    //收款分账规则串
 	BelongsType       string            `json:"belongsType,omitempty"`       //手续费承担方向
 }
+
+/*
+ *商户订单查询接口
+ */
+
+type AccountPayQueryRequest struct {
+	P1BizType   string `json:"Pt1_bizType"`   //交易类型
+	P2SignCode  string `json:"Pt2_signType"`  //签名类型
+	P3Timestamp string `json:"Pt3_timestamp"` //时间戳
+
+	P4OrderId        string `json:"Pt4_orderId"`        //商户订单号
+	P5CustomerNumber string `json:"Pt5_customerNumber"` //商户商编
+}
