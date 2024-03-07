@@ -3,7 +3,7 @@ module github.com/Epur/ext-sdk
 go 1.20
 
 require (
-	github.com/deatil/go-cryptobin v1.0.2052
+	github.com/deatil/go-cryptobin v1.0.2021
 	github.com/google/uuid v1.3.0
 	github.com/jinzhu/copier v0.4.0
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
