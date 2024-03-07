@@ -11,7 +11,7 @@ import (
 
 type AccountPaySubRequest struct {
 	P1BizType   string `json:"P1_bizType"`   //交易类型
-	P2SignCode  string `json:"P2_signType"`  //签名类型
+	P2SignType  string `json:"P2_signType"`  //签名类型
 	P3Timestamp string `json:"P3_timestamp"` //时间戳
 
 	P4OrderId        string `json:"P4_orderId"`        //商户订单号
@@ -39,7 +39,7 @@ type P6Ext struct {
 
 type AccountPayQueryRequest struct {
 	P1BizType   string `json:"P1_bizType"`   //交易类型
-	P2SignCode  string `json:"P2_signType"`  //签名类型
+	P2SignType  string `json:"P2_signType"`  //签名类型
 	P3Timestamp string `json:"P3_timestamp"` //时间戳
 
 	P4OrderId        string `json:"P4_orderId"`        //商户订单号
@@ -51,7 +51,7 @@ type AccountPayQueryRequest struct {
  */
 type MerchantSettlementRequest struct {
 	P1BizType string `json:"P1_bizType"` //交易类型
-	SignCode  string `json:"signType"`   //签名类型
+	SignType  string `json:"signType"`   //签名类型
 	//P3Timestamp string `json:"Pt3_timestamp"` //时间戳
 
 	P2OrderId        string          `json:"P2_orderId"`             //商户订单号
@@ -67,7 +67,7 @@ type MerchantSettlementRequest struct {
 
 type MerchantSettlementQueryRequest struct {
 	P1BizType string `json:"P1_bizType"` //交易类型
-	SignCode  string `json:"signType"`   //签名类型
+	SignType  string `json:"signType"`   //签名类型
 	//P3Timestamp string `json:"Pt3_timestamp"` //时间戳
 
 	P2OrderId        string          `json:"P2_orderId,omitempty"` //商户订单号
