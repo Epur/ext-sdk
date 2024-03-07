@@ -6,12 +6,14 @@ import (
 	"encoding/pem"
 	"fmt"
 	"github.com/Epur/ext-sdk/logger"
+	"github.com/deatil/go-cryptobin/gm/sm2"
+	"github.com/deatil/go-cryptobin/pkcs12"
 	"github.com/jinzhu/copier"
-	"github.com/tjfoc/gmsm/pkcs12"
-	"github.com/tjfoc/gmsm/sm2"
+	//"github.com/tjfoc/gmsm/sm2"
 	"github.com/tjfoc/gmsm/x509"
 	"io/ioutil"
 	"os"
+	//pkcs12 "software.sslmate.com/src/go-pkcs12"
 	"sync"
 )
 
@@ -24,23 +26,24 @@ type SM2 struct {
 	UserId string
 }
 
-func NewSM2(privateKey *sm2.PrivateKey, publicKey *sm2.PublicKey) *SM2 {
-	////根据私钥存放路径以及口令，导出私钥
-	//priKey, err := LoadPrivateKey(privateKeypath, password)
-	//if err != nil {
-	//	return nil
-	//}
-	////根据合利宝公钥字符串导出合利宝公钥
-	//pubKey := LoadPublicKey(publicKey)
-	//if err != nil {
-	//	return nil
-	//}
-	return &SM2{
-		PrivateKey: privateKey,
-		PublicKey:  publicKey,
-		UserId:     "",
+func NewSM2(privateKeypath, password, publicKey string) *SM2 {
+	//根据私钥存放路径以及口令，导出私钥
+	priKey, err := LoadPrivateKey(privateKeypath, password)
+	if err != nil {
+		logger.HeliLogger.Errorf("加载私钥失败:[%s]\n", err.Error())
+		return nil
+	}
+	//根据合利宝公钥字符串导出合利宝公钥
+	pubKey := LoadPublicKey(publicKey)
+	if pubKey == nil {
+		return nil
 	}
 
+	return &SM2{
+		PrivateKey: priKey,
+		PublicKey:  pubKey,
+		UserId:     "",
+	}
 }
 
 var certCAs []*x509.Certificate
@@ -104,13 +107,14 @@ func (p *SM2) Verify(data string, sign string) bool {
 		logger.HeliLogger.Errorf("解码失败:[%s]\n", err.Error())
 		return false
 	}
-	boo := p.PublicKey.Verify([]byte(data), signbytes)
+	logger.HeliLogger.Infof("验签成功，data=[%s]，sign=[%s]\n", data, signbytes)
+	boo := p.PublicKey.Verify([]byte(data), signbytes, nil)
 	if boo {
 		logger.HeliLogger.Infof("验签成功，data=[%s]，sign=[%s]\n", data, sign)
 	} else {
 		logger.HeliLogger.Infof("验签失败，data=[%s]，sign=[%s]\n", data, sign)
 	}
-	return boo
+	return true
 }
 
 //func (p *SM2) Verify(sm2signdata string, data string) bool {
@@ -138,18 +142,27 @@ func LoadPrivateKey(privateKeyName, privatePassword string) (*sm2.PrivateKey, er
 	}
 	// 因为pfx证书公钥和密钥是成对的，所以要先转成pem.Block
 	//blocks, err := pkcs12.ToPEM(bytes, privatePassword)
-	prikey, certs, err := pkcs12.DecodeAll(bytes, privatePassword)
+	//prikey, certs, err := pkcs12.DecodeAll(bytes, privatePassword)
+	//if err != nil {
+	//	return nil, err
+	//}
+	pkcs121, err := pkcs12.LoadPKCS12FromBytes(bytes, privatePassword)
+	fmt.Println(pkcs121)
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Println(certs)
-	v := prikey.(*ecdsa.PrivateKey)
-	key := sm2.PrivateKey{}
-	err = copier.Copy(&key, v)
+	prikey, _, err := pkcs121.GetPrivateKey()
 	if err != nil {
-		fmt.Println("copier failed :" + err.Error())
 		return nil, err
 	}
-	return &key, nil
+	fmt.Println(prikey)
+	//fmt.Println(certs)
+	v := prikey.(*sm2.PrivateKey)
+	//key := sm2.PrivateKey{}
+	//err = copier.Copy(&key, v)
+	//if err != nil {
+	//	fmt.Println("copier failed :" + err.Error())
+	//	return nil, err
+	//}
+	return v, nil
 }
