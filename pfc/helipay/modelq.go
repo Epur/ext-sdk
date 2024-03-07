@@ -10,13 +10,13 @@ import (
  */
 
 type AccountPaySubRequest struct {
-	P1BizType   string `json:"Pt1_bizType"`   //交易类型
-	P2SignCode  string `json:"Pt2_signType"`  //签名类型
-	P3Timestamp string `json:"Pt3_timestamp"` //时间戳
+	P1BizType   string `json:"P1_bizType"`   //交易类型
+	P2SignCode  string `json:"P2_signType"`  //签名类型
+	P3Timestamp string `json:"P3_timestamp"` //时间戳
 
-	P4OrderId        string `json:"Pt4_orderId"`        //商户订单号
-	P5CustomerNumber string `json:"Pt5_customerNumber"` //付款商户商编
-	P6Ext            *P6Ext `json:"P6_ext"`             //拓展参数
+	P4OrderId        string `json:"P4_orderId"`        //商户订单号
+	P5CustomerNumber string `json:"P5_customerNumber"` //付款商户商编
+	P6Ext            *P6Ext `json:"P6_ext"`            //拓展参数
 }
 
 type P6Ext struct {
@@ -38,10 +38,39 @@ type P6Ext struct {
  */
 
 type AccountPayQueryRequest struct {
-	P1BizType   string `json:"Pt1_bizType"`   //交易类型
-	P2SignCode  string `json:"Pt2_signType"`  //签名类型
-	P3Timestamp string `json:"Pt3_timestamp"` //时间戳
+	P1BizType   string `json:"P1_bizType"`   //交易类型
+	P2SignCode  string `json:"P2_signType"`  //签名类型
+	P3Timestamp string `json:"P3_timestamp"` //时间戳
 
-	P4OrderId        string `json:"Pt4_orderId"`        //商户订单号
-	P5CustomerNumber string `json:"Pt5_customerNumber"` //商户商编
+	P4OrderId        string `json:"P4_orderId"`        //商户订单号
+	P5CustomerNumber string `json:"P5_customerNumber"` //商户商编
+}
+
+/*
+ *商户提现接口
+ */
+type MerchantSettlementRequest struct {
+	P1BizType string `json:"P1_bizType"` //交易类型
+	SignCode  string `json:"signType"`   //签名类型
+	//P3Timestamp string `json:"Pt3_timestamp"` //时间戳
+
+	P2OrderId        string          `json:"P2_orderId"`             //商户订单号
+	P3CustomerNumber string          `json:"P3_customerNumber"`      //商户商编
+	P4Amount         decimal.Decimal `json:"P4_amount"`              //金额
+	P5Summary        string          `json:"P5_summary,omitempty"`   //备注
+	P6NotifyUrl      string          `json:"P6_notifyUrl,omitempty"` //结果通知地址
+}
+
+/*
+ *商户提现查询接口
+ */
+
+type MerchantSettlementQueryRequest struct {
+	P1BizType string `json:"P1_bizType"` //交易类型
+	SignCode  string `json:"signType"`   //签名类型
+	//P3Timestamp string `json:"Pt3_timestamp"` //时间戳
+
+	P2OrderId        string          `json:"P2_orderId,omitempty"` //商户订单号
+	P3CustomerNumber string          `json:"P3_customerNumber"`    //商户商编
+	P4SettleDate     decimal.Decimal `json:"P4_settleDate"`        //结算日期
 }
