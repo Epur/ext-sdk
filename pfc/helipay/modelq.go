@@ -70,7 +70,7 @@ type MerchantSettlementQueryRequest struct {
 	SignType  string `json:"signType"`   //签名类型
 	//P3Timestamp string `json:"Pt3_timestamp"` //时间戳
 
-	P2OrderId        string          `json:"P2_orderId,omitempty"` //商户订单号
-	P3CustomerNumber string          `json:"P3_customerNumber"`    //商户商编
-	P4SettleDate     decimal.Decimal `json:"P4_settleDate"`        //结算日期
+	P2OrderId        string `json:"P2_orderId,omitempty"` //商户订单号
+	P3CustomerNumber string `json:"P3_customerNumber"`    //商户商编
+	P4SettleDate     string `json:"P4_settleDate"`        //结算日期
 }
