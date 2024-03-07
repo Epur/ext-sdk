@@ -54,7 +54,7 @@ func LoadPublicKey(publicKey string) *sm2.PublicKey {
 	prefix := `-----BEGIN CERTIFICATE-----`
 	postfix := `-----END CERTIFICATE-----`
 
-	apublicKey := fmt.Sprintf("%s\n%s%s", prefix, publicKey, postfix)
+	apublicKey := fmt.Sprintf("%s\n%s\n%s", prefix, publicKey, postfix)
 	initonce.Do(func() {
 		block, _ := pem.Decode([]byte(apublicKey))
 		ca, err := x509.ParseCertificate(block.Bytes)
