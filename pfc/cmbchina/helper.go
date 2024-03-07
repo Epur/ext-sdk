@@ -38,6 +38,7 @@ func (p *SM4) Sign(data string) (string, error) {
 	sm2Sign := cryptobin_sm2.NewSM2().
 		FromPrivateKeyBytes(sm2keyBytes).
 		FromString(data).
+		WithUID([]byte(p.UserId)).
 		SignBytes().
 		ToBase64String()
 	return sm2Sign, nil
@@ -49,6 +50,7 @@ func (p *SM4) Verify(sm2signdata string, data string) bool {
 
 	sssss := cryptobin_sm2.NewSM2().FromBase64String(sm2signdata).
 		FromPublicKeyString(hex.EncodeToString(sm2keyBytes)).
+		WithUID([]byte(p.UserId)).
 		VerifyBytes([]byte(data))
 
 	fmt.Println(sssss.Error())
