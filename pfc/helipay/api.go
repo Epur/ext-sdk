@@ -149,3 +149,35 @@ func (p *Api) MerchantSettlement(Body model.BodyMap) *model.Client {
 	c.Response.Response.DataTo = response
 	return &c.Client
 }
+
+/*
+ * 商户余额查询接口
+ */
+
+func (p *Api) MerchantAccountQuery(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("合利宝商户余额查询接口...")
+
+	c := NewClient(p.Setting)
+	c.SetPath(`/trx/merchant/interface.action`).
+		SetMethod("POST").
+		SetBody(Body)
+
+	if c.Err = Body.CheckEmptyError("P1_bizType", "P2_customerNumber", "P3_timestamp"); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	response := MerchantAccountQueryResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.CmbcLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+	return &c.Client
+}

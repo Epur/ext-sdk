@@ -74,3 +74,16 @@ type MerchantSettlementQueryRequest struct {
 	P3CustomerNumber string `json:"P3_customerNumber"`    //商户商编
 	P4SettleDate     string `json:"P4_settleDate"`        //结算日期
 }
+
+/*
+ *商户余额查询接口
+ */
+
+type MerchantAccountQueryRequest struct {
+	P1BizType string `json:"P1_bizType"` //交易类型
+	SignType  string `json:"signType"`   //签名类型
+	//P3Timestamp string `json:"Pt3_timestamp"` //时间戳
+
+	P2CustomerNumber string `json:"P2_customerNumber"` //商户商编号
+	P3Timestamp      string `json:"P3_timestamp"`      //时间戳
+}
