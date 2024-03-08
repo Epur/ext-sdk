@@ -31,7 +31,8 @@ func NewClient(setting *model.Setting) *client {
 	if setting.UserId != nil {
 		a.UserId = *setting.UserId
 	}
-
+	a.key.PrivateKey = setting.SM2.PrivateKey
+	a.key.PublicKey = setting.SM2.PublicKey
 	return a
 }
 
