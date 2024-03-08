@@ -194,9 +194,8 @@ func (p *client) responseParams() (model.BodyMap, error) {
 		if v == "sign" {
 			continue
 		}
-		if vv := row.Get(v); vv != model.NULL {
-			data.WriteString(fmt.Sprintf("%s%s", "&", vv))
-		}
+		vv := row.Get(v)
+		data.WriteString(fmt.Sprintf("%s%s", "&", vv))
 	}
 
 	if !p.key.Verify(data.String(), signature) {
