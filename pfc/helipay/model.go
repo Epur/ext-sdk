@@ -86,21 +86,21 @@ type SettleRecord struct {
  * 商户余额查询接口响应结构
  */
 type MerchantAccountQueryResponse struct {
-	Rt1BizType          string `json:"rt1_bizType"`            //交易类型
-	Rt2RetCode          string `json:"rt2_retCode"`            //响应码
-	Rt3RetMsg           string `json:"rt3_retMsg"`             //返回信息
-	Rt4CustomerNumber   string `json:"rt4_customerNumber"`     //商户编号
-	Rt5AccountStatus    string `json:"rt5_accountStatus"`      //商户订单号
-	Rt6Balance          string `json:"rt6_balance"`            //账户余额
-	Rt7FrozenBalance    string `json:"rt7_frozenBalance"`      //账户余额
-	Rt8D0Balance        string `json:"rt8_d0Balance"`          //账户余额
-	Rt9T1Balance        string `json:"rt9_T1Balance"`          //账户余额
-	Rt10Currency        string `json:"rt10_currency"`          //账户余额
-	Rt11CreateDate      string `json:"rt11_createDate"`        //账户余额
-	Rt12Desc            string `json:"rt12_desc"`              //账户余额
-	Rt13D1Balance       string `json:"rt13_d1Balance"`         //账户余额
-	Rt14RechargeBalance string `json:"rt14_rechargeBalance"`   //账户余额
-	Rt15AmountToSettled string `json:"rt15_amountToBeSettled"` //账户余额
-	Sign                string `json:"sign"`                   //签名
+	Rt1BizType          string          `json:"rt1_bizType"`            //交易类型
+	Rt2RetCode          string          `json:"rt2_retCode"`            //响应码
+	Rt3RetMsg           string          `json:"rt3_retMsg"`             //返回信息
+	Rt4CustomerNumber   string          `json:"rt4_customerNumber"`     //商户编号
+	Rt5AccountStatus    string          `json:"rt5_accountStatus"`      //商户订单号
+	Rt6Balance          string          `json:"rt6_balance"`            //账户余额
+	Rt7FrozenBalance    string          `json:"rt7_frozenBalance"`      //账户余额
+	Rt8D0Balance        decimal.Decimal `json:"rt8_d0Balance"`          //账户余额
+	Rt9T1Balance        string          `json:"rt9_T1Balance"`          //账户余额
+	Rt10Currency        string          `json:"rt10_currency"`          //账户余额
+	Rt11CreateDate      string          `json:"rt11_createDate"`        //账户余额
+	Rt12Desc            string          `json:"rt12_desc"`              //账户余额
+	Rt13D1Balance       decimal.Decimal `json:"rt13_d1Balance"`         //账户余额
+	Rt14RechargeBalance decimal.Decimal `json:"rt14_rechargeBalance"`   //账户余额
+	Rt15AmountToSettled decimal.Decimal `json:"rt15_amountToBeSettled"` //账户余额
+	Sign                string          `json:"sign"`                   //签名
 
 }
