@@ -28,8 +28,9 @@ type client struct {
 func NewClient(setting *model.Setting) *client {
 	a := &client{Client: model.Client{
 		Setting: setting}}
-
-	a.UserId = *setting.UserId
+	if setting.UserId != nil {
+		a.UserId = *setting.UserId
+	}
 
 	return a
 }
