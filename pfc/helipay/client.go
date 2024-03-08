@@ -181,19 +181,22 @@ func (p *client) responseParams() (model.BodyMap, error) {
 		return row, nil
 	}
 
+	var keys []string
+
+	//获取Key,并重排序
+	for k, _ := range row {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
 	data := bytes.Buffer{}
-	//构造验签请求参数
-	if row != nil {
-		//bodys = row["body"].(string)
-		for key, v := range row {
-			if key == "sign" {
-				continue
-			}
-			data.WriteString("&")
-			data.WriteString(v.(string))
+	for _, v := range keys {
+		if v == "sign" {
+			continue
 		}
-		//data.WriteString("&")
-		//data.WriteString(p.key.PrivateKey)
+		if vv := row.Get(v); vv != model.NULL {
+			data.WriteString(fmt.Sprintf("%s%s", "&", vv))
+		}
 	}
 
 	if !p.key.Verify(data.String(), signature) {

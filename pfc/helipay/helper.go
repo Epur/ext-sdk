@@ -110,7 +110,7 @@ func (p *SM2) Verify(data string, sign string) bool {
 		logger.HeliLogger.Errorf("解码失败:[%s]\n", err.Error())
 		return false
 	}
-	logger.HeliLogger.Infof("验签成功，data=[%s]，sign=[%s]\n", data, signbytes)
+	logger.HeliLogger.Infof("验签：data=[%s]，sign=[%s]\n", data, signbytes)
 	boo := p.PublicKey.Verify([]byte(data), signbytes, nil)
 	if boo {
 		logger.HeliLogger.Infof("验签成功，data=[%s]，sign=[%s]\n", data, sign)
