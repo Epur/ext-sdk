@@ -14,6 +14,7 @@ import (
 	"io/ioutil"
 	"os"
 	"sort"
+	"strings"
 )
 
 type client struct {
@@ -188,6 +189,18 @@ func (p *client) responseParams() (model.BodyMap, error) {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
+
+	//调整前顺序为(rt10,rt11, ..., rt1, rt2..., rt9)调整后顺序(rt1,rt2,...,rt10,rt11...)
+	idx := 0
+	for _, v := range keys {
+		if vv := strings.Contains(v, "rt1_"); vv {
+			break
+		}
+		idx++
+	}
+	if idx > 0 {
+		keys = append(keys[idx:], keys[:idx]...)
+	}
 
 	data := bytes.Buffer{}
 	for _, v := range keys {
