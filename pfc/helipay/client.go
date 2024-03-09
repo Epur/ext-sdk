@@ -2,7 +2,6 @@ package helipay
 
 import (
 	"bytes"
-	"crypto/rsa"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -10,9 +9,6 @@ import (
 	"github.com/Epur/ext-sdk/model"
 	"github.com/Epur/ext-sdk/utils"
 	"github.com/tangchen2018/go-utils/http"
-	"github.com/tjfoc/gmsm/pkcs12"
-	"io/ioutil"
-	"os"
 	"sort"
 	"strings"
 )
@@ -228,23 +224,76 @@ func (p *client) urlParse() string {
 	return fmt.Sprintf("%s%s", *p.Setting.ServerUrl, *p.Request.Path)
 }
 
-func GetPrivateKey(privateKeyName, privatePassword string) (*rsa.PrivateKey, error) {
-	f, err := os.Open(privateKeyName)
-	if err != nil {
-		return nil, err
+//func GetPrivateKey(privateKeyName, privatePassword string) (*rsa.PrivateKey, error) {
+//	f, err := os.Open(privateKeyName)
+//	if err != nil {
+//		return nil, err
+//	}
+//
+//	bytes, err := ioutil.ReadAll(f)
+//	if err != nil {
+//		return nil, err
+//	}
+//
+//	prikey, certs, err := pkcs12.DecodeAll(bytes, privatePassword)
+//	if err != nil {
+//		return nil, err
+//	}
+//
+//	fmt.Println(prikey)
+//	fmt.Println(certs)
+//	return nil, nil
+//}
+
+/*
+ *直接根据body数据验证签名有效性
+ */
+
+func (p *client) VerifySign(row model.BodyMap) (bool, error) {
+	var signature string
+
+	//row包含所有返回数据信息，从中可以拿到signature
+	if row["sign"] != nil {
+		signature = row["sign"].(string)
+		//fmt.Printf("签名:%v\n", signature)
+	} else {
+		fmt.Println("无需验签")
+		return true, nil
 	}
 
-	bytes, err := ioutil.ReadAll(f)
-	if err != nil {
-		return nil, err
+	var keys []string
+
+	//获取Key,并重排序
+	for k, _ := range row {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	//调整前顺序为(rt10,rt11, ..., rt1, rt2..., rt9)调整后顺序(rt1,rt2,...,rt10,rt11...)
+	idx := 0
+	for _, v := range keys {
+		if vv := strings.Contains(v, "rt1_"); vv {
+			break
+		}
+		idx++
+	}
+	if idx > 0 {
+		keys = append(keys[idx:], keys[:idx]...)
 	}
 
-	prikey, certs, err := pkcs12.DecodeAll(bytes, privatePassword)
-	if err != nil {
-		return nil, err
+	data := bytes.Buffer{}
+	for _, v := range keys {
+		if v == "sign" {
+			continue
+		}
+		vv := row.Get(v)
+		data.WriteString(fmt.Sprintf("%s%s", "&", vv))
 	}
 
-	fmt.Println(prikey)
-	fmt.Println(certs)
-	return nil, nil
+	if !p.key.Verify(data.String(), signature) {
+		logger.HeliLogger.Error("ERROR:验签失败")
+		return false, errors.New("验签失败")
+	}
+	
+	return true, nil
 }
