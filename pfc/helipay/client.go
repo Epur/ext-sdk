@@ -164,7 +164,8 @@ func (p *client) requestParams() (model.BodyMap, error) {
 		fmt.Println(t1)
 		body.Set("sign", t1)
 	} else {
-		//商户余额查询用md5算法签名
+		//商户余额查询用md5算法签名(增加商户密钥)
+		signData = fmt.Sprintf("%s&%s", signData, p.key.MerchantKey)
 		t1, err := p.key.SignWithMD5(signData)
 		if err != nil {
 			logger.CmbcLogger.Error("ERROR:", err.Error())
@@ -228,10 +229,17 @@ func (p *client) responseParams() (model.BodyMap, error) {
 		vv := row.Get(v)
 		data.WriteString(fmt.Sprintf("%s%s", "&", vv))
 	}
-
-	if !p.key.Verify(data.String(), signature) {
-		logger.HeliLogger.Error("ERROR:验签失败")
-		return nil, errors.New("验签失败")
+	if bizType != BIZ_TYPE_MAQ {
+		if !p.key.Verify(data.String(), signature) {
+			logger.HeliLogger.Error("ERROR:验签失败")
+			return nil, errors.New("验签失败")
+		}
+	} else {
+		signData := fmt.Sprintf("%s&%s", data.String(), p.key.MerchantKey)
+		if !p.key.VerifyWithMD5(signData, signature) {
+			logger.HeliLogger.Error("ERROR:验签（md5)失败")
+			return nil, errors.New("验签失败")
+		}
 	}
 
 	return row, nil

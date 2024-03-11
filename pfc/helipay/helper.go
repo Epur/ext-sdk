@@ -103,14 +103,14 @@ func (p *SM2) SignWithMD5(data string) (string, error) {
 /*
  * 商户余额查询签名验证算法
  */
-func (p *SM2) VerifyWithMD5(data string, signature string) (bool, error) {
+func (p *SM2) VerifyWithMD5(data string, signature string) bool {
 	m := md5.New()
 	m.Write([]byte(data))
 	sign := hex.EncodeToString(m.Sum(nil))
 	if sign == signature {
-		return true, nil
+		return true
 	} else {
-		return false, nil
+		return false
 	}
 }
 
