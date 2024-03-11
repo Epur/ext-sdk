@@ -153,14 +153,24 @@ func (p *client) requestParams() (model.BodyMap, error) {
 	}
 
 	signData := data.String()
+	t1 := ""
 	//签名
-	t1, err := p.key.Sign(signData)
-	if err != nil {
-		logger.CmbcLogger.Error("ERROR:", err.Error())
-		return nil, err
+	if bizType != BIZ_TYPE_MAQ {
+		t1, err := p.key.Sign(signData)
+		if err != nil {
+			logger.CmbcLogger.Error("ERROR:", err.Error())
+			return nil, err
+		}
+		fmt.Println(t1)
+	} else {
+		//商户余额查询用md5算法签名
+		t1, err := p.key.SignWithMD5(signData)
+		if err != nil {
+			logger.CmbcLogger.Error("ERROR:", err.Error())
+			return nil, err
+		}
+		fmt.Println(t1)
 	}
-
-	fmt.Println(t1)
 
 	body.Set("sign", t1)
 	fmt.Println(body)

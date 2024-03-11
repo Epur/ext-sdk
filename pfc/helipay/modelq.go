@@ -11,6 +11,7 @@ const (
 	BIZ_TYPE_MSQ = "MerchantSettlementQuery" //结算查询接口
 	BIZ_TYPE_AP  = "AccountPaySub"           //子商户支付接口
 	BIZ_TYPE_APQ = "AccountPayQuery"         //单笔查询接口
+	BIZ_TYPE_MAQ = "MerchantAccountQuery"    //商户余额查询
 )
 
 /*
