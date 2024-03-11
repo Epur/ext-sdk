@@ -100,6 +100,20 @@ func (p *SM2) SignWithMD5(data string) (string, error) {
 	return hex.EncodeToString(m.Sum(nil)), nil
 }
 
+/*
+ * 商户余额查询签名验证算法
+ */
+func (p *SM2) VerifyWithMD5(data string, signature string) (bool, error) {
+	m := md5.New()
+	m.Write([]byte(data))
+	sign := hex.EncodeToString(m.Sum(nil))
+	if sign == signature {
+		return true, nil
+	} else {
+		return false, nil
+	}
+}
+
 //func (p *SM2) Sign(data string) (string, error) {
 //
 //	sm2keyBytes, _ := base64.StdEncoding.DecodeString(p.PrivateKey)
