@@ -30,6 +30,8 @@ func NewClient(setting *model.Setting) *client {
 	}
 	a.key.PrivateKey = setting.SM2.PrivateKey
 	a.key.PublicKey = setting.SM2.PublicKey
+	a.key.MerchantKey = setting.SM2.MerchantKey
+	a.key.EncryptKey = setting.SM2.EncryptKey
 	return a
 }
 
