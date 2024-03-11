@@ -140,11 +140,16 @@ func (p *client) requestParams() (model.BodyMap, error) {
 	}
 	sort.Strings(keys)
 
+	//获取交易类型P1_bizType，如MerchantSettlement的P6_notifyUrl不参与签名
+	bizType := body.Get("P1_bizType")
+
 	data := bytes.Buffer{}
 	for _, v := range keys {
-		if vv := body.Get(v); vv != model.NULL {
-			data.WriteString(fmt.Sprintf("%s%s", "&", vv))
+		if bizType == BIZ_TYPE_MS && v == "P6_notifyUrl" {
+			continue
 		}
+		vv := body.Get(v)
+		data.WriteString(fmt.Sprintf("%s%s", "&", vv))
 	}
 
 	signData := data.String()
@@ -294,6 +299,6 @@ func (p *client) VerifySign(row model.BodyMap) (bool, error) {
 		logger.HeliLogger.Error("ERROR:验签失败")
 		return false, errors.New("验签失败")
 	}
-	
+
 	return true, nil
 }

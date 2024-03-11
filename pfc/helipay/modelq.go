@@ -5,6 +5,14 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+// 交易类型
+const (
+	BIZ_TYPE_MS  = "MerchantSettlement"      //结算接口
+	BIZ_TYPE_MSQ = "MerchantSettlementQuery" //结算查询接口
+	BIZ_TYPE_AP  = "AccountPaySub"           //子商户支付接口
+	BIZ_TYPE_APQ = "AccountPayQuery"         //单笔查询接口
+)
+
 /*
  *商户下单（转账）请求接口
  */
