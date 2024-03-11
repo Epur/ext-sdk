@@ -18,7 +18,9 @@ type SM2 struct {
 	PrivateKey *sm2.PrivateKey // 商户私钥，商户加签
 	PublicKey  *sm2.PublicKey  // 合利宝公钥，验签
 
-	UserId string
+	MerchantKey string // 签名密钥 （进件文档接口、余额查询文档、对账下载接口）
+	EncryptKey  string // 加密密钥 （进件文档接口、余额查询文档、对账下载接口）
+	UserId      string
 }
 
 type Setting struct {
