@@ -2,7 +2,9 @@ package helipay
 
 import (
 	"crypto/ecdsa"
+	"crypto/md5"
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/pem"
 	"fmt"
 	"github.com/Epur/ext-sdk/logger"
@@ -87,6 +89,15 @@ func (p *SM2) Sign(data string) (string, error) {
 		return "", err
 	}
 	return base64.StdEncoding.EncodeToString(sign), nil
+}
+
+/*
+ * 商户余额查询签名算法
+ */
+func (p *SM2) SignWithMD5(data string) (string, error) {
+	m := md5.New()
+	m.Write([]byte(data))
+	return hex.EncodeToString(m.Sum(nil)), nil
 }
 
 //func (p *SM2) Sign(data string) (string, error) {
