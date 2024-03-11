@@ -153,7 +153,7 @@ func (p *client) requestParams() (model.BodyMap, error) {
 	}
 
 	signData := data.String()
-	t1 := ""
+
 	//签名
 	if bizType != BIZ_TYPE_MAQ {
 		t1, err := p.key.Sign(signData)
@@ -162,6 +162,7 @@ func (p *client) requestParams() (model.BodyMap, error) {
 			return nil, err
 		}
 		fmt.Println(t1)
+		body.Set("sign", t1)
 	} else {
 		//商户余额查询用md5算法签名
 		t1, err := p.key.SignWithMD5(signData)
@@ -170,9 +171,9 @@ func (p *client) requestParams() (model.BodyMap, error) {
 			return nil, err
 		}
 		fmt.Println(t1)
+		body.Set("sign", t1)
 	}
 
-	body.Set("sign", t1)
 	fmt.Println(body)
 
 	return body, nil
