@@ -96,26 +96,29 @@ func (p *client) Execute() {
 	}
 	logger.HeliLogger.Info(response)
 	result := new(Response)
+	smap := make(model.BodyMap)
 	//data, _ := json.Marshal(response["body"])
-	_ = json.Unmarshal(p.HttpReq.Result, &result)
+	err = json.Unmarshal(p.HttpReq.Result, &result)
+	if err != nil {
+		json.Unmarshal(p.HttpReq.Result, &smap)
+	}
 	//fmt.Println("data:", string(data))
 	//fmt.Printf("\nresult:%+v\n", result)
-
-	p.Response.Response.Code = result.Rt5RetCode           //返回码
-	p.Response.Response.Message = result.Rt6RetMsg         //响应信息
-	p.Response.Response.RequestId = result.Rt9SerialNumber //平台流水号
+	//返回码
+	if result.Rt5RetCode != "" {
+		p.Response.Response.Code = result.Rt5RetCode
+	} else {
+		p.Response.Response.Code = smap["rt2_retCode"].(string)
+	}
+	//返回信息
+	if result.Rt6RetMsg != "" {
+		p.Response.Response.Message = result.Rt6RetMsg //响应信息
+	} else {
+		p.Response.Response.Message = smap["rt3_retMsg"].(string)
+	}
+	//p.Response.Response.RequestId = result.Rt9SerialNumber //合利宝支付流水号
 	p.Response.Response.Data = p.HttpReq.Result
-	//p.Response.Response.Data = result.MsgPrivate
-	//p.Response.Response.Result = json.RawMessage(response["body"].(string))
-	////fmt.Printf("\np.Response.Response:%+v\n", p.Response.Response)
-	//
-	//if p.Response.Response.Code == "0000" {
-	//	p.Response.Success = true
-	//}
-	//
-	//if p.Response.HttpStatus != 200 {
-	//	p.Response.Success = false
-	//}
+
 	p.Response.Response.Result = p.HttpReq.Result
 
 	if p.Response.Response.Code == "0000" {
