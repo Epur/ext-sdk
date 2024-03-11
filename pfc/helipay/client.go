@@ -98,24 +98,17 @@ func (p *client) Execute() {
 	result := new(Response)
 	smap := make(model.BodyMap)
 	//data, _ := json.Marshal(response["body"])
-	err = json.Unmarshal(p.HttpReq.Result, &result)
-	if err != nil {
+	v := response.GetString("rt1_bizType")
+	if strings.Contains(v, "Merchant") { //结算及余额查询接口
 		json.Unmarshal(p.HttpReq.Result, &smap)
-	}
-	//fmt.Println("data:", string(data))
-	//fmt.Printf("\nresult:%+v\n", result)
-	//返回码
-	if result.Rt5RetCode != "" {
-		p.Response.Response.Code = result.Rt5RetCode
-	} else {
 		p.Response.Response.Code = smap["rt2_retCode"].(string)
-	}
-	//返回信息
-	if result.Rt6RetMsg != "" {
-		p.Response.Response.Message = result.Rt6RetMsg //响应信息
-	} else {
 		p.Response.Response.Message = smap["rt3_retMsg"].(string)
+	} else { //支付接口
+		_ = json.Unmarshal(p.HttpReq.Result, &result)
+		p.Response.Response.Code = result.Rt5RetCode
+		p.Response.Response.Message = result.Rt6RetMsg //响应信息
 	}
+
 	//p.Response.Response.RequestId = result.Rt9SerialNumber //合利宝支付流水号
 	p.Response.Response.Data = p.HttpReq.Result
 
