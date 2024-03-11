@@ -12,6 +12,8 @@ import (
 	"github.com/deatil/go-cryptobin/gm/sm2"
 	"github.com/deatil/go-cryptobin/pkcs12"
 	"github.com/jinzhu/copier"
+	"strings"
+
 	//"github.com/tjfoc/gmsm/sm2"
 	"github.com/tjfoc/gmsm/x509"
 	"io/ioutil"
@@ -107,7 +109,7 @@ func (p *SM2) VerifyWithMD5(data string, signature string) bool {
 	m := md5.New()
 	m.Write([]byte(data))
 	sign := hex.EncodeToString(m.Sum(nil))
-	if sign == signature {
+	if strings.Compare(sign, signature) == 0 {
 		return true
 	} else {
 		return false
