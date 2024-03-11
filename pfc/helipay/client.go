@@ -202,10 +202,16 @@ func (p *client) responseParams() (model.BodyMap, error) {
 	if idx > 0 {
 		keys = append(keys[idx:], keys[:idx]...)
 	}
+	//获取交易类型P1_bizType，如MerchantSettlement的P6_notifyUrl不参与签名
+	bizType := row.Get("P1_bizType")
 
 	data := bytes.Buffer{}
 	for _, v := range keys {
 		if v == "sign" {
+			continue
+		}
+		//交易类型为MerchantSettlement的rt3_retMsg字段不参与验签
+		if bizType == BIZ_TYPE_MS && v == "rt3_retMsg" {
 			continue
 		}
 		vv := row.Get(v)
