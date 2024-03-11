@@ -228,6 +228,13 @@ func (p *client) responseParams() (model.BodyMap, error) {
 		if bizType == BIZ_TYPE_MS && v == "rt3_retMsg" {
 			continue
 		}
+		//专属化过滤，商户余额查询接口以下三个字段不参与验签
+		if bizType == BIZ_TYPE_MAQ &&
+			(v == "rt13_d1Balance" ||
+				v == "rt14_rechargeBalance" ||
+				v == "rt15_amountToBeSettled") {
+			continue
+		}
 		vv := row.Get(v)
 		data.WriteString(fmt.Sprintf("%s%s", "&", vv))
 	}
