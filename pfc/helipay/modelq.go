@@ -9,9 +9,10 @@ import (
 const (
 	BIZ_TYPE_MS  = "MerchantSettlement"      //结算接口
 	BIZ_TYPE_MSQ = "MerchantSettlementQuery" //结算查询接口
-	BIZ_TYPE_AP  = "AccountPaySub"           //子商户支付接口
+	BIZ_TYPE_APS = "AccountPaySub"           //子商户支付接口
 	BIZ_TYPE_APQ = "AccountPayQuery"         //单笔查询接口
 	BIZ_TYPE_MAQ = "MerchantAccountQuery"    //商户余额查询
+	BIZ_TYPE_AP  = "AccountPay"              //支付接口通知
 )
 
 /*
