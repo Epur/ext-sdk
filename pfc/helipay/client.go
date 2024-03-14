@@ -221,7 +221,7 @@ func (p *client) responseParams() (model.BodyMap, error) {
 			continue
 		}
 		//交易类型为MerchantSettlement的rt3_retMsg字段不参与验签
-		if bizType == BIZ_TYPE_MS && v == "rt3_retMsg" {
+		if (bizType == BIZ_TYPE_MS || bizType == BIZ_TYPE_MSQ) && v == "rt3_retMsg" {
 			continue
 		}
 		//专属化过滤，商户余额查询接口以下三个字段不参与验签
