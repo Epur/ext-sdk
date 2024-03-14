@@ -96,7 +96,7 @@ func (p *Api) MerchantSettlementQuery(Body model.BodyMap) *model.Client {
 		SetBody(Body)
 
 	if c.Err = Body.CheckEmptyError("P1_bizType", "P2_orderId", "P3_customerNumber",
-		"P4_amount", "signType"); c.Err != nil {
+		"P4_settleDate", "signType"); c.Err != nil {
 		logger.HeliLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
