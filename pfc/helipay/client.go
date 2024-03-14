@@ -228,7 +228,8 @@ func (p *client) responseParams() (model.BodyMap, error) {
 		if bizType == BIZ_TYPE_MAQ &&
 			(v == "rt13_d1Balance" ||
 				v == "rt14_rechargeBalance" ||
-				v == "rt15_amountToBeSettled") {
+				v == "rt15_amountToBeSettled" ||
+				v == "rt16_splittableAmount") {
 			continue
 		}
 		vv := row.Get(v)
