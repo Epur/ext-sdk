@@ -5,10 +5,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/Epur/ext-sdk/logger"
 	"github.com/Epur/ext-sdk/model"
 	"github.com/Epur/ext-sdk/utils"
 	"github.com/tangchen2018/go-utils/http"
 	"net/url"
+	"strings"
 )
 
 type Client struct {
@@ -54,33 +56,20 @@ func (p *Client) Execute() {
 
 	p.t = utils.TimestampSecond()
 
-	//p.HttpReq.Header.Set("Content-type", "application/json;charset=utf-8")
-	//p.HttpReq.Header.Set("Signature-Type", "RSA")
-
-	//signature, err := p.sign(p.Request.Body)
-	//if err != nil {
-	//	p.Err = err
-	//	return
-	//}
-
+	p.HttpReq.Header.Set("Content-type", " application/json")
 	p.HttpReq.Header.Set(`LLPAY-Signature`, p.sign())
 	p.HttpReq.Header.Set("Authorization", p.authorization())
 	http.WithRequestType(http.TypeJSON)(p.HttpReq)
 	p.HttpReq.Body = p.Request.Body
-	//
-	//if *p.Request.Method == http.GET {
-	//	for key, value := range p.Request.Body {
-	//		p.HttpReq.QueryParams.Add(key, value.(string))
-	//	}
-	//} else {
-	//	http.WithRequestType(http.TypeJSON)(p.HttpReq)
-	//	p.HttpReq.Body = p.Request.Body
-	//}
 
 	if p.Err = p.Client.Execute(); p.Err != nil {
 		return
 	}
 
+	//验签
+	if _, p.Err = p.responseParams(); p.Err != nil {
+		return
+	}
 	result := new(Response)
 	_ = json.Unmarshal(p.HttpReq.Result, &result)
 
@@ -110,15 +99,7 @@ func (p *Client) urlParse() string {
 
 func (p *Client) sign() string {
 
-	/*
-		签名
-	*/
-
-	query_params := ""
-	if p.Request.Params != nil {
-		query_params = "&" + p.Request.Params.EncodeURLParams()
-	}
-
+	//获取请求路径
 	path := p.urlParse()
 	s, _ := url.Parse(path)
 
@@ -126,31 +107,50 @@ func (p *Client) sign() string {
 	if body == "{}" {
 		body = ""
 	}
-
-	payload := fmt.Sprintf("%s&%s&%d&%s%s",
+	//去掉query_params参数
+	payload := fmt.Sprintf("%s&%s&%d&%s",
 		*p.Request.Method,
 		s.Path,
 		p.t,
 		body,
-		query_params,
+		//query_params,
 	)
 
 	fmt.Println(payload)
 
-	ss, err := p.sig.RsaSignWithMd5([]byte(payload))
+	ss, err := p.sig.RsaSignWithSHA256([]byte(payload))
 	if err != nil {
 		panic(errors.New("rsa 错误"))
 	}
 	return fmt.Sprintf("t=%d,v=%s", p.t, ss)
 
-	//body := fmt.Sprintf("%s")
-	//dd, err := json.Marshal(data)
-	//if err != nil {
-	//	return "", errors.New("签名数据解析失败")
-	//}
-	//return p.sig.RsaSignWithMd5(dd)
 }
 
+//转码开发者id及mastertoken
+
 func (p *Client) authorization() string {
-	return fmt.Sprintf("Basic %s", base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", *p.Setting.Key, *p.Setting.Secret))))
+	return fmt.Sprintf("Basic %s", base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", *p.Setting.DevelopId, *p.Setting.MasterToken))))
+}
+
+//验签及解密敏感字段
+
+func (p *Client) responseParams() (model.BodyMap, error) {
+
+	//body := model.BodyMap{}
+	//获取body
+	body := p.Request.Body
+	//获取签名信息
+	signature := p.HttpReq.Header.Get("Signature-Data")
+	//验证签名信息
+	if strings.Compare(signature, "") == 0 {
+		logger.LianlianLogger.Errorf("%s", "签名串不存在，存在伪造可能")
+		return nil, errors.New("签名串不存在，存在伪造可能")
+	}
+	signData, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	err = p.sig.RsaVerifySignWithMd5(signData, signature)
+
+	return nil, err
 }

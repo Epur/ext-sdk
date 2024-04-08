@@ -36,8 +36,8 @@ func (p *Response) To(row interface{}) error {
 type Request struct {
 	Path      *string
 	Method    *string
-	Params    BodyMap
-	Body      BodyMap
+	Params    BodyMap //query参数
+	Body      BodyMap //POST body参数
 	Protected BodyMap
 }
 

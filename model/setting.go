@@ -24,11 +24,13 @@ type SM2 struct {
 }
 
 type Setting struct {
+	Id              *string //专用tk企业资源规划的id(逸采)
 	Key             *string // Key
 	Secret          *string // 密钥
 	ShopId          *string // 店铺ID
 	RetryCount      *int    // 重试次数
 	AccessToken     *string // 刷新令牌
+	RefreshToken    *string //刷新令牌
 	ServerUrl       *string // 服务链接
 	AuthCallbackUrl *string // 授权回调地址
 	SiteNo          *string // 站点(目前Lazada切换访问域名用的)
@@ -43,7 +45,9 @@ type Setting struct {
 	RsaEncryptKey *string // 对称加密密钥明文
 	RsaEncryptIV  *string // 对称加密初始向量明文
 	SM4           *SM4
-	SM2           *SM2
+	SM2           *SM2    //合利宝使用
+	DevelopId     *string //连连国际使用
+	MasterToken   *string //连连国际使用
 }
 
 func (c *Setting) SetSM4(data *SM4) *Setting {
@@ -53,6 +57,24 @@ func (c *Setting) SetSM4(data *SM4) *Setting {
 
 func (c *Setting) SetSM2(data *SM2) *Setting {
 	c.SM2 = data
+	return c
+}
+
+/*
+ *连连使用的开发者id
+ */
+
+func (c *Setting) SetDevelopId(developId string) *Setting {
+	c.DevelopId = &developId
+	return c
+}
+
+/*
+ *连连使用的主token
+ */
+
+func (c *Setting) SetMasterToken(masterToken string) *Setting {
+	c.MasterToken = &masterToken
 	return c
 }
 
