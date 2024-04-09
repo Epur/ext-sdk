@@ -82,12 +82,14 @@ type LoanFinishedRequest struct {
 //强制还款
 
 type ForceRepaymentRequest struct {
-	UserId     string `json:"userId" validate:"required"`
-	ProdType   string `json:"prodType" validate:"required"`
-	LoanId     string `json:"loanId" validate:"required"`
-	ExtLoanId  string `json:"extLoanId"`
-	FinishDate string `json:"finishDate" validate:"required"`
-	Memo       string `json:"memo"`
+	UserId       string `json:"userId" validate:"required"`
+	ProdType     string `json:"prodType" validate:"required"`
+	LoanId       string `json:"loanId" validate:"required"`
+	FundParty    string `json:"fundParty" validate:"required"`
+	Status       string `json:"status"`
+	DeductAmount string `json:"deductAmount" validate:"required"`
+	NotifyTime   string `json:"notifyTime" validate:"required"`
+	DeductId     string `json:"deductId" validate:"required"`
 }
 
 //强制还款
