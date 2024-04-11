@@ -9,15 +9,26 @@ const (
 )
 
 const (
-	AccessTokenURL           = "/token"
-	REPAY_FORCECANCEL        = "1"                //取消强制扣款
-	REPAY_MATYDEDUT_USER     = "2"                //强制扣款（用户维度）
-	REPAY_MATYDEDUT_PLATFORM = "3"                //强制扣款（平台维度）
-	REPAY_TYPE_LSR           = "LUMP_SUM_REPAY"   //一次性还本付息
-	REPAY_TYPE_UNLIMITED     = "UNLIMITED"        //随借随还
-	REPAY_TYPE_ET            = "EVEN_TOTAL"       //:等额本息;
-	REPAY_TYPE_EP            = "EVEN_PRINCIPAL"   //等额本金
-	REPAY_TYPE_MI            = "MONTHLY_INTEREST" //先息后本
+	AccessTokenURL = "/token"
+	//强制还款状态
+	REPAY_FORCECANCEL        = "1" //取消强制扣款
+	REPAY_MATYDEDUT_USER     = "2" //强制扣款（用户维度）
+	REPAY_MATYDEDUT_PLATFORM = "3" //强制扣款（平台维度）
+
+	//还款方式
+	REPAY_TYPE_LSR       = "LUMP_SUM_REPAY"   //一次性还本付息
+	REPAY_TYPE_UNLIMITED = "UNLIMITED"        //随借随还
+	REPAY_TYPE_ET        = "EVEN_TOTAL"       //:等额本息;
+	REPAY_TYPE_EP        = "EVEN_PRINCIPAL"   //等额本金
+	REPAY_TYPE_MI        = "MONTHLY_INTEREST" //先息后本
+
+	//币种
+	CURRENCY_RMB = "CNY" //人民币
+	CURRENCY_US  = "USD" //美元
+	CURRENCY_GB  = "GBP" //英镑
+	CURRENCY_EU  = "EUR" //欧元
+	CURRENCY_JP  = "JPY" //日元
+	CURRENCY_CAD = "CAD" //加元
 	//RefreshURL     = "/token"
 )
 
