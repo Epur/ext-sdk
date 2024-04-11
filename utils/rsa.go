@@ -139,3 +139,12 @@ func (s *Sign) RsaEncrypt(source string) (string, error) {
 	encrypted := base64.StdEncoding.EncodeToString(ciphertext)
 	return encrypted, nil
 }
+
+// 连连国际 证件号码hash
+func (s *Sign) Sha256Hex(content []byte) (sign string) {
+
+	h := sha256.New()
+	h.Write(content)
+	out := hex.EncodeToString(h.Sum(nil))
+	return out
+}
