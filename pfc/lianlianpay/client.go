@@ -139,8 +139,8 @@ func (p *Client) responseParams() (model.BodyMap, error) {
 	//body := model.BodyMap{}
 	//获取body
 	body := p.Request.Body
-	//获取签名信息
-	signature := p.HttpReq.Header.Get("Signature-Data")
+	//获取签名信息(响应信息的签名)
+	signature := p.HttpReq.Response.Header.Get("Signature-Data")
 	//验证签名信息
 	if strings.Compare(signature, "") == 0 {
 		logger.LianlianLogger.Errorf("%s", "签名串不存在，存在伪造可能")
@@ -150,7 +150,7 @@ func (p *Client) responseParams() (model.BodyMap, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = p.sig.RsaVerifySignWithMd5(signData, signature)
+	err = p.sig.RsaVerifySignWithSHA256(signData, signature)
 
 	return nil, err
 }
