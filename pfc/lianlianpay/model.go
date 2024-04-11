@@ -9,7 +9,10 @@ const (
 )
 
 const (
-	AccessTokenURL = "/token"
+	AccessTokenURL           = "/token"
+	REPAY_FORCECANCEL        = "1" //取消强制扣款
+	REPAY_MATYDEDUT_USER     = "2" //强制扣款（用户维度）
+	REPAY_MATYDEDUT_PLATFORM = "3" //强制扣款（平台维度）
 	//RefreshURL     = "/token"
 )
 
