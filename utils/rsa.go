@@ -141,7 +141,7 @@ func (s *Sign) RsaEncrypt(source string) (string, error) {
 }
 
 // 连连国际 证件号码hash
-func (s *Sign) Sha256Hex(content []byte) (sign string) {
+func Sha256Hex(content []byte) (sign string) {
 
 	h := sha256.New()
 	h.Write(content)
