@@ -182,7 +182,11 @@ func (p *client) responseParams() (model.BodyMap, error) {
 	var signature string
 
 	row := model.BodyMap{}
-	_ = json.Unmarshal(p.HttpReq.Result, &row)
+	err := json.Unmarshal(p.HttpReq.Result, &row)
+	if err != nil {
+		logger.HeliLogger.Error("ERROR:反序列化失败")
+		return nil, errors.New(fmt.Sprintf("反序列化失败:返回结果为[%s]", p.HttpReq.Result))
+	}
 
 	//row包含所有返回数据信息，从中可以拿到signature
 	if row["sign"] != nil {
