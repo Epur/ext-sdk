@@ -262,7 +262,16 @@ func (p *client) urlParse() string {
 	if p.Request.Path == nil {
 		panic("apiPath is void...")
 	}
-
+	url := strings.Split(*p.Setting.ServerUrl, ";")
+	//新增判断，下面这个接口的域名为serverUrl的第二个地址，其余的接口按第一个地址发送
+	switch *p.Request.Path {
+	//扫码接口
+	case "/trx/app/interface.action":
+		p.Setting.ServerUrl = &url[1]
+	//其他接口
+	default:
+		p.Setting.ServerUrl = &url[0]
+	}
 	return fmt.Sprintf("%s%s", *p.Setting.ServerUrl, *p.Request.Path)
 }
 
