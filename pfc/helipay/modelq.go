@@ -96,3 +96,52 @@ type MerchantAccountQueryRequest struct {
 	P2CustomerNumber string `json:"P2_customerNumber"` //商户商编号
 	P3Timestamp      string `json:"P3_timestamp"`      //时间戳
 }
+
+/*
+ *扫码/刷单接口
+ */
+
+type AppPayRequest struct {
+	P1BizType string `json:"P1_bizType"` //交易类型
+
+	P2OrderId          string `json:"P2_orderId"`         //订单号
+	P3CustomerNumber   string `json:"P3_customerNumber"`  //商户编号
+	P4PayType          string `json:"P4_payType"`         //支付类型
+	P5OrderAmount      string `json:"P5_orderAmount"`     //订单额
+	P6Currency         string `json:"P6_currency"`        //币种
+	P7Authcode         string `json:"P7_authcode"`        //授权码
+	P8AppType          string `json:"P8_appType"`         //类型
+	P9NotifyUrl        string `json:"P9_notifyUrl"`       //通知地址
+	P10SuccessToUrl    string `json:"P10_successToUrl"`   //返回地址
+	P11OrderIp         string `json:"P11_orderIp"`        //订单ID
+	P12GoodsName       string `json:"P12_goodsName"`      //商品名称
+	P13GoodsDetail     string `json:"P13_goodsDetail"`    //商品明细
+	P14Desc            string `json:"P14_desc"`           //描述
+	P16AppId           string `json:"P16_appId"`          //公众号id
+	P17LimitCreditPay  string `json:"P17_limitCreditPay"` //是否限制借贷记
+	P18GoodsTag        string `json:"P18_goodsTag"`       //商品标记
+	P19Guid            string `json:"P19_guid"`           //微信上送的唯一号
+	P20MarketingRule   string `json:"P20_marketingRule"`  //营销参数规则
+	P21Identity        string `json:"P21_identity"`       //实名参数
+	SplitBillType      string `json:"splitBillType"`      //分账类型
+	RuleJson           string `json:"ruleJson"`           //分账规则
+	HbfqNum            string `json:"hbfqNum"`            //分期数
+	DeviceInfo         string `json:"deviceInfo"`         //终端号
+	StoreId            string `json:"storeId"`            //商户门店编号
+	AlipayStoreId      string `json:"alipayStoreId"`      //支付宝店铺编号
+	TimeExpire         string `json:"timeExpire"`         //超时时间
+	IndustryRefluxInfo string `json:"industryRefluxInfo"` //支付宝行业数据回流信息
+	TermInfo           string `json:"termInfo"`           //银联终端信息
+	OpenId             string `json:"openId"`             //用户id
+	AuthConfirmMode    string `json:"authConfirmMode"`    //预授权确认模式
+	TerminalSysBindNo  string `json:"terminalSysBindNo"`  //终端绑定号
+	EncryptRandNum     string `json:"encryptRandNum"`     //加密随机因子
+	SecretText         string `json:"secretText"`         //密文数据
+	SceneInfo          string `json:"sceneInfo"`          //场景信息
+	EduSubject         string `json:"eduSubject"`         //学校名称、场景名称
+	BusinessParams     string `json:"businessParams"`     //商户传入业务信息，具体值要和支付宝约定
+	ExtendParams       string `json:"extendParams"`       //业务扩展参数
+	Pid                string `json:"pid"`                //服务商pid
+	EncryptionKey      string `json:"encryptionKey"`      //加密密钥
+	SignatureType      string `json:"signatureType"`      //签名方式
+}
