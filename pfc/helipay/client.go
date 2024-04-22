@@ -145,6 +145,30 @@ func (p *client) requestParams() (model.BodyMap, error) {
 	for _, v := range keys {
 		if bizType == BIZ_TYPE_MS && v == "P6_notifyUrl" {
 			continue
+		} else if bizType == BIZ_TYPE_QR && (v == "P16_appId" ||
+			v == "P17_limitCreditPay" ||
+			v == "P18_goodsTag" ||
+			v == "P19_guid" ||
+			v == "P20_marketingRule" ||
+			v == "P21_identity" ||
+			v == "splitBillType" ||
+			v == "ruleJson" ||
+			v == "hbfqNum" ||
+			v == "deviceInfo" ||
+			v == "storeId" ||
+			v == "alipayStoreId" ||
+			v == "timeExpire" ||
+			v == "industryRefluxInfo" ||
+			v == "termInfo" ||
+			v == "openId" ||
+			v == "authConfirmMode" ||
+			v == "sceneInfo" ||
+			v == "eduSubject" ||
+			v == "businessParams" ||
+			v == "extendParams" ||
+			v == "pid" ||
+			v == "encryptionKey") {
+			continue
 		}
 		vv := body.Get(v)
 		data.WriteString(fmt.Sprintf("%s%s", "&", vv))
@@ -234,6 +258,40 @@ func (p *client) responseParams() (model.BodyMap, error) {
 				v == "rt14_rechargeBalance" ||
 				v == "rt15_amountToBeSettled" ||
 				v == "rt16_splittableAmount") {
+			continue
+		}
+		if bizType == BIZ_TYPE_QR &&
+			(v == "rt3_retMsg" ||
+				v == "rt12_openId" ||
+				v == "rt13_orderStatus" ||
+				v == "rt14_fundBillList" ||
+				v == "rt15_channelRetCode" ||
+				v == "rt16_outTransactionOrderId" ||
+				v == "rt17_bankType" ||
+				v == "rt18_subOpenId" ||
+				v == "rt19_orderAttribute" ||
+				v == "rt20_marketingRule" ||
+				v == "rt21_promotionDetail" ||
+				v == "rt22_creditAmount" ||
+				v == "rt23_paymentAmount" ||
+				v == "rt24_orderCompleteDate" ||
+				v == "rt25_appPayType" ||
+				v == "rt26_appId" ||
+				v == "ruleJson" ||
+				v == "productFee" ||
+				v == "channelSettlementAmount" ||
+				v == "realCreditAmount" ||
+				v == "tradeType" ||
+				v == "chargeFlag" ||
+				v == "upAddData" ||
+				v == "resvData" ||
+				v == "onlineCardType" ||
+				v == "subMerchantNo" ||
+				v == "feeRate" ||
+				v == "feeAccountAmt" ||
+				v == "receiverFee" ||
+				v == "offlineFee" ||
+				v == "signatureType") {
 			continue
 		}
 		vv := row.Get(v)

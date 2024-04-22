@@ -104,3 +104,55 @@ type MerchantAccountQueryResponse struct {
 	Sign                string          `json:"sign"`                   //签名
 
 }
+
+/*
+ * 扫码/刷卡下单接口返回结构化结构
+ */
+type AppPayResponse struct {
+	Rt1BizType        string `json:"rt1_bizType"`        //交易类型
+	Rt2SignCode       string `json:"rt2_retCode"`        //签名类型
+	Rt3RetMsg         string `json:"rt3_retMsg"`         //时间戳
+	Rt4CustomerNumber string `json:"rt4_customerNumber"` //商户编号
+	Rt5OrderId        string `json:"rt5_orderId"`        //商户订单号
+	Rt6SerialNumber   string `json:"rt6_serialNumber"`   //平台流水号
+	Rt7PayType        string `json:"rt7_payType"`        //是否需要验签
+	Rt8Qrcode         string `json:"rt8_qrcode"`         //响应码
+
+	Rt9Wapurl string `json:"rt9_wapurl"` //返回信息
+
+	Rt10OrderAmount           string          `json:"rt10_orderAmount"`           //订单状态
+	Rt11Currency              string          `json:"rt11_currency"`              //拓展参数(AccountPaySub)
+	Rt12OpenId                string          `json:"rt12_openId"`                //拓展参数
+	Rt13OrderStatus           string          `json:"rt13_orderStatus"`           //拓展参数(AccountPayQuery)
+	Rt14FundBillList          string          `json:"rt14_fundBillList"`          //拓展参数(AccountPayQuery)
+	Rt15ChannelRetCode        string          `json:"rt15_channelRetCode"`        //拓展参数(AccountPayQuery)
+	Rt16OutTransactionOrderId string          `json:"rt16_outTransactionOrderId"` //拓展参数(AccountPayQuery)
+	Rt17BankType              string          `json:"rt17_bankType"`              //拓展参数(AccountPayQuery)
+	Rt18SubOpenId             string          `json:"rt18_subOpenId"`             //拓展参数(AccountPayQuery)
+	Rt19OrderAttribute        string          `json:"rt19_orderAttribute"`        //拓展参数(AccountPayQuery)
+	Rt20MarketingRule         string          `json:"rt20_marketingRule"`         //拓展参数(AccountPayQuery)
+	Rt21PromotionDetail       string          `json:"rt21_promotionDetail"`       //拓展参数(AccountPayQuery)
+	Rt22CreditAmount          decimal.Decimal `json:"rt22_creditAmount"`          //拓展参数(AccountPayQuery)
+	Rt23PaymentAmount         decimal.Decimal `json:"rt23_paymentAmount"`         //拓展参数(AccountPayQuery)
+	Rt24OrderCompleteDate     string          `json:"rt24_orderCompleteDate"`     //拓展参数(AccountPayQuery)
+	Rt25AppPayType            string          `json:"rt25_appPayType"`            //拓展参数(AccountPayQuery)
+	Rt26AppId                 string          `json:"rt26_appId"`                 //拓展参数(AccountPayQuery)
+	RuleJson                  string          `json:"ruleJson"`                   //拓展参数(AccountPayQuery)
+	ProductFee                decimal.Decimal `json:"productFee"`                 //拓展参数(AccountPayQuery)
+	ChannelSettlementAmount   decimal.Decimal `json:"channelSettlementAmount"`    //拓展参数(AccountPayQuery)
+	RealCreditAmount          decimal.Decimal `json:"realCreditAmount"`           //拓展参数(AccountPayQuery)
+	TradeType                 string          `json:"tradeType"`                  //拓展参数(AccountPayQuery)
+	ChargeFlag                string          `json:"chargeFlag"`                 //拓展参数(AccountPayQuery)
+	UpAddData                 string          `json:"upAddData"`                  //拓展参数(AccountPayQuery)
+	ResvData                  string          `json:"resvData"`                   //拓展参数(AccountPayQuery)
+	OnlineCardType            string          `json:"onlineCardType"`             //拓展参数(AccountPayQuery)
+	SubMerchantNo             string          `json:"subMerchantNo"`              //拓展参数(AccountPayQuery)
+	FeeRate                   decimal.Decimal `json:"feeRate"`                    //拓展参数(AccountPayQuery)
+	FeeAccountAmt             decimal.Decimal `json:"feeAccountAmt"`              //拓展参数(AccountPayQuery)
+	VoucherDetailList         string          `json:"voucherDetailList"`          //拓展参数(AccountPayQuery)
+	ReceiverFee               decimal.Decimal `json:"receiverFee"`                //拓展参数(AccountPayQuery)
+	OfflineFee                decimal.Decimal `json:"offlineFee"`                 //拓展参数(AccountPayQuery)
+	SignatureType             string          `json:"signatureType"`              //拓展参数(AccountPayQuery)
+	Sign                      string          `json:"sign"`                       //拓展参数(AccountPayQuery)
+
+}

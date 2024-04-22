@@ -53,6 +53,43 @@ func (p *Api) AccountPay(Body model.BodyMap) *model.Client {
 }
 
 /*
+ *扫码/刷卡下单
+ */
+func (p *Api) QrcodePay(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("扫码/刷卡下单接口...")
+
+	c := NewClient(p.Setting)
+	c.SetPath(`/trx/app/interface.action`).
+		SetMethod("POST").
+		SetBody(Body)
+
+	if c.Err = Body.CheckEmptyError("P1_bizType", "P2_orderId", "P3_customerNumber",
+		"P4_payType", "P5_orderAmount", "P6_currency",
+		"P7_authcode",
+		"P8_appType",
+		"P12_goodsName",
+		"signatureType"); c.Err != nil {
+		logger.HeliLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		logger.HeliLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	response := AppPayResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.HeliLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+
+	return &c.Client
+}
+
+/*
  * 订单结果查询（转账结果查询）
  */
 func (p *Api) AccountPayQuery(Body model.BodyMap) *model.Client {

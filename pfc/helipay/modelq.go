@@ -13,6 +13,7 @@ const (
 	BIZ_TYPE_APQ = "AccountPayQuery"         //单笔查询接口
 	BIZ_TYPE_MAQ = "MerchantAccountQuery"    //商户余额查询
 	BIZ_TYPE_AP  = "AccountPay"              //支付接口通知
+	BIZ_TYPE_QR  = "AppPay"                  //扫码/下单接口
 )
 
 /*
