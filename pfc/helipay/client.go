@@ -170,8 +170,8 @@ func (p *client) requestParams() (model.BodyMap, error) {
 			v == "encryptionKey") {
 			continue
 		}
-		vv := body.Get(v)
-		data.WriteString(fmt.Sprintf("%s%s", "&", vv))
+		vv := body.GetInterface(v)
+		data.WriteString(fmt.Sprintf("%s%v", "&", vv))
 	}
 
 	signData := data.String()
