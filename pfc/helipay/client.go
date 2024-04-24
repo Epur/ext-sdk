@@ -178,7 +178,8 @@ func (p *client) requestParams() (model.BodyMap, error) {
 			v == "businessParams" ||
 			v == "extendParams" ||
 			v == "pid" ||
-			v == "encryptionKey") {
+			v == "encryptionKey" ||
+			v == "signatureType") {
 			continue
 		}
 		vv := body.GetInterface(v)
