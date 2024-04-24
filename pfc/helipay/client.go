@@ -273,42 +273,24 @@ func (p *client) responseParams() (model.BodyMap, error) {
 			continue
 		}
 		if bizType == BIZ_TYPE_QR &&
-			(v == "rt3_retMsg" ||
-				v == "rt12_openId" ||
-				v == "rt13_orderStatus" ||
-				v == "rt14_fundBillList" ||
-				v == "rt15_channelRetCode" ||
-				v == "rt16_outTransactionOrderId" ||
-				v == "rt17_bankType" ||
-				v == "rt18_subOpenId" ||
-				v == "rt19_orderAttribute" ||
-				v == "rt20_marketingRule" ||
-				v == "rt21_promotionDetail" ||
-				v == "rt22_creditAmount" ||
-				v == "rt23_paymentAmount" ||
-				v == "rt24_orderCompleteDate" ||
-				v == "rt25_appPayType" ||
-				v == "rt26_appId" ||
-				v == "ruleJson" ||
-				v == "productFee" ||
-				v == "channelSettlementAmount" ||
-				v == "realCreditAmount" ||
-				v == "tradeType" ||
-				v == "chargeFlag" ||
-				v == "upAddData" ||
-				v == "resvData" ||
-				v == "onlineCardType" ||
-				v == "subMerchantNo" ||
-				v == "feeRate" ||
-				v == "feeAccountAmt" ||
-				v == "voucherDetailList" ||
-				v == "receiverFee" ||
-				v == "offlineFee" ||
-				v == "signatureType") {
-			continue
+			(v == "rt1_bizType" ||
+				v == "rt2_retCode" ||
+				v == "rt4_customerNumber" ||
+				v == "rt5_orderId" ||
+				v == "rt6_serialNumber" ||
+				v == "rt7_payType" ||
+				v == "rt8_qrcode" ||
+				v == "rt9_wapurl" ||
+				v == "rt10_orderAmount" ||
+				v == "rt11_currency") {
+			vv := row.Get(v)
+			data.WriteString(fmt.Sprintf("%s%s", "&", vv))
 		}
-		vv := row.Get(v)
-		data.WriteString(fmt.Sprintf("%s%s", "&", vv))
+		if bizType != BIZ_TYPE_QR {
+			vv := row.Get(v)
+			data.WriteString(fmt.Sprintf("%s%s", "&", vv))
+		}
+
 	}
 	if bizType != BIZ_TYPE_MAQ {
 		if !p.key.Verify(data.String(), signature) {
