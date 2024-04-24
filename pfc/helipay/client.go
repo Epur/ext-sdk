@@ -186,7 +186,7 @@ func (p *client) requestParams() (model.BodyMap, error) {
 	}
 
 	signData := data.String()
-
+	fmt.Println(signData)
 	//签名
 	if bizType != BIZ_TYPE_MAQ {
 		t1, err := p.key.Sign(signData)
