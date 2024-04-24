@@ -110,7 +110,7 @@ type MerchantAccountQueryResponse struct {
  */
 type AppPayResponse struct {
 	Rt1BizType        string `json:"rt1_bizType"`        //交易类型
-	Rt2SignCode       string `json:"rt2_retCode"`        //签名类型
+	Rt2RetCode        string `json:"rt2_retCode"`        //签名类型
 	Rt3RetMsg         string `json:"rt3_retMsg"`         //时间戳
 	Rt4CustomerNumber string `json:"rt4_customerNumber"` //商户编号
 	Rt5OrderId        string `json:"rt5_orderId"`        //商户订单号
