@@ -138,6 +138,17 @@ func (p *client) requestParams() (model.BodyMap, error) {
 	}
 	sort.Strings(keys)
 
+	idx := 0
+	for _, v := range keys {
+		if vv := strings.Contains(v, "rt1_"); vv {
+			break
+		}
+		idx++
+	}
+	if idx > 0 {
+		keys = append(keys[idx:], keys[:idx]...)
+	}
+
 	//获取交易类型P1_bizType，如MerchantSettlement的P6_notifyUrl不参与签名
 	bizType := body.Get("P1_bizType")
 
