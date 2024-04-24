@@ -140,7 +140,7 @@ func (p *client) requestParams() (model.BodyMap, error) {
 
 	idx := 0
 	for _, v := range keys {
-		if vv := strings.Contains(v, "rt1_"); vv {
+		if vv := strings.Contains(v, "P1_"); vv {
 			break
 		}
 		idx++
