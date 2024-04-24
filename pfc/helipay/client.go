@@ -301,6 +301,7 @@ func (p *client) responseParams() (model.BodyMap, error) {
 				v == "subMerchantNo" ||
 				v == "feeRate" ||
 				v == "feeAccountAmt" ||
+				v == "voucherDetailList" ||
 				v == "receiverFee" ||
 				v == "offlineFee" ||
 				v == "signatureType") {
