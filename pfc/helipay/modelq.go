@@ -14,7 +14,25 @@ const (
 	BIZ_TYPE_MAQ = "MerchantAccountQuery"    //商户余额查询
 	BIZ_TYPE_AP  = "AccountPay"              //支付接口通知
 	BIZ_TYPE_QR  = "AppPay"                  //扫码/下单接口
+
 )
+
+var QRPAY_REQ_FIELDS = []string{
+	"P1_bizType",
+	"P2_orderId",
+	"P3_customerNumber",
+	"P4_payType",
+	"P5_orderAmount",
+	"P6_currency",
+	"P7_authcode",
+	"P8_appType",
+	"P9_notifyUrl",
+	"P10_successToUrl",
+	"P11_orderIp",
+	"P12_goodsName",
+	"P13_goodsDetail",
+	"P14_desc",
+}
 
 /*
  *商户下单（转账）请求接口

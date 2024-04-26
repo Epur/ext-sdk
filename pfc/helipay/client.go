@@ -156,20 +156,7 @@ func (p *client) requestParams() (model.BodyMap, error) {
 	for _, v := range keys {
 		if bizType == BIZ_TYPE_MS && v == "P6_notifyUrl" {
 			continue
-		} else if bizType == BIZ_TYPE_QR && (v == "P1_bizType" ||
-			v == "P2_orderId" ||
-			v == "P3_customerNumber" ||
-			v == "P4_payType" ||
-			v == "P5_orderAmount" ||
-			v == "P6_currency" ||
-			v == "P7_authcode" ||
-			v == "P8_appType" ||
-			v == "P9_notifyUrl" ||
-			v == "P10_successToUrl" ||
-			v == "P11_orderIp" ||
-			v == "P12_goodsName" ||
-			v == "P13_goodsDetail" ||
-			v == "P14_desc") {
+		} else if bizType == BIZ_TYPE_QR && InSlice(QRPAY_REQ_FIELDS, v) {
 			vv := body.GetInterface(v)
 			data.WriteString(fmt.Sprintf("%s%v", "&", vv))
 		}
@@ -394,4 +381,13 @@ func (p *client) VerifySign(row model.BodyMap) (bool, error) {
 	}
 
 	return true, nil
+}
+
+func InSlice(items []string, item string) bool {
+	for _, eachItem := range items {
+		if strings.Compare(eachItem, item) == 0 {
+			return true
+		}
+	}
+	return false
 }
