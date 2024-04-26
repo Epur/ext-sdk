@@ -117,6 +117,7 @@ type AppPayRequest struct {
 	P12GoodsName     string  `json:"P12_goodsName"`     //商品名称
 	P13GoodsDetail   string  `json:"P13_goodsDetail"`   //商品明细
 	P14Desc          string  `json:"P14_desc"`          //描述
+	P15SubMerchantId string  `json:"P15_subMerchantId"` //描述
 	//P16AppId           string  `json:"P16_appId"`          //公众号id
 	//P17LimitCreditPay  string  `json:"P17_limitCreditPay"` //是否限制借贷记
 	//P18GoodsTag        string  `json:"P18_goodsTag"`       //商品标记
