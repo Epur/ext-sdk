@@ -253,17 +253,7 @@ func (p *client) responseParams() (model.BodyMap, error) {
 				v == "rt16_splittableAmount") {
 			continue
 		}
-		if bizType == BIZ_TYPE_QR &&
-			(v == "rt1_bizType" ||
-				v == "rt2_retCode" ||
-				v == "rt4_customerNumber" ||
-				v == "rt5_orderId" ||
-				v == "rt6_serialNumber" ||
-				v == "rt7_payType" ||
-				v == "rt8_qrcode" ||
-				v == "rt9_wapurl" ||
-				v == "rt10_orderAmount" ||
-				v == "rt11_currency") {
+		if bizType == BIZ_TYPE_QR && InSlice(QRPAY_REQ_FIELDS, v) {
 			vv := row.Get(v)
 			data.WriteString(fmt.Sprintf("%s%s", "&", vv))
 		}

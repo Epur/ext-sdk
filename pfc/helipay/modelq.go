@@ -34,6 +34,19 @@ var QRPAY_REQ_FIELDS = []string{
 	"P14_desc",
 }
 
+var QRPAY_RSP_FILEDS = []string{
+	"rt1_bizType",
+	"rt2_retCode",
+	"rt4_customerNumber",
+	"rt5_orderId",
+	"rt6_serialNumber",
+	"rt7_payType",
+	"rt8_qrcode",
+	"rt9_wapurl",
+	"rt10_orderAmount",
+	"rt11_currency",
+}
+
 /*
  *商户下单（转账）请求接口
  */
