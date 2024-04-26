@@ -17,6 +17,7 @@ const (
 
 )
 
+// 扫码接口请求加签字段
 var QRPAY_REQ_FIELDS = []string{
 	"P1_bizType",
 	"P2_orderId",
@@ -34,6 +35,7 @@ var QRPAY_REQ_FIELDS = []string{
 	"P14_desc",
 }
 
+// 扫码接口响应验签字段
 var QRPAY_RSP_FILEDS = []string{
 	"rt1_bizType",
 	"rt2_retCode",
