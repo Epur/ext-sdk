@@ -253,7 +253,7 @@ func (p *client) responseParams() (model.BodyMap, error) {
 				v == "rt16_splittableAmount") {
 			continue
 		}
-		if bizType == BIZ_TYPE_QR && InSlice(QRPAY_REQ_FIELDS, v) {
+		if bizType == BIZ_TYPE_QR && InSlice(QRPAY_RSP_FIELDS, v) {
 			vv := row.Get(v)
 			data.WriteString(fmt.Sprintf("%s%s", "&", vv))
 		}

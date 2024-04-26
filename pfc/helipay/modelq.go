@@ -36,7 +36,7 @@ var QRPAY_REQ_FIELDS = []string{
 }
 
 // 扫码接口响应验签字段
-var QRPAY_RSP_FILEDS = []string{
+var QRPAY_RSP_FIELDS = []string{
 	"rt1_bizType",
 	"rt2_retCode",
 	"rt4_customerNumber",
