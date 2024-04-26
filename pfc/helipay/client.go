@@ -156,7 +156,8 @@ func (p *client) requestParams() (model.BodyMap, error) {
 	for _, v := range keys {
 		if bizType == BIZ_TYPE_MS && v == "P6_notifyUrl" {
 			continue
-		} else if bizType == BIZ_TYPE_QR && (v == "P16_appId" ||
+		} else if bizType == BIZ_TYPE_QR && (v == "P15_subMerchantId" ||
+			v == "P16_appId" ||
 			v == "P17_limitCreditPay" ||
 			v == "P18_goodsTag" ||
 			v == "P19_guid" ||
