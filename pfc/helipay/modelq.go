@@ -68,6 +68,7 @@ var PREPAY_REQ_FIELDS = []string{
 	"P13_successToUrl",
 	"P14_orderIp",
 	"P15_goodsName",
+	"P16_goodsDetail",
 	"P17_limitCreditPay",
 	"P18_desc",
 }
