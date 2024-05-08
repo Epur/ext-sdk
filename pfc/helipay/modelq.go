@@ -224,23 +224,23 @@ type AppPayRequest struct {
 type AppPayPublicRequest struct {
 	P1BizType string `json:"P1_bizType"` //交易类型
 
-	P2OrderId         string  `json:"P2_orderId"`         //订单号
-	P3CustomerNumber  string  `json:"P3_customerNumber"`  //商户编号
-	P4PayType         string  `json:"P4_payType"`         //支付类型
-	P5Appid           float64 `json:"P5_appid"`           //公众账号ID
-	P6DeviceInfo      string  `json:"P6_deviceInfo"`      //设备号
-	P7IsRaw           string  `json:"P7_isRaw"`           //是否原生
-	P8Openid          string  `json:"P8_openid"`          //用户标识
-	P9OrderAmount     string  `json:"P9_orderAmount"`     //交易金额
-	P10Currency       string  `json:"P10_currency"`       //币种类型
-	P11AppType        string  `json:"P11_appType"`        //客户端类型
-	P12NotifyUrl      string  `json:"P12_notifyUrl"`      //通知回调地址
-	P13SuccessToUrl   string  `json:"P13_successToUrl"`   //页面跳转地址
-	P14OrderIp        string  `json:"P14_orderIp"`        //下单IP
-	P15GoodsName      string  `json:"P15_goodsName"`      //商品名称
-	P16GoodsDetail    string  `json:"P16_goodsDetail"`    //商品详情
-	P17LimitCreditPay string  `json:"P17_limitCreditPay"` //能否使用信用卡
-	P18Desc           string  `json:"P18_desc"`           //备注
+	P2OrderId         string `json:"P2_orderId"`         //订单号
+	P3CustomerNumber  string `json:"P3_customerNumber"`  //商户编号
+	P4PayType         string `json:"P4_payType"`         //支付类型
+	P5Appid           string `json:"P5_appid"`           //公众账号ID
+	P6DeviceInfo      string `json:"P6_deviceInfo"`      //设备号
+	P7IsRaw           string `json:"P7_isRaw"`           //是否原生
+	P8Openid          string `json:"P8_openid"`          //用户标识
+	P9OrderAmount     string `json:"P9_orderAmount"`     //交易金额
+	P10Currency       string `json:"P10_currency"`       //币种类型
+	P11AppType        string `json:"P11_appType"`        //客户端类型
+	P12NotifyUrl      string `json:"P12_notifyUrl"`      //通知回调地址
+	P13SuccessToUrl   string `json:"P13_successToUrl"`   //页面跳转地址
+	P14OrderIp        string `json:"P14_orderIp"`        //下单IP
+	P15GoodsName      string `json:"P15_goodsName"`      //商品名称
+	P16GoodsDetail    string `json:"P16_goodsDetail"`    //商品详情
+	P17LimitCreditPay string `json:"P17_limitCreditPay"` //能否使用信用卡
+	P18Desc           string `json:"P18_desc"`           //备注
 	//P19Guid            string  `json:"P19_guid"`           //微信上送的唯一号
 	//P20MarketingRule   string  `json:"P20_marketingRule"`  //营销参数规则
 	//P21Identity        string  `json:"P21_identity"`       //实名参数
