@@ -7,13 +7,14 @@ import (
 
 // 交易类型
 const (
-	BIZ_TYPE_MS  = "MerchantSettlement"      //结算接口
-	BIZ_TYPE_MSQ = "MerchantSettlementQuery" //结算查询接口
-	BIZ_TYPE_APS = "AccountPaySub"           //子商户支付接口
-	BIZ_TYPE_APQ = "AccountPayQuery"         //单笔查询接口
-	BIZ_TYPE_MAQ = "MerchantAccountQuery"    //商户余额查询
-	BIZ_TYPE_AP  = "AccountPay"              //支付接口通知
-	BIZ_TYPE_QR  = "AppPay"                  //扫码/下单接口
+	BIZ_TYPE_MS     = "MerchantSettlement"      //结算接口
+	BIZ_TYPE_MSQ    = "MerchantSettlementQuery" //结算查询接口
+	BIZ_TYPE_APS    = "AccountPaySub"           //子商户支付接口
+	BIZ_TYPE_APQ    = "AccountPayQuery"         //单笔查询接口
+	BIZ_TYPE_MAQ    = "MerchantAccountQuery"    //商户余额查询
+	BIZ_TYPE_AP     = "AccountPay"              //支付接口通知
+	BIZ_TYPE_QR     = "AppPay"                  //扫码/下单接口
+	BIZ_TYPE_PREPAY = "AppPayPublic"            //公众号/JS/服务窗预下单接口
 
 )
 
@@ -47,6 +48,44 @@ var QRPAY_RSP_FIELDS = []string{
 	"rt9_wapurl",
 	"rt10_orderAmount",
 	"rt11_currency",
+}
+
+// 公众号/JS/服务窗预下单接口请求加签字段
+
+var PREPAY_REQ_FIELDS = []string{
+	"P1_bizType",
+	"P2_orderId",
+	"P3_customerNumber",
+	"P4_payType",
+	"P5_appid",
+	"P6_deviceInfo",
+	"P7_isRaw",
+	"P8_openid",
+	"P9_orderAmount",
+	"P10_currency",
+	"P11_appType",
+	"P12_notifyUrl",
+	"P13_successToUrl",
+	"P14_orderIp",
+	"P15_goodsName",
+	"P17_limitCreditPay",
+	"P18_desc",
+}
+
+// 公众号/JS/服务窗预下单接口响应验签字段
+
+var PREPAY_RSP_FIELDS = []string{
+	"rt1_bizType",
+	"rt2_retCode",
+	"rt4_customerNumber",
+	"rt5_orderId",
+	"rt6_serialNumber",
+	"rt7_payType",
+	"rt8_appid",
+	"rt9_tokenId",
+	"rt10_payInfo",
+	"rt11_orderAmount",
+	"rt12_currency",
 }
 
 /*
@@ -154,6 +193,54 @@ type AppPayRequest struct {
 	//P16AppId           string  `json:"P16_appId"`          //公众号id
 	//P17LimitCreditPay  string  `json:"P17_limitCreditPay"` //是否限制借贷记
 	//P18GoodsTag        string  `json:"P18_goodsTag"`       //商品标记
+	//P19Guid            string  `json:"P19_guid"`           //微信上送的唯一号
+	//P20MarketingRule   string  `json:"P20_marketingRule"`  //营销参数规则
+	//P21Identity        string  `json:"P21_identity"`       //实名参数
+	//SplitBillType      string  `json:"splitBillType"`      //分账类型
+	//RuleJson           string  `json:"ruleJson"`           //分账规则
+	//HbfqNum            string  `json:"hbfqNum"`            //分期数
+	//DeviceInfo         string  `json:"deviceInfo"`         //终端号
+	//StoreId            string  `json:"storeId"`            //商户门店编号
+	//AlipayStoreId      string  `json:"alipayStoreId"`      //支付宝店铺编号
+	//TimeExpire         string  `json:"timeExpire"`         //超时时间
+	//IndustryRefluxInfo string  `json:"industryRefluxInfo"` //支付宝行业数据回流信息
+	//TermInfo           string  `json:"termInfo"`           //银联终端信息
+	//OpenId             string  `json:"openId"`             //用户id
+	//AuthConfirmMode    string  `json:"authConfirmMode"`    //预授权确认模式
+	//TerminalSysBindNo  string  `json:"terminalSysBindNo"`  //终端绑定号
+	//EncryptRandNum     string  `json:"encryptRandNum"`     //加密随机因子
+	//SecretText         string  `json:"secretText"`         //密文数据
+	//SceneInfo          string  `json:"sceneInfo"`          //场景信息
+	//EduSubject         string  `json:"eduSubject"`         //学校名称、场景名称
+	//BusinessParams     string  `json:"businessParams"`     //商户传入业务信息，具体值要和支付宝约定
+	//ExtendParams       string  `json:"extendParams"`       //业务扩展参数
+	//Pid                string  `json:"pid"`                //服务商pid
+	//EncryptionKey      string  `json:"encryptionKey"`      //加密密钥
+	SignatureType string `json:"signatureType"` //签名方式
+}
+
+//公众号/JS/服务窗预下单接口
+
+type AppPayPublicRequest struct {
+	P1BizType string `json:"P1_bizType"` //交易类型
+
+	P2OrderId         string  `json:"P2_orderId"`         //订单号
+	P3CustomerNumber  string  `json:"P3_customerNumber"`  //商户编号
+	P4PayType         string  `json:"P4_payType"`         //支付类型
+	P5Appid           float64 `json:"P5_appid"`           //公众账号ID
+	P6DeviceInfo      string  `json:"P6_deviceInfo"`      //设备号
+	P7IsRaw           string  `json:"P7_isRaw"`           //是否原生
+	P8Openid          string  `json:"P8_openid"`          //用户标识
+	P9OrderAmount     string  `json:"P9_orderAmount"`     //交易金额
+	P10Currency       string  `json:"P10_currency"`       //币种类型
+	P11AppType        string  `json:"P11_appType"`        //客户端类型
+	P12NotifyUrl      string  `json:"P12_notifyUrl"`      //通知回调地址
+	P13SuccessToUrl   string  `json:"P13_successToUrl"`   //页面跳转地址
+	P14OrderIp        string  `json:"P14_orderIp"`        //下单IP
+	P15GoodsName      string  `json:"P15_goodsName"`      //商品名称
+	P16GoodsDetail    string  `json:"P16_goodsDetail"`    //商品详情
+	P17LimitCreditPay string  `json:"P17_limitCreditPay"` //能否使用信用卡
+	P18Desc           string  `json:"P18_desc"`           //备注
 	//P19Guid            string  `json:"P19_guid"`           //微信上送的唯一号
 	//P20MarketingRule   string  `json:"P20_marketingRule"`  //营销参数规则
 	//P21Identity        string  `json:"P21_identity"`       //实名参数

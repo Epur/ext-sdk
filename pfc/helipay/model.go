@@ -106,6 +106,30 @@ type MerchantAccountQueryResponse struct {
 }
 
 /*
+ * 公众号/JS/服务窗预下单接口
+ */
+
+type AppPayPublicResponse struct {
+	Rt1BizType         string `json:"rt1_bizType"`         //交易类型
+	Rt2RetCode         string `json:"rt2_retCode"`         //返回码
+	Rt3RetMsg          string `json:"rt3_retMsg"`          //时间戳
+	Rt4CustomerNumber  string `json:"rt4_customerNumber"`  //商户编号
+	Rt5OrderId         string `json:"rt5_orderId"`         //商户订单号
+	Rt6SerialNumber    string `json:"rt6_serialNumber"`    //平台流水号
+	Rt7PayType         string `json:"rt7_payType"`         //支付类型
+	Rt8Appid           string `json:"rt8_appid"`           //公众账号 ID
+	Rt9TokenId         string `json:"rt9_tokenId"`         //动态口令
+	Rt10PayInfo        string `json:"rt10_payInfo"`        //原生态js 支付信息
+	Rt11OrderAmount    string `json:"rt11_orderAmount"`    //交易金额
+	Rt12Currency       string `json:"rt12_currency"`       //币种类型
+	Rt13ChannelRetCode string `json:"rt13_channelRetCode"` //上游返回码
+	Rt14AppPayType     string `json:"rt14_appPayType"`     //客户端类型
+	SubMerchantNo      string `json:"subMerchantNo"`       //渠道子商户号(U/A/T)
+	SignatureType      string `json:"signatureType"`       //签名方式
+	Sign               string `json:"sign"`                //签名
+}
+
+/*
  * 扫码/刷卡下单接口返回结构化结构
  */
 type AppPayResponse struct {

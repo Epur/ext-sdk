@@ -90,6 +90,46 @@ func (p *Api) QrcodePay(Body model.BodyMap) *model.Client {
 }
 
 /*
+ *公众号/JS/服务窗预下单接口
+ */
+
+func (p *Api) PrePay(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("公众号/JS/服务窗预下单接口...")
+
+	c := NewClient(p.Setting)
+	c.SetPath(`/trx/app/interface.action`).
+		SetMethod("POST").
+		SetBody(Body)
+
+	if c.Err = Body.CheckEmptyError("P1_bizType", "P2_orderId", "P3_customerNumber",
+		"P4_payType", "P5_appid", "P8_openid",
+		"P9_orderAmount",
+		"P10_currency",
+		"P11_appType",
+		"P14_orderIp",
+		"P15_goodsName",
+		"signatureType"); c.Err != nil {
+		logger.HeliLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		logger.HeliLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	response := AppPayPublicResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.HeliLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+
+	return &c.Client
+}
+
+/*
  * 订单结果查询（转账结果查询）
  */
 func (p *Api) AccountPayQuery(Body model.BodyMap) *model.Client {

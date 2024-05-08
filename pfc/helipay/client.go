@@ -159,8 +159,11 @@ func (p *client) requestParams() (model.BodyMap, error) {
 		} else if bizType == BIZ_TYPE_QR && InSlice(QRPAY_REQ_FIELDS, v) {
 			vv := body.GetInterface(v)
 			data.WriteString(fmt.Sprintf("%s%v", "&", vv))
+		} else if bizType == BIZ_TYPE_PREPAY && InSlice(PREPAY_REQ_FIELDS, v) {
+			vv := body.GetInterface(v)
+			data.WriteString(fmt.Sprintf("%s%v", "&", vv))
 		}
-		if bizType != BIZ_TYPE_QR {
+		if bizType != BIZ_TYPE_QR && bizType != BIZ_TYPE_PREPAY {
 			vv := body.GetInterface(v)
 			data.WriteString(fmt.Sprintf("%s%v", "&", vv))
 		}
@@ -257,7 +260,12 @@ func (p *client) responseParams() (model.BodyMap, error) {
 			vv := row.Get(v)
 			data.WriteString(fmt.Sprintf("%s%s", "&", vv))
 		}
-		if bizType != BIZ_TYPE_QR {
+		if bizType == BIZ_TYPE_PREPAY && InSlice(PREPAY_RSP_FIELDS, v) {
+			vv := row.Get(v)
+			data.WriteString(fmt.Sprintf("%s%s", "&", vv))
+		}
+
+		if bizType != BIZ_TYPE_QR && bizType != BIZ_TYPE_PREPAY {
 			vv := row.Get(v)
 			data.WriteString(fmt.Sprintf("%s%s", "&", vv))
 		}
