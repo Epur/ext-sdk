@@ -164,8 +164,15 @@ func (p *client) requestParams() (model.BodyMap, error) {
 			data.WriteString(fmt.Sprintf("%s%v", "&", vv))
 		}
 		if bizType != BIZ_TYPE_QR && bizType != BIZ_TYPE_PREPAY {
-			vv := body.GetInterface(v)
-			data.WriteString(fmt.Sprintf("%s%v", "&", vv))
+
+			if v == "P6_ext" {
+				vv := body.GetString(v)
+				data.WriteString(fmt.Sprintf("%s%s", "&", vv))
+			} else {
+				vv := body.GetInterface(v)
+				data.WriteString(fmt.Sprintf("%s%v", "&", vv))
+			}
+
 		}
 
 	}
