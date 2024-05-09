@@ -99,7 +99,9 @@ func (p *client) Execute() {
 	smap := make(model.BodyMap)
 	//data, _ := json.Marshal(response["body"])
 	v := response.GetString("rt1_bizType")
-	if strings.Contains(v, "Merchant") { //结算及余额查询接口
+	if strings.Contains(v, "Merchant") ||
+		strings.Compare(v, BIZ_TYPE_PREPAY) == 0 ||
+		strings.Compare(v, BIZ_TYPE_QR) == 0 { //结算及余额查询接口及公众号/JS预下单接口,扫码下单
 		json.Unmarshal(p.HttpReq.Result, &smap)
 		p.Response.Response.Code = smap["rt2_retCode"].(string)
 		p.Response.Response.Message = smap["rt3_retMsg"].(string)
