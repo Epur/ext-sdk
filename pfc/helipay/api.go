@@ -258,3 +258,42 @@ func (p *Api) MerchantAccountQuery(Body model.BodyMap) *model.Client {
 	c.Response.Response.DataTo = response
 	return &c.Client
 }
+
+/*
+**产品手续费收取方式修改
+ */
+func (p *Api) MdfyPdConf(Body model.BodyMap, otherParam model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("产品手续费收取方式修改接口...")
+
+	c := NewClient(p.Setting)
+	c.SetPath(BIZ_TXN_PMENRY).
+		SetMethod("POST").
+		SetBody(Body).
+		SetProtected(otherParam)
+
+	if c.Err = Body.CheckEmptyError("merchantNo", "merchantNo", "productType",
+		"value"); c.Err != nil {
+		logger.HeliLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	if c.Err = otherParam.CheckEmptyError("interfaceName", "merchantNo"); c.Err != nil {
+		logger.HeliLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		logger.HeliLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	response := AppPayPublicResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.HeliLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+
+	return &c.Client
+}

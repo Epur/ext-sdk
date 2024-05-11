@@ -63,20 +63,35 @@ func (p *client) Execute() {
 		http.WithMethod(*p.Request.Method),
 	)
 
-	row, err := p.requestParams()
-	if err != nil {
-		logger.HeliLogger.Error("ERROR:", err.Error())
-		p.Err = err
-		return
+	if strings.Compare(*p.Request.Path, BIZ_TXN_PMENRY) == 0 {
+		row, err := p.requestMEntryParams()
+		if err != nil {
+			logger.HeliLogger.Error("ERROR:", err.Error())
+			p.Err = err
+			return
+		}
+		p.HttpReq.Body = row
+	} else {
+		row, err := p.requestParams()
+		if err != nil {
+			logger.HeliLogger.Error("ERROR:", err.Error())
+			p.Err = err
+			return
+		}
+		p.HttpReq.Body = row
 	}
 
 	// 将报文添加到请求url中
 	//for key := range row {
 	//	p.HttpReq.QueryParams.Add(key, row.Get(key))
 	//}
-	p.HttpReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	if strings.Compare(*p.Request.Path, BIZ_TXN_PMENRY) == 0 {
+		p.HttpReq.Header.Set("Content-Type", "multipart/form-data")
+	} else {
+		p.HttpReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	}
+
 	http.WithRequestType(http.TypeForm)(p.HttpReq)
-	p.HttpReq.Body = row
 
 	if p.Err = p.Client.Execute(); p.Err != nil {
 		logger.HeliLogger.Error("ERROR:", p.Err.Error())
@@ -310,6 +325,8 @@ func (p *client) urlParse() string {
 	case "/trx/app/interface.action":
 		p.Setting.ServerUrl = &url[1]
 	//其他接口
+	case "/trx/merchantEntry/interface.action":
+		p.Setting.ServerUrl = &url[2]
 	default:
 		p.Setting.ServerUrl = &url[0]
 	}
@@ -397,4 +414,42 @@ func InSlice(items []string, item string) bool {
 		}
 	}
 	return false
+}
+
+/*
+ *返回body数据,并且包含签名及签名算法信息(进件相关操作，区别于支付相关接口)
+ */
+func (p *client) requestMEntryParams() (model.BodyMap, error) {
+	body := model.BodyMap{}
+	body = p.Request.Body
+
+	//var keys []string
+	data := bytes.Buffer{}
+	for _, v := range PREPAY_MEntry_FIELDS {
+		vv := ""
+		if v == "body" {
+			vv = body.JsonBody()
+		} else {
+			vv = p.Request.Protected.GetString(v)
+		}
+		data.WriteString(fmt.Sprintf("%s%s", vv, "&"))
+	}
+	if strings.Compare(p.key.MerchantKey, "") != 0 {
+		data.WriteString(fmt.Sprintf("%s", p.key.MerchantKey))
+	}
+	signData := data.String()
+	fmt.Println(signData)
+	//签名
+	t1, err := p.key.SignWithMD5(signData)
+	if err != nil {
+		logger.CmbcLogger.Error("ERROR:", err.Error())
+		return nil, err
+	}
+	fmt.Println(t1)
+	p.Request.Protected.Set("sign", t1)
+	p.Request.Protected.Set("body", body.JsonBody())
+
+	fmt.Println(p.Request.Protected)
+
+	return p.Request.Protected, nil
 }
