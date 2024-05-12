@@ -180,3 +180,23 @@ type AppPayResponse struct {
 	Sign                      string `json:"sign"`                              //拓展参数(AccountPayQuery)
 
 }
+
+/*
+ * 进件接口
+ */
+
+type MerchantEntryResponse struct {
+	Success       bool            `json:"success"`       //交易类型
+	Code          string          `json:"code"`          //签名类型
+	Message       string          `json:"message"`       //时间戳
+	Data          json.RawMessage `json:"data"`          //是否需要验签
+	Sign          string          `json:"sign"`          //响应码
+	Hostname      string          `json:"hostname"`      //响应码
+	SignType      string          `json:"signType"`      //响应码
+	EncryptionKey string          `json:"encryptionKey"` //响应码
+}
+
+type MdPdConfResponse struct {
+	MerchantNo string `json:"merchantNo"` //子商户编号
+	Status     string `json:"status"`     //状态
+}

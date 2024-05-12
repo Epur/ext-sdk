@@ -277,3 +277,14 @@ type AppPayPublicRequest struct {
 	//EncryptionKey      string  `json:"encryptionKey"`      //加密密钥
 	SignatureType string `json:"signatureType"` //签名方式
 }
+
+//进件统一请求参数接口
+
+type MerchantEntryRequest struct {
+	InterfaceName string `json:"interfaceName"` //交易类型
+
+	Body          json.RawMessage `json:"body"`          //订单号
+	MerchantNo    string          `json:"merchantNo"`    //商户编号
+	SignType      string          `json:"signType"`      //支付类型
+	EncryptionKey string          `json:"encryptionKey"` //公众账号ID
+}
