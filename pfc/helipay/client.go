@@ -426,12 +426,7 @@ func (p *client) requestMEntryParams() (model.BodyMap, error) {
 	//var keys []string
 	data := bytes.Buffer{}
 	for _, v := range PREPAY_MEntry_FIELDS {
-		vv := ""
-		if v == "body" {
-			vv = body.JsonBody()
-		} else {
-			vv = p.Request.Protected.GetString(v)
-		}
+		vv := body.GetString(v)
 		data.WriteString(fmt.Sprintf("%s%s", vv, "&"))
 	}
 	if strings.Compare(p.key.MerchantKey, "") != 0 {

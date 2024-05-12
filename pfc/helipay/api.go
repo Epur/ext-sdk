@@ -268,16 +268,15 @@ func (p *Api) MdfyPdConf(Body model.BodyMap, otherParam model.BodyMap) *model.Cl
 	c := NewClient(p.Setting)
 	c.SetPath(BIZ_TXN_PMENRY).
 		SetMethod("POST").
-		SetBody(Body).
-		SetProtected(otherParam)
+		SetBody(Body)
 
-	if c.Err = Body.CheckEmptyError("merchantNo", "type", "productType",
-		"value"); c.Err != nil {
-		logger.HeliLogger.Error("ERROR:", c.Err.Error())
-		return &c.Client
-	}
+	//if c.Err = Body.CheckEmptyError("merchantNo", "type", "productType",
+	//	"value"); c.Err != nil {
+	//	logger.HeliLogger.Error("ERROR:", c.Err.Error())
+	//	return &c.Client
+	//}
 
-	if c.Err = otherParam.CheckEmptyError("interfaceName", "merchantNo"); c.Err != nil {
+	if c.Err = Body.CheckEmptyError("interfaceName", "merchantNo", "body"); c.Err != nil {
 		logger.HeliLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
 	}
