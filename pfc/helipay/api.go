@@ -262,7 +262,7 @@ func (p *Api) MerchantAccountQuery(Body model.BodyMap) *model.Client {
 /*
 **产品手续费收取方式修改
  */
-func (p *Api) MdfyPdConf(Body model.BodyMap, otherParam model.BodyMap) *model.Client {
+func (p *Api) MdfyPdConf(Body model.BodyMap) *model.Client {
 	logger.CmbcLogger.Info("产品手续费收取方式修改接口...")
 
 	c := NewClient(p.Setting)
@@ -287,7 +287,7 @@ func (p *Api) MdfyPdConf(Body model.BodyMap, otherParam model.BodyMap) *model.Cl
 		return &c.Client
 	}
 
-	response := AppPayPublicResponse{}
+	response := MerchantEntryResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
 		logger.HeliLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
