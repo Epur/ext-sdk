@@ -271,7 +271,7 @@ func (p *Api) MdfyPdConf(Body model.BodyMap, otherParam model.BodyMap) *model.Cl
 		SetBody(Body).
 		SetProtected(otherParam)
 
-	if c.Err = Body.CheckEmptyError("merchantNo", "merchantNo", "productType",
+	if c.Err = Body.CheckEmptyError("merchantNo", "type", "productType",
 		"value"); c.Err != nil {
 		logger.HeliLogger.Error("ERROR:", c.Err.Error())
 		return &c.Client
