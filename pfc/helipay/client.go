@@ -442,7 +442,7 @@ func (p *client) requestMEntryParams() (model.BodyMap, error) {
 		return nil, err
 	}
 	fmt.Println(t1)
-	p.Request.Protected.Set("sign", t1)
+	p.Request.Body.Set("sign", t1)
 	//p.Request.Protected.Set("body", body.JsonBody())
 
 	fmt.Println(p.Request.Protected)
