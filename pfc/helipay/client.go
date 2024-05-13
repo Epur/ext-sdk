@@ -447,5 +447,5 @@ func (p *client) requestMEntryParams() (model.BodyMap, error) {
 
 	fmt.Println(p.Request.Protected)
 
-	return p.Request.Protected, nil
+	return p.Request.Body, nil
 }
