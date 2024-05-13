@@ -19,7 +19,7 @@ const (
 )
 
 const (
-	BIZ_TXN_PMENRY = "/trx/transfer/interface.action" //进件接口
+	BIZ_TXN_PMENRY = "/trx/merchantEntry/interface.action" //进件接口
 )
 
 // 扫码接口请求加签字段
