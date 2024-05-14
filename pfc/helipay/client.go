@@ -433,10 +433,10 @@ func (p *client) requestMEntryParams() (model.BodyMap, error) {
 			data.WriteString(fmt.Sprintf("%s%s", vv, "&"))
 		} else {
 			vv := body.GetString(v)
-			mapv := make(map[string]interface{})
-			err := json.Unmarshal([]byte(vv), &mapv)
-			vvv, err := json.Marshal(mapv)
-			encrypted, err := desede.TripleEcbDesEncrypt(vvv, []byte(p.key.EncryptKey))
+			//mapv := make(map[string]interface{})
+			//err := json.Unmarshal([]byte(vv), &mapv)
+			//vvv, err := json.Marshal(mapv)
+			encrypted, err := desede.TripleEcbDesEncrypt([]byte(vv), []byte(p.key.EncryptKey))
 			if err != nil {
 				return nil, err
 			}
