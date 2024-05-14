@@ -429,14 +429,14 @@ func (p *client) requestMEntryParams() (model.BodyMap, error) {
 		vv := body.GetString(v)
 		data.WriteString(fmt.Sprintf("%s%s", "&", vv))
 	}
-	//if strings.Compare(p.key.MerchantKey, "") != 0 {
-	//	data.WriteString(fmt.Sprintf("%s", p.key.MerchantKey))
-	//}
+	if strings.Compare(p.key.MerchantKey, "") != 0 {
+		data.WriteString(fmt.Sprintf("%s%s", "&", p.key.MerchantKey))
+	}
 
 	signData := data.String()
 	fmt.Println(signData)
 	//签名
-	t1, err := p.key.Sign(signData)
+	t1, err := p.key.SignWithMD5(signData)
 	if err != nil {
 		logger.CmbcLogger.Error("ERROR:", err.Error())
 		return nil, err
