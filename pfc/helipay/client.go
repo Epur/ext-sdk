@@ -436,7 +436,7 @@ func (p *client) requestMEntryParams() (model.BodyMap, error) {
 			mapv := make(map[string]interface{})
 			err := json.Unmarshal([]byte(vv), &mapv)
 			vvv, err := json.Marshal(mapv)
-			encrypted, err := desede.TripleEcbDesEncrypt([]byte(vvv), []byte(p.key.EncryptKey))
+			encrypted, err := desede.TripleEcbDesEncrypt(vvv, []byte(p.key.EncryptKey))
 			if err != nil {
 				return nil, err
 			}
