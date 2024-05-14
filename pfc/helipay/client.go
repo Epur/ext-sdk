@@ -2,12 +2,14 @@ package helipay
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/Epur/ext-sdk/logger"
 	"github.com/Epur/ext-sdk/model"
 	"github.com/Epur/ext-sdk/utils"
+	"github.com/Epur/ext-sdk/utils/desede"
 	"github.com/tangchen2018/go-utils/http"
 	"sort"
 	"strings"
@@ -426,11 +428,20 @@ func (p *client) requestMEntryParams() (model.BodyMap, error) {
 	//var keys []string
 	data := bytes.Buffer{}
 	for _, v := range PREPAY_MEntry_FIELDS {
-		vv := body.GetString(v)
-		data.WriteString(fmt.Sprintf("%s%s", "&", vv))
+		if v != "body" {
+			vv := body.GetString(v)
+			data.WriteString(fmt.Sprintf("%s%s", vv, "&"))
+		} else {
+			vv := body.GetString(v)
+			sigData, err := desede.TripleEcbDesEncrypt([]byte(vv), []byte(p.key.EncryptKey))
+			if err != nil {
+				return nil, err
+			}
+			data.WriteString(fmt.Sprintf("%s%s", base64.StdEncoding.EncodeToString(sigData), "&"))
+		}
 	}
 	if strings.Compare(p.key.MerchantKey, "") != 0 {
-		data.WriteString(fmt.Sprintf("%s%s", "&", p.key.MerchantKey))
+		data.WriteString(fmt.Sprintf("%s", p.key.MerchantKey))
 	}
 
 	signData := data.String()

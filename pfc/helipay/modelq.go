@@ -78,7 +78,6 @@ var PREPAY_REQ_FIELDS = []string{
 }
 
 var PREPAY_MEntry_FIELDS = []string{
-	"merchantNo",
 	"body",
 	"merchantNo",
 }
