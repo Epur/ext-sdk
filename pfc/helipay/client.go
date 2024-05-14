@@ -433,11 +433,12 @@ func (p *client) requestMEntryParams() (model.BodyMap, error) {
 			data.WriteString(fmt.Sprintf("%s%s", vv, "&"))
 		} else {
 			vv := body.GetString(v)
-			sigData, err := desede.TripleEcbDesEncrypt([]byte(vv), []byte(p.key.EncryptKey))
+			encrypted, err := desede.TripleEcbDesEncrypt([]byte(vv), []byte(p.key.EncryptKey))
 			if err != nil {
 				return nil, err
 			}
-			data.WriteString(fmt.Sprintf("%s%s", base64.StdEncoding.EncodeToString(sigData), "&"))
+			encryptedStr := base64.StdEncoding.EncodeToString(encrypted)
+			data.WriteString(fmt.Sprintf("%s%s", encryptedStr, "&"))
 		}
 	}
 	if strings.Compare(p.key.MerchantKey, "") != 0 {

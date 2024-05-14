@@ -115,10 +115,11 @@ func TripleEcbDesDecrypt(crypted, key []byte) ([]byte, error) {
 //	// 定义密钥，长度必须是24字节
 //	key := []byte("J68yys6TYv5YNHTMtZrZnIa5")
 //	// 定义明文
-//	plaintext := []byte("{\"orderNo\":\"\", \"merchantNo\":\"c10000213\"}")
+//	plaintext := `{"merchantNo":"E1808319765","productType":"APPPAY","type":"FeeCollection","value":"OWN_CASHACCOUNT"}`
+//	//plaintext := []byte(`{"merchantNo":"E1808319765","productType":"APPPAY","type":"FeeCollection","value":"OWN_CASHACCOUNT"}`)
 //	fmt.Println("明文：", string(plaintext))
 //	// 加密明文
-//	ciphertext, err := TripleEcbDesEncrypt(plaintext, key)
+//	ciphertext, err := TripleEcbDesEncrypt([]byte(plaintext), key)
 //	if err != nil {
 //		fmt.Println(err)
 //		return
