@@ -282,8 +282,8 @@ type AppPayPublicRequest struct {
 type MerchantEntryRequest struct {
 	InterfaceName string `json:"interfaceName"` //交易类型
 
-	Body          string `json:"body"`          //订单号
-	MerchantNo    string `json:"merchantNo"`    //商户编号
-	SignType      string `json:"signType"`      //支付类型
-	EncryptionKey string `json:"encryptionKey"` //公众账号ID
+	Body          map[string]interface{} `json:"body"`          //订单号
+	MerchantNo    string                 `json:"merchantNo"`    //平台商编
+	SignType      string                 `json:"signType"`      //支付类型
+	EncryptionKey string                 `json:"encryptionKey"` //加密密钥
 }
