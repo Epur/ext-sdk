@@ -116,16 +116,23 @@ func (p *client) Execute() {
 	smap := make(model.BodyMap)
 	//data, _ := json.Marshal(response["body"])
 	v := response.GetString("rt1_bizType")
-	if strings.Contains(v, "Merchant") ||
-		strings.Compare(v, BIZ_TYPE_PREPAY) == 0 ||
-		strings.Compare(v, BIZ_TYPE_QR) == 0 { //结算及余额查询接口及公众号/JS预下单接口,扫码下单
+	if v != "" {
+		if strings.Contains(v, "Merchant") ||
+			strings.Compare(v, BIZ_TYPE_PREPAY) == 0 ||
+			strings.Compare(v, BIZ_TYPE_QR) == 0 { //结算及余额查询接口及公众号/JS预下单接口,扫码下单
+			json.Unmarshal(p.HttpReq.Result, &smap)
+			p.Response.Response.Code = smap["rt2_retCode"].(string)
+			p.Response.Response.Message = smap["rt3_retMsg"].(string)
+		} else { //支付接口
+			_ = json.Unmarshal(p.HttpReq.Result, &result)
+			p.Response.Response.Code = result.Rt5RetCode
+			p.Response.Response.Message = result.Rt6RetMsg //响应信息
+		}
+	} else {
+		//进件接口
 		json.Unmarshal(p.HttpReq.Result, &smap)
-		p.Response.Response.Code = smap["rt2_retCode"].(string)
-		p.Response.Response.Message = smap["rt3_retMsg"].(string)
-	} else { //支付接口
-		_ = json.Unmarshal(p.HttpReq.Result, &result)
-		p.Response.Response.Code = result.Rt5RetCode
-		p.Response.Response.Message = result.Rt6RetMsg //响应信息
+		p.Response.Response.Code = smap["code"].(string)
+		p.Response.Response.Message = smap["message"].(string)
 	}
 
 	//p.Response.Response.RequestId = result.Rt9SerialNumber //合利宝支付流水号
