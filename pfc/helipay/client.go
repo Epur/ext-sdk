@@ -442,6 +442,7 @@ func (p *client) requestMEntryParams() (model.BodyMap, error) {
 			}
 			encryptedStr := base64.StdEncoding.EncodeToString(encrypted)
 			data.WriteString(fmt.Sprintf("%s%s", encryptedStr, "&"))
+			p.Request.Body.Set("body", encryptedStr)
 		}
 	}
 	if strings.Compare(p.key.MerchantKey, "") != 0 {
