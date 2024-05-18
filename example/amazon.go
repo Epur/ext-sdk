@@ -17,9 +17,9 @@ func main() {
 	set := new(model.Setting).
 		SetKey("").
 		SetSecret("").
-		SetAuthCallbackUrl("https://dev2.web.epur.cn/openapi/admin/v1/erp/platform/cross/auth/callback/Amazon").
+		SetAuthCallbackUrl("").
 		SetAccessToken("").
-		SetServerUrl("https://dev2.web.epur.cn/#/to/enter-in").
+		SetServerUrl("").
 		SetDevelopId("")
 	api := amazon.New(set)
 	testApi := AmazonTest{api: api}
