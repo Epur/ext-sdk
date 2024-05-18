@@ -3,6 +3,7 @@ package api
 import (
 	"errors"
 	"github.com/Epur/ext-sdk/model"
+	"github.com/Epur/ext-sdk/pfc/amazon"
 	"github.com/Epur/ext-sdk/pfc/epur"
 	"github.com/Epur/ext-sdk/pfc/go1688"
 	"github.com/Epur/ext-sdk/pfc/lazada"
@@ -33,6 +34,8 @@ func New(pfc string, setting *model.Setting) *Api {
 		api.api = lazada.New(setting)
 	case model.PFC_SHOPEE:
 		api.api = shopee.New(setting)
+	case model.PFC_AMAZON:
+		api.api = amazon.New(setting)
 	case model.PFC_1688:
 		api.api = go1688.New(setting)
 	default:
