@@ -111,15 +111,16 @@ func (p *Api) StoreRefreshToken(Body model.BodyMap) *model.Client {
 	Response: GetOrderListResponse
 */
 
-func (p *Api) GetOrderList(Body model.BodyMap) *model.Client {
+func (p *Api) GetOrderList(Body model.BodyMap, Params model.BodyMap) *model.Client {
 
 	var cursor *string
 	c := NewClient(p.Setting)
 	c.SetPath(`/order/202309/orders/search`).
 		SetMethod("POST").
-		SetBody(Body)
+		SetBody(Body).
+		SetParams(Params) // 新增 Query 参数赋值  page_size只能存在于params中
 
-	if c.Err = Body.CheckEmptyError("page_size"); c.Err != nil {
+	if c.Err = Params.CheckEmptyError("page_size"); c.Err != nil {
 		return &c.Client
 	}
 
@@ -128,7 +129,8 @@ func (p *Api) GetOrderList(Body model.BodyMap) *model.Client {
 	for {
 
 		if cursor != nil && len(*cursor) > 0 {
-			c.Request.Body.Set("page_token", cursor)
+			// 将page_token 参数 传给Query  page_token只能存在于params中
+			c.Request.Params.Set("page_token", cursor)
 		}
 
 		cResult := getOrderListResponse{}
