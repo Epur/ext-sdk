@@ -47,14 +47,17 @@ func (p *Client) Execute() {
 	p.Request.Params.Set("timestamp", fmt.Sprintf("%d", time.Now().Unix())).
 		Set("app_key", *p.Setting.Key)
 
-	if *p.Request.Path != GETACCESS && *p.Request.Path != REFRESHTOKEN {
-		p.Request.Params.Set("sign", p.sign())
-	}
-
+	// 先进行httpRep初始化
 	p.HttpReq = http.New(
 		http.WithUrl(p.urlParse()),
 		http.WithMethod(*p.Request.Method),
 	)
+	// 目前只用到 application/json 类型 后续根据业务处理
+	p.HttpReq.Header.Set("Content-Type", "application/json")
+
+	if *p.Request.Path != GETACCESS && *p.Request.Path != REFRESHTOKEN {
+		p.Request.Params.Set("sign", p.sign())
+	}
 
 	//请求头增加访问令牌
 	if p.Setting.AccessToken != nil && *p.Client.Request.Path != GETACCESS && *p.Client.Request.Path != REFRESHTOKEN {
