@@ -130,7 +130,8 @@ func (p *Api) GetOrderList(Body model.BodyMap, Params model.BodyMap) *model.Clie
 
 		if cursor != nil && len(*cursor) > 0 {
 			// 将page_token 参数 传给Query  page_token只能存在于params中
-			c.Request.Params.Set("page_token", cursor)
+			// 去掉地址符
+			c.Request.Params.Set("page_token", *cursor)
 		}
 
 		cResult := getOrderListResponse{}
