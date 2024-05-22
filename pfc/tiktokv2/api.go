@@ -199,14 +199,14 @@ func (p *Api) GetOrderList(Body model.BodyMap, Params model.BodyMap) *model.Clie
 	Response: GetOrderDetailResponse
 */
 
-func (p *Api) GetOrderDetail(Body model.BodyMap) *model.Client {
+func (p *Api) GetOrderDetail(Param model.BodyMap) *model.Client {
 
 	c := NewClient(p.Setting)
 	c.SetPath(`/order/202309/orders`).
 		SetMethod("GET").
-		SetBody(Body)
+		SetParams(Param) // 改成 Param 传参
 
-	if c.Err = Body.CheckEmptyError("ids"); c.Err != nil {
+	if c.Err = Param.CheckEmptyError("ids"); c.Err != nil {
 		return &c.Client
 	}
 
