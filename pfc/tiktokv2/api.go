@@ -19,11 +19,17 @@ func New(setting *model.Setting) *Api {
 获取授权链接
 callbackParams : 同步回调的自定义参数
 */
-func (p *Api) GetAuthUrl(callbackParams string) string {
+func (p *Api) GetAuthUrl(callbackParams string, IsUs bool) string {
+	if IsUs {
+		return fmt.Sprintf("%s%s?%s", AUTHSITE_US, AUTH, model.BodyMap{}.
+			Set("service_id", *p.Setting.Id).
+			Set("state", url.QueryEscape(callbackParams)).EncodeURLParams())
+	} else {
+		return fmt.Sprintf("%s%s?%s", AUTHSITE, AUTH, model.BodyMap{}.
+			Set("service_id", *p.Setting.Id).
+			Set("state", url.QueryEscape(callbackParams)).EncodeURLParams())
+	}
 
-	return fmt.Sprintf("%s%s?%s", AUTHSITE, AUTH, model.BodyMap{}.
-		Set("service_id", *p.Setting.Id).
-		Set("state", url.QueryEscape(callbackParams)).EncodeURLParams())
 }
 
 /*

@@ -10,7 +10,7 @@ const (
 	AUTHSITE     = "https://services.tiktokshop.com"
 	AUTHSITE_US  = "https://services.us.tiktokshop.com"
 	GETACCESS    = "/api/v2/token/get" // 获取访问令牌
-	AUTH         = `open/authorize`
+	AUTH         = `/open/authorize`
 	REFRESHTOKEN = "/api/v2/token/refresh"
 
 	GET_AUTHORIZED_SHOP = "/authorization/202309/shops"
