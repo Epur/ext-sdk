@@ -3,6 +3,7 @@ package tiktokv2
 import (
 	"fmt"
 	"github.com/Epur/ext-sdk/model"
+	"net/http"
 	"net/url"
 )
 
@@ -57,6 +58,32 @@ func (p *Api) GetToken(Body model.BodyMap) *model.Client {
 }
 
 /*
+	2024.5.22 11:36
+	获取授权店铺信息
+	Url : https://partner.tiktokshop.com/docv2/page/6507ead7b99d5302be949ba9?external_id=6507ead7b99d5302be949ba9
+	Response: ShopListResponse
+*/
+
+func (p *Api) GetSellerShop(Body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetPath(GET_AUTHORIZED_SHOP).
+		SetMethod(http.MethodGet).
+		SetParams(Body)
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+	var response ShopListResponse
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+/*
 	刷新令牌
 	Url : https://partner.tiktokshop.com/docv2/page/64f199619495ef0281851e1c
 	Response: GetTokenResponse
@@ -73,8 +100,10 @@ func (p *Api) RefreshToken(Body model.BodyMap) *model.Client {
 		return &c.Client
 	}
 
+	// c.Execute()已经存在 app_key的字段 所以这里需要删除 2024.5.22 11:36
 	c.Request.Params.Set("grant_type", "refresh_token").
-		Set("app_secret", *p.Setting.Secret).Set("app_key", *p.Setting.Key)
+		Set("app_secret", *p.Setting.Secret)
+	//.Set("app_key", *p.Setting.Key)
 
 	c.Execute()
 	if c.Err != nil {

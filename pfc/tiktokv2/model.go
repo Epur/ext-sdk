@@ -12,6 +12,8 @@ const (
 	GETACCESS    = "/api/v2/token/get" // 获取访问令牌
 	AUTH         = `open/authorize`
 	REFRESHTOKEN = "/api/v2/token/refresh"
+
+	GET_AUTHORIZED_SHOP = "/authorization/202309/shops"
 )
 
 type Response struct {
