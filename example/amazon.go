@@ -14,13 +14,7 @@ type AmazonTest struct {
 }
 
 func main() {
-	set := new(model.Setting).
-		SetKey("").
-		SetSecret("").
-		SetAuthCallbackUrl("").
-		SetAccessToken("").
-		SetServerUrl("").
-		SetDevelopId("")
+	set := new(model.Setting)
 	api := amazon.New(set)
 	testApi := AmazonTest{api: api}
 	//testApi.GetAuthUrl()
