@@ -89,6 +89,10 @@ func (p *Client) Execute() {
 	if result.Code == 0 {
 		p.Response.Success = true
 	}
+	// 新增错误返回
+	if result.Code != 0 {
+		p.Err = utils.Err(result.Message)
+	}
 
 	if p.Response.HttpStatus != 200 {
 		p.Response.Success = false
