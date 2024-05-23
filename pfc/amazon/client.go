@@ -211,34 +211,20 @@ func (c *Client) urlParse() string {
 }
 
 func (c *Client) getServerURL() string {
-	switch strings.ToUpper(*c.Setting.SiteNo) {
-	case "US":
-	case "MX":
-	case "CA":
-	case "BR":
-		return APIGatewayUS
-	case "ES":
-	case "UK":
-	case "FR":
-	case "BE":
-	case "NL":
-	case "DE":
-	case "IT":
-	case "SE":
-	case "ZA":
-	case "PL":
-	case "EG":
-	case "TR":
-	case "SA":
-	case "AE":
-	case "IN":
-		return APIGatewayEU
-	case "SG":
-	case "AU":
-	case "JP":
-		return APIGatewayFE
-	case "refresh":
-		return TokenURL
+	siteNo := c.Setting.SiteNo
+	api := APIGatewayUS
+	if siteNo == nil {
+		return api
 	}
-	return ""
+	switch strings.ToUpper(*siteNo) {
+	case "US", "MX", "CA", "BR":
+		api = APIGatewayUS
+	case "ES", "UK", "FR", "BE", "NL", "DE", "IT", "SE", "ZA", "PL", "EG", "TR", "SA", "AE", "IN":
+		api = APIGatewayEU
+	case "SG", "AU", "JP":
+		api = APIGatewayFE
+	case "refresh":
+		api = TokenURL
+	}
+	return api
 }

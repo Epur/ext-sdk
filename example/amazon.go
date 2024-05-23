@@ -30,7 +30,7 @@ func main() {
 }
 
 func (p *AmazonTest) GetAuthUrl() {
-	callbackParam := map[string]interface{}{"link": 1, "sites": []string{"MX"}}
+	callbackParam := map[string]interface{}{"link": 1, "sites": "US,MX,CA"}
 	callbackParamStr, _ := json.Marshal(callbackParam)
 	result := p.api.GetAuthUrl(string(callbackParamStr))
 	fmt.Println(result)
@@ -56,7 +56,7 @@ func (p *AmazonTest) RefreshToken(refreshToken string) {
 
 func (p *AmazonTest) GetSeller() {
 
-	p.api.Setting.SetSiteNo("us")
+	p.api.Setting.SetSiteNo("US")
 
 	c := p.api.GetSeller()
 	if c.Err != nil {
@@ -68,7 +68,7 @@ func (p *AmazonTest) GetSeller() {
 
 func (p *AmazonTest) GetOrderDetail() {
 
-	p.api.Setting.SetSiteNo("th")
+	p.api.Setting.SetSiteNo("TH")
 
 	c := p.api.GetOrder(model.BodyMap{"orderId": "690646034119032"})
 	if c.Err != nil {
@@ -83,7 +83,7 @@ func (p *AmazonTest) GetOrderDetail() {
 
 func (p *AmazonTest) GetOrderList() {
 
-	p.api.Setting.SetSiteNo("us")
+	p.api.Setting.SetSiteNo("US")
 
 	c := p.api.GetOrderList(model.BodyMap{
 		"MarketplaceIds": []string{"A1AM78C64UM0Y8", "ATVPDKIKX0DER"},
