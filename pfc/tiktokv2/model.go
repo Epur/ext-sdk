@@ -7,6 +7,7 @@ import (
 
 const (
 	SERVER_URl   = `https://open-api.tiktokglobalshop.com`
+	AUTH_URL     = "http://auth.tiktok-shops.com"
 	AUTHSITE     = "https://services.tiktokshop.com"
 	AUTHSITE_US  = "https://services.us.tiktokshop.com"
 	GETACCESS    = "/api/v2/token/get" // 获取访问令牌

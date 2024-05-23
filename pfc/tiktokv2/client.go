@@ -144,7 +144,7 @@ func (p *Client) generateSHA256(input string) (string, error) {
 
 func (p *Client) urlParse() string {
 	if *p.Client.Request.Path == GETACCESS || *p.Client.Request.Path == REFRESHTOKEN {
-		return fmt.Sprintf("%s%s", AUTHSITE, *p.Client.Request.Path)
+		return fmt.Sprintf("%s%s", AUTH_URL, *p.Client.Request.Path)
 	} else {
 		return fmt.Sprintf("%s%s", SERVER_URl, *p.Client.Request.Path)
 	}
