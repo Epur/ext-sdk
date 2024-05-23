@@ -110,13 +110,3 @@ type Error struct {
 	Message string `json:"message"`
 	Details string `json:"details"`
 }
-
-//type Response struct {
-//	Code       string          `json:"code"`
-//	Message    string          `json:"message"`
-//	RequestId  string          `json:"request_id"`
-//	Data       json.RawMessage `json:"data"`
-//	Result     json.RawMessage `json:"result"`
-//	Success    bool            `json:"success"`
-//	HttpStatus int             `json:"http_status"`
-//}

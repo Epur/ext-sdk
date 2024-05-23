@@ -10,7 +10,7 @@ const (
 	APIGatewayEU = "https://sellingpartnerapi-eu.amazon.com"
 	APIGatewayFE = "https://sellingpartnerapi-fe.amazon.com"
 	TokenURL     = "https://api.amazon.com/auth/o2/token"
-	// AuthURL 默认的授权链接，其他分区域的，通过 getAuthURL() 调用得到
+	// AuthURL 默认的授权链接，其他分区域的，通过实现 getAuthBase() 调用得到
 	AuthURL = "https://sellercentral.amazon.com/apps/authorize/consent"
 )
 
