@@ -13,12 +13,7 @@ type GetTokenResponse struct {
 
 type GetSellerResponse struct {
 	*Response
-	Id                  string `json:"id"`
-	Name                string `json:"name"`
-	CountryCode         string `json:"countryCode"`
-	DefaultCurrencyCode string `json:"defaultCurrencyCode"`
-	DefaultLanguageCode string `json:"defaultLanguageCode"`
-	DomainName          string `json:"domainName"`
+	Payload []MarketplaceParticipation `json:"payload"`
 }
 
 type GetOrderResponse struct {
@@ -109,4 +104,23 @@ type Error struct {
 	Code    string `json:"code"`
 	Message string `json:"message"`
 	Details string `json:"details"`
+}
+
+type MarketplaceParticipation struct {
+	Marketplace   Marketplace   `json:"marketplace"`
+	Participation Participation `json:"participation"`
+}
+
+type Marketplace struct {
+	Id                  string `json:"id"`
+	Name                string `json:"name"`
+	CountryCode         string `json:"countryCode"`
+	DefaultCurrencyCode string `json:"defaultCurrencyCode"`
+	DefaultLanguageCode string `json:"defaultLanguageCode"`
+	DomainName          string `json:"domainName"`
+}
+
+type Participation struct {
+	IsParticipating      bool `json:"isParticipating"`
+	HasSuspendedListings bool `json:"hasSuspendedListings"`
 }
