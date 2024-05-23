@@ -16,7 +16,8 @@ const (
 
 	GET_SHIPPING_DOCUMENTS = "/fulfillment/202309/packages/%v/shipping_documents" // 获取面单
 
-	GET_AUTHORIZED_SHOP = "/authorization/202309/shops"
+	GET_AUTHORIZED_SHOP = "/authorization/202309/shops" // 获取店铺信息
+	GET_SELLER_SHOP     = "/seller/202309/shops"        // 获取授权店铺与卖家关联的所有商店
 )
 
 type Response struct {

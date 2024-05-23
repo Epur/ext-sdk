@@ -24,6 +24,15 @@ type Shop struct {
 	SellerType string `json:"seller_type"` // 跨境类型: LOCAL-本土店 CROSS_BORDER-跨境店
 }
 
+// 返回与卖家关联的所有商店
+type ActiveShopListResponse struct {
+	Shop []ActiveShop `json:"shops"`
+}
+type ActiveShop struct {
+	Id     string `json:"id"`
+	Region string `json:"region"`
+}
+
 type GetOrderDetailResponse struct {
 	List []OrderDetailResponse `json:"order_list"`
 }

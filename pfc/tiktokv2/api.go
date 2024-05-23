@@ -85,6 +85,32 @@ func (p *Api) GetSellerShop(Body model.BodyMap) *model.Client {
 }
 
 /*
+	2024.5.23 16:12
+	获取与授权店铺关联的所有商店
+	Url : https://partner.tiktokshop.com/docv2/page/650a69e24a0bb702c067291c?external_id=650a69e24a0bb702c067291c
+	Response: ShopListResponse
+*/
+
+func (p *Api) GetActiveShop(Body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetPath(GET_SELLER_SHOP).
+		SetMethod(http.MethodGet).
+		SetParams(Body)
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+	var response ActiveShopListResponse
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+/*
 	刷新令牌
 	Url : https://partner.tiktokshop.com/docv2/page/64f199619495ef0281851e1c
 	Response: GetTokenResponse
