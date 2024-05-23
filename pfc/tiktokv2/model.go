@@ -13,6 +13,8 @@ const (
 	AUTH         = `/open/authorize`
 	REFRESHTOKEN = "/api/v2/token/refresh"
 
+	GET_SHIPPING_DOCUMENTS = "/fulfillment/202309/packages/%v/shipping_documents" // 获取面单
+
 	GET_AUTHORIZED_SHOP = "/authorization/202309/shops"
 )
 

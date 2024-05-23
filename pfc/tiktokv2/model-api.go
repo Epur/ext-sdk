@@ -39,3 +39,7 @@ type GetProductListResponse struct {
 type GetProductDetailResponse struct {
 	ProductDetailResponse
 }
+
+type GetOrderPrintAwbResponse struct {
+	DocUrl string `json:"doc_url"`
+}

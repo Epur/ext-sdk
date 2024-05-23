@@ -1,6 +1,7 @@
 package tiktokv2
 
 import (
+	"errors"
 	"fmt"
 	"github.com/Epur/ext-sdk/model"
 	"net/http"
@@ -216,6 +217,40 @@ func (p *Api) GetOrderDetail(Param model.BodyMap) *model.Client {
 	}
 
 	response := GetOrderDetailResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+/*
+	获取包裹面单
+	Url : https://partner.tiktokshop.com/docv2/page/650aa5fac16ffe02b8f112ca
+	Response: GetOrderDetailResponse
+*/
+
+func (p *Api) PrintAwb(Param model.BodyMap, PackageId string) *model.Client {
+	c := NewClient(p.Setting)
+	if len(PackageId) <= 0 || PackageId == "" {
+		c.Client.Err = errors.New("PackageId is empty")
+		return &c.Client
+	}
+
+	c.SetPath(fmt.Sprintf(GET_SHIPPING_DOCUMENTS, PackageId)).
+		SetMethod("GET").
+		SetParams(Param) // 改成 Param 传参
+
+	if c.Err = Param.CheckEmptyError("document_type"); c.Err != nil {
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+
+	response := GetOrderPrintAwbResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
 		return &c.Client
 	}
