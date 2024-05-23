@@ -1,8 +1,10 @@
 package tiktokv2
 
 import (
+	"errors"
 	"fmt"
 	"github.com/Epur/ext-sdk/model"
+	"net/http"
 	"net/url"
 )
 
@@ -57,6 +59,32 @@ func (p *Api) GetToken(Body model.BodyMap) *model.Client {
 }
 
 /*
+	2024.5.22 11:36
+	获取授权店铺信息
+	Url : https://partner.tiktokshop.com/docv2/page/6507ead7b99d5302be949ba9?external_id=6507ead7b99d5302be949ba9
+	Response: ShopListResponse
+*/
+
+func (p *Api) GetSellerShop(Body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetPath(GET_AUTHORIZED_SHOP).
+		SetMethod(http.MethodGet).
+		SetParams(Body)
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+	var response ShopListResponse
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+/*
 	刷新令牌
 	Url : https://partner.tiktokshop.com/docv2/page/64f199619495ef0281851e1c
 	Response: GetTokenResponse
@@ -73,8 +101,10 @@ func (p *Api) RefreshToken(Body model.BodyMap) *model.Client {
 		return &c.Client
 	}
 
+	// c.Execute()已经存在 app_key的字段 所以这里需要删除 2024.5.22 11:36
 	c.Request.Params.Set("grant_type", "refresh_token").
-		Set("app_secret", *p.Setting.Secret).Set("app_key", *p.Setting.Key)
+		Set("app_secret", *p.Setting.Secret)
+	//.Set("app_key", *p.Setting.Key)
 
 	c.Execute()
 	if c.Err != nil {
@@ -111,15 +141,16 @@ func (p *Api) StoreRefreshToken(Body model.BodyMap) *model.Client {
 	Response: GetOrderListResponse
 */
 
-func (p *Api) GetOrderList(Body model.BodyMap) *model.Client {
+func (p *Api) GetOrderList(Body model.BodyMap, Params model.BodyMap) *model.Client {
 
 	var cursor *string
 	c := NewClient(p.Setting)
 	c.SetPath(`/order/202309/orders/search`).
 		SetMethod("POST").
-		SetBody(Body)
+		SetBody(Body).
+		SetParams(Params) // 新增 Query 参数赋值  page_size只能存在于params中
 
-	if c.Err = Body.CheckEmptyError("page_size"); c.Err != nil {
+	if c.Err = Params.CheckEmptyError("page_size"); c.Err != nil {
 		return &c.Client
 	}
 
@@ -128,7 +159,9 @@ func (p *Api) GetOrderList(Body model.BodyMap) *model.Client {
 	for {
 
 		if cursor != nil && len(*cursor) > 0 {
-			c.Request.Body.Set("page_token", cursor)
+			// 将page_token 参数 传给Query  page_token只能存在于params中
+			// 去掉地址符
+			c.Request.Params.Set("page_token", *cursor)
 		}
 
 		cResult := getOrderListResponse{}
@@ -167,14 +200,14 @@ func (p *Api) GetOrderList(Body model.BodyMap) *model.Client {
 	Response: GetOrderDetailResponse
 */
 
-func (p *Api) GetOrderDetail(Body model.BodyMap) *model.Client {
+func (p *Api) GetOrderDetail(Param model.BodyMap) *model.Client {
 
 	c := NewClient(p.Setting)
 	c.SetPath(`/order/202309/orders`).
 		SetMethod("GET").
-		SetBody(Body)
+		SetParams(Param) // 改成 Param 传参
 
-	if c.Err = Body.CheckEmptyError("ids"); c.Err != nil {
+	if c.Err = Param.CheckEmptyError("ids"); c.Err != nil {
 		return &c.Client
 	}
 
@@ -184,6 +217,40 @@ func (p *Api) GetOrderDetail(Body model.BodyMap) *model.Client {
 	}
 
 	response := GetOrderDetailResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+/*
+	获取包裹面单
+	Url : https://partner.tiktokshop.com/docv2/page/650aa5fac16ffe02b8f112ca
+	Response: GetOrderDetailResponse
+*/
+
+func (p *Api) PrintAwb(Param model.BodyMap, PackageId string) *model.Client {
+	c := NewClient(p.Setting)
+	if len(PackageId) <= 0 || PackageId == "" {
+		c.Client.Err = errors.New("PackageId is empty")
+		return &c.Client
+	}
+
+	c.SetPath(fmt.Sprintf(GET_SHIPPING_DOCUMENTS, PackageId)).
+		SetMethod("GET").
+		SetParams(Param) // 改成 Param 传参
+
+	if c.Err = Param.CheckEmptyError("document_type"); c.Err != nil {
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+
+	response := GetOrderPrintAwbResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
 		return &c.Client
 	}

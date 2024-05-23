@@ -7,11 +7,16 @@ import (
 
 const (
 	SERVER_URl   = `https://open-api.tiktokglobalshop.com`
+	AUTH_URL     = "http://auth.tiktok-shops.com"
 	AUTHSITE     = "https://services.tiktokshop.com"
 	AUTHSITE_US  = "https://services.us.tiktokshop.com"
 	GETACCESS    = "/api/v2/token/get" // 获取访问令牌
-	AUTH         = `open/authorize`
+	AUTH         = `/open/authorize`
 	REFRESHTOKEN = "/api/v2/token/refresh"
+
+	GET_SHIPPING_DOCUMENTS = "/fulfillment/202309/packages/%v/shipping_documents" // 获取面单
+
+	GET_AUTHORIZED_SHOP = "/authorization/202309/shops"
 )
 
 type Response struct {

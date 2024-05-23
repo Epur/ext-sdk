@@ -11,6 +11,17 @@ type GetTokenResponse struct {
 	UserType             int    `json:"user_type"`               //卖家所在区域，如ID:印尼
 }
 
+// 获取店铺信息
+type ShopListResponse []Shop
+type Shop struct {
+	ShopCipher string `json:"cipher"`      // 商店密码(Tk用)
+	Code       string `json:"code"`        // 店铺code
+	ShopId     string `json:"id"`          // 店铺ID
+	ShopName   string `json:"name"`        // 店铺名称
+	Region     string `json:"region"`      // 店铺所在区域
+	SellerType string `json:"seller_type"` // 跨境类型: LOCAL-本土店 CROSS_BORDER-跨境店
+}
+
 type GetOrderDetailResponse struct {
 	List []OrderDetailResponse `json:"order_list"`
 }
@@ -27,4 +38,8 @@ type GetProductListResponse struct {
 
 type GetProductDetailResponse struct {
 	ProductDetailResponse
+}
+
+type GetOrderPrintAwbResponse struct {
+	DocUrl string `json:"doc_url"`
 }
