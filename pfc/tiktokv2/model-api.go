@@ -12,7 +12,9 @@ type GetTokenResponse struct {
 }
 
 // 获取店铺信息
-type ShopListResponse []Shop
+type ShopListResponse struct {
+	Shop []Shop `json:"shops"`
+}
 type Shop struct {
 	ShopCipher string `json:"cipher"`      // 商店密码(Tk用)
 	Code       string `json:"code"`        // 店铺code
