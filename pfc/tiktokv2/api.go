@@ -3,6 +3,7 @@ package tiktokv2
 import (
 	"errors"
 	"fmt"
+	"github.com/Epur/ext-sdk/logger"
 	"github.com/Epur/ext-sdk/model"
 	"net/http"
 	"net/url"
@@ -372,5 +373,322 @@ func (p *Api) GetProductDetail(Body model.BodyMap) *model.Client {
 		return &c.Client
 	}
 	c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+// 订单发货（运单号回填）
+func (p *Api) OrderShipPackage202309(body model.BodyMap) error {
+	logger.SdkLogger.Info("OrderShipPackage202309...")
+
+	c := NewClient(p.Setting)
+	c.SetMethod("POST").
+		SetBody(body).
+		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher)).
+		SetPath(SHIP_PACKAGE)
+
+	c.Execute()
+	if c.Err != nil {
+		logger.SdkLogger.Error(c.Err.Error())
+		return c.Err
+	}
+	logger.SdkLogger.Info("OrderShipPackage202309 END")
+	return nil
+}
+
+// 获取店铺关联仓库
+func (p *Api) LogisticsWarehouses202309() *model.Client {
+	logger.SdkLogger.Info("LogisticsWarehouses202309...")
+
+	c := NewClient(p.Setting)
+	c.SetMethod("GET").
+		SetPath(LOGISTICS_WAREHOUSES).
+		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
+
+	c.Execute()
+	if c.Err != nil {
+		logger.SdkLogger.Error(c.Err.Error())
+		return &c.Client
+	}
+	response := LogisticsWarehousesResult{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+
+	logger.SdkLogger.Info("LogisticsWarehouses202309 END")
+	return &c.Client
+}
+
+// 获取卖家指定仓库订阅的配送选项列表
+func (p *Api) LogisticsWarehousesDeliveryOptions202309(WarehousesId *string) *model.Client {
+	logger.SdkLogger.Info("LogisticsWarehousesDeliveryOptions202309...")
+
+	c := NewClient(p.Setting)
+	c.SetMethod("GET").
+		SetPath(fmt.Sprintf(LOGISTICS_WAREHOUSES_DELIVERY_OPTIONS, *WarehousesId)).
+		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
+
+	c.Execute()
+	if c.Err != nil {
+		logger.SdkLogger.Error(c.Err.Error())
+		return &c.Client
+	}
+	response := LogisticsWarehousesDeliveryOptionsResult{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+
+	logger.SdkLogger.Info("LogisticsWarehousesDeliveryOptions202309 END")
+	return &c.Client
+}
+
+// 获取指定配送选项对应的配送商
+func (p *Api) LogisticsWarehousesDeliveryOptionsShip202309(DeliveryOptionsId *string) *model.Client {
+	logger.SdkLogger.Info("LogisticsWarehousesDeliveryOptionsShip202309...")
+
+	c := NewClient(p.Setting)
+	c.SetMethod("GET").
+		SetPath(fmt.Sprintf(LOGISTICS_DELIVERY_OPTIONS_SHIP, *DeliveryOptionsId)).
+		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
+
+	c.Execute()
+	if c.Err != nil {
+		logger.SdkLogger.Error(c.Err.Error())
+		return &c.Client
+	}
+	response := LogisticsWarehousesDeliveryOptionsShipResult{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+
+	logger.SdkLogger.Info("LogisticsWarehousesDeliveryOptionsShip202309 END")
+	return &c.Client
+}
+
+// 获取包裹详情
+func (p *Api) GetPackageDetail202309(packageId *string) *model.Client {
+	logger.SdkLogger.Info("GetPackageDetail202309...")
+
+	c := NewClient(p.Setting)
+	c.SetMethod("GET").
+		SetPath(fmt.Sprintf(GET_PACKAGE_DETAIL_BY_PACKAGEID, *packageId)).
+		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
+
+	c.Execute()
+	if c.Err != nil {
+		logger.SdkLogger.Error(c.Err.Error())
+		return &c.Client
+	}
+	response := PackageDetail{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+
+	logger.SdkLogger.Info("GetPackageDetail202309 END")
+	return &c.Client
+}
+
+// 获取合格的运输服务
+func (p *Api) GetShippingServices202309(orderId *string) *model.Client {
+	logger.SdkLogger.Info("GetShippingServices202309...")
+
+	c := NewClient(p.Setting)
+	c.SetMethod("GET").
+		SetPath(fmt.Sprintf(GET_SHIPPING_SERVICES, *orderId)).
+		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
+
+	c.Execute()
+	if c.Err != nil {
+		logger.SdkLogger.Error(c.Err.Error())
+		return &c.Client
+	}
+	response := ShippingServices{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+
+	logger.SdkLogger.Info("GetShippingServices202309 END")
+	return &c.Client
+}
+
+func (p *Api) GetOrderStatementTransaction202309(orderId *string) *model.Client {
+	logger.SdkLogger.Infof("GetOrderStatementTransaction...%s", *orderId)
+
+	c := NewClient(p.Setting)
+	c.SetMethod("GET").
+		SetPath(fmt.Sprintf(STATEMENT_ORDER_TRANSACTIONS_GET_URL, *orderId)).
+		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
+
+	c.Execute()
+	if c.Err != nil {
+		logger.SdkLogger.Error(c.Err.Error())
+		return &c.Client
+	}
+	response := OrderStatementTransactionsResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+
+	return &c.Client
+}
+
+func (p *Api) GetStatementTransaction202309(data StatementTransactionRequest) *model.Client {
+	logger.SdkLogger.Infof("GetStatementTransaction... %v", *data.StatementId)
+
+	param := model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher).
+		Set("sort_field", "order_create_time")
+
+	if data.PageSize != nil {
+		param.Set("page_size", *data.PageSize)
+	}
+	if data.PageToken != nil {
+		param.Set("page_token", *data.PageToken)
+	}
+	if data.SortOrder != nil {
+		param.Set("sort_order", *data.SortOrder)
+	}
+
+	result := StatementTransactionResponse{}
+	c := NewClient(p.Setting)
+	c.SetMethod("GET").
+		SetPath(fmt.Sprintf(STATEMENT_TRANSACTIONS_GET_URL, *data.StatementId)).
+		SetParams(param)
+
+	for {
+
+		c.Request.Params.Set("page_size", "100")
+
+		cResult := StatementTransactionResponse{}
+
+		c.Execute()
+		if c.Err != nil || !c.Response.Success {
+			return &c.Client
+		}
+
+		if c.Err = c.Client.Response.To(&cResult); c.Err != nil {
+			return &c.Client
+		}
+
+		if len(cResult.StatementTransactions) > 0 {
+			result.StatementTransactions = append(result.StatementTransactions, cResult.StatementTransactions...)
+		}
+
+		if len(result.StatementTransactions) >= cResult.TotalCount {
+			break
+		}
+	}
+	c.Response.Response.DataTo = result
+
+	logger.SdkLogger.Info("GetStatementTransaction202309....END")
+
+	return &c.Client
+}
+
+func (p *Api) GetStatement202309(data StatementRequest) *model.Client {
+	logger.SdkLogger.Info("GetStatement202309...")
+
+	param := model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher).
+		Set("sort_field", "statement_time").Set("page_size", "100")
+
+	if data.PageToken != nil {
+		param.Set("page_token", *data.PageToken)
+	}
+	if data.SortOrder != nil {
+		param.Set("sort_order", *data.SortOrder)
+	}
+	if data.StatementTimeGe != nil && data.StatementTimeIt != nil {
+		param.Set("statement_time_ge", fmt.Sprintf("%d", *data.StatementTimeGe)).
+			Set("statement_time_it", fmt.Sprintf("%d", *data.StatementTimeIt))
+	}
+
+	if data.PaymentStatus != nil {
+		param.Set("payment_status", *data.PaymentStatus)
+	}
+
+	result := StatementResponse{}
+	c := NewClient(p.Setting)
+	c.SetMethod("GET").
+		SetPath(STATEMENT_GET_URL).
+		SetParams(param)
+
+	for {
+
+		c.Request.Params.Set("page_size", "100")
+
+		cResult := StatementResponse{}
+
+		c.Execute()
+		if c.Err != nil || !c.Response.Success {
+			return &c.Client
+		}
+
+		if c.Err = c.Client.Response.To(&cResult); c.Err != nil {
+			return &c.Client
+		}
+
+		if len(cResult.Statements) > 0 {
+			result.Statements = append(result.Statements, cResult.Statements...)
+		}
+
+		if len(result.NextPageToken) <= 0 {
+			break
+		}
+	}
+	c.Response.Response.DataTo = result
+
+	logger.SdkLogger.Info("GetStatement202309....END")
+
+	return &c.Client
+}
+
+func (p *Api) GetPayments202309(beginTime, endTime *int64) *model.Client {
+	logger.SdkLogger.Info("GetPayments202309...")
+
+	param := model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher).
+		Set("sort_field", "create_time").Set("page_size", "100")
+
+	if beginTime != nil && endTime != nil {
+		param.Set("create_time_lt", fmt.Sprintf("%d", *beginTime)).
+			Set("create_time_ge", fmt.Sprintf("%d", *endTime))
+	}
+
+	result := PaymentsResponse{}
+	c := NewClient(p.Setting)
+	c.SetMethod("GET").
+		SetPath(STATEMENT_PAYMENTS).
+		SetParams(param)
+
+	for {
+
+		c.Request.Params.Set("page_size", "100")
+
+		cResult := PaymentsResponse{}
+
+		c.Execute()
+		if c.Err != nil || !c.Response.Success {
+			return &c.Client
+		}
+
+		if c.Err = c.Client.Response.To(&cResult); c.Err != nil {
+			return &c.Client
+		}
+
+		if len(cResult.Payments) > 0 {
+			result.Payments = append(result.Payments, cResult.Payments...)
+		}
+
+		if len(result.NextPageToken) <= 0 {
+			break
+		}
+	}
+	c.Response.Response.DataTo = result
+
+	logger.SdkLogger.Info("GetPayments202309....END")
+
 	return &c.Client
 }
