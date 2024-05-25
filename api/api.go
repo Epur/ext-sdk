@@ -8,7 +8,7 @@ import (
 	"github.com/Epur/ext-sdk/pfc/go1688"
 	"github.com/Epur/ext-sdk/pfc/lazada"
 	"github.com/Epur/ext-sdk/pfc/shopee"
-	"github.com/Epur/ext-sdk/pfc/tiktokv2"
+	"github.com/Epur/ext-sdk/pfc/tiktok"
 )
 
 type PfcApi interface {
