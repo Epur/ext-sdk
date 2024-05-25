@@ -14,14 +14,21 @@ type AmazonTest struct {
 }
 
 func main() {
-	//set := new(model.Setting)
-	//api := amazon.New(set)
-	//testApi := AmazonTest{api: api}
+	set := new(model.Setting).
+		SetKey("amzn1.application-oa2-client.60110a1e40a041779f11bb6c49c1fe26").
+		SetSecret("amzn1.oa2-cs.v1.3b1e4dc89b49e879d59de2161c848b851b961347844d145f23c5b540e99d1ce0").
+		SetAuthCallbackUrl("https://dev2.web.epur.cn/openapi/admin/v1/erp/platform/cross/auth/callback/Amazon").
+		SetAccessToken("Atza|IwEBIKq59lYMWbDNhf-vFTeKnd96BZ7EsTuZs9-9ZzQYKmQ1cCWBPMv_ychaedwdIgGPYqVUIthlUeyuFbrIkqFuVuEhgLVSctXM0fvrSIgn8nozKeosPmHX_EqmMhcxUtRpyIMwxgQNarVbXpEoGTHSo0KCnm5mIFc5zCzRcNrc26lrYBTl5P9A9nJ_b8gb3Uht_CxJuzPbvFOH5SYlttrZXCzcrT2yJlKe8Ib4FHWt7QycUM9VqvB-kCxEzwIXJkpQOxnTodEBuQ-QqGm-jOSGYovGhe6ZacjtfQ5MdoyZ7UVxs9pok-DwM7xXpZKTCg5sHKvHy0jPlpkizxwXqfVjywUv").
+		SetServerUrl("https://dev2.web.epur.cn/#/to/enter-in").
+		SetDevelopId("amzn1.sp.solution.3dbb2269-d7a9-415d-802d-bf0c9ed40fe4")
+	api := amazon.New(set)
+	testApi := AmazonTest{api: api}
 	//testApi.GetAuthUrl()
 	//testApi.GetToken("")
-	//testApi.RefreshToken("")
+	//testApi.RefreshToken("Atzr|IwEBIJ7ZrNhqoJUmWD_s1RQC2hf8kS_j37fFAcNx0XYLWbUEA0r6GjXts5j45LGCS5mKpA1Hospv2ojIbHcp5Kn9ans61YF0p5WVMmKrDBXxvshzT0NB3EaY7g2YRwZiZ7iZnVdYKeyU273dzNEQKIALOld3kaNre_K8vbfO09tfPb3P_a4ZX240yUdMjDG3A2Jr_-z9q-j5tmkdK9-oISDnB-DCSdghtB_cRNvTXWOt5CM-M_MUS489AueTNuLwbsic2h6zt2FVpM4EYyjXAncfy0VgUtVVA_QYMdutJ_NKqD5zTeHrbDbzg04hsnlq6yaBeFw")
 	//testApi.GetSeller()
 	//testApi.GetOrderList()
+	testApi.GetOrderDetail("TEST_CASE_200")
 }
 
 func (p *AmazonTest) GetAuthUrl() {
@@ -51,7 +58,7 @@ func (p *AmazonTest) RefreshToken(refreshToken string) {
 
 func (p *AmazonTest) GetSeller() {
 
-	p.api.Setting.SetSiteNo("US")
+	p.api.Setting.SetSiteNo("UK")
 
 	c := p.api.GetSeller()
 	if c.Err != nil {
@@ -61,11 +68,11 @@ func (p *AmazonTest) GetSeller() {
 	fmt.Println(result)
 }
 
-func (p *AmazonTest) GetOrderDetail() {
+func (p *AmazonTest) GetOrderDetail(orderId string) {
 
-	p.api.Setting.SetSiteNo("TH")
+	p.api.Setting.SetSiteNo("US")
 
-	c := p.api.GetOrder(model.BodyMap{"orderId": "690646034119032"})
+	c := p.api.GetOrder(model.BodyMap{"orderId": orderId})
 	if c.Err != nil {
 		panic(c.Err)
 	}
@@ -74,6 +81,7 @@ func (p *AmazonTest) GetOrderDetail() {
 	}
 	result := c.GetResponseTo().(amazon.GetOrderResponse)
 	fmt.Println(result)
+	fmt.Println(result.Payload.AmazonOrderId)
 }
 
 func (p *AmazonTest) GetOrderList() {
@@ -81,16 +89,16 @@ func (p *AmazonTest) GetOrderList() {
 	p.api.Setting.SetSiteNo("US")
 
 	c := p.api.GetOrderList(model.BodyMap{
-		"MarketplaceIds": []string{"A1AM78C64UM0Y8", "ATVPDKIKX0DER"},
-		"CreatedAfter":   "2024-01-02"})
+		"MarketplaceIds": "ATVPDKIKX0DER",
+		"CreatedAfter":   "TEST_CASE_200"})
 	if c.Err != nil {
 		panic(c.Err)
 	}
 	if !c.Response.Success {
 		panic(errors.New(c.Response.Response.Message))
 	}
-	result := c.GetResponseTo().(amazon.GetOrderListResponse)
-	for _, item := range result.OrderList {
+	result := c.GetResponseTo().(amazon.GetOrdersResponse)
+	for _, item := range result.Payload.OrderList {
 		fmt.Println(item)
 	}
 }

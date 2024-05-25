@@ -6,9 +6,12 @@ import (
 )
 
 const (
-	APIGatewayUS = "https://sellingpartnerapi-na.amazon.com"
-	APIGatewayEU = "https://sellingpartnerapi-eu.amazon.com"
-	APIGatewayFE = "https://sellingpartnerapi-fe.amazon.com"
+	//APIGatewayUS = "https://sellingpartnerapi-na.amazon.com"
+	//APIGatewayEU = "https://sellingpartnerapi-eu.amazon.com"
+	//APIGatewayFE = "https://sellingpartnerapi-fe.amazon.com"
+	APIGatewayUS = "https://sandbox.sellingpartnerapi-na.amazon.com"
+	APIGatewayEU = "https://sandbox.sellingpartnerapi-eu.amazon.com"
+	APIGatewayFE = "https://sandbox.sellingpartnerapi-fe.amazon.com"
 	TokenURL     = "https://api.amazon.com/auth/o2/token"
 	// AuthURL 默认的授权链接，其他分区域的，通过实现 getAuthBase() 调用得到
 	AuthURL = "https://sellercentral.amazon.com/apps/authorize/consent"

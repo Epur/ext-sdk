@@ -6,6 +6,7 @@ import (
 	"github.com/Epur/ext-sdk/model"
 	"github.com/tangchen2018/go-utils/http"
 	"net/url"
+	"time"
 )
 
 type Api struct {
@@ -76,8 +77,17 @@ func (p *Api) RefreshToken(Body model.BodyMap) *model.Client {
 }
 
 func (p *Api) StoreRefreshToken(Body model.BodyMap) *model.Client {
-	//TODO implement me
-	panic("implement me")
+	c := p.RefreshToken(Body)
+	if c.Response.Response.DataTo != nil {
+		response := c.Response.Response.DataTo.(GetTokenResponse)
+		c.Response.Response.DataTo = model.StoreTokenResponse{
+			AccessToken:        response.AccessToken,
+			AccessTokenExpire:  time.Now().Unix() + response.ExpiresIn,
+			RefreshToken:       response.RefreshToken,
+			RefreshTokenExpire: time.Now().Unix() + 365*24*60*60,
+		}
+	}
+	return c
 }
 
 func (p *Api) GetSeller() *model.Client {
@@ -123,38 +133,14 @@ func (p *Api) GetOrderList(Body model.BodyMap) *model.Client {
 	c.SetPath("/orders/v0/orders").
 		SetMethod(http.GET).
 		SetParams(Body)
-
 	if c.Err = Body.CheckEmptyError("MarketplaceIds"); c.Err != nil {
 		return &c.Client
 	}
-
 	c.Execute()
 	if c.Err != nil {
 		return &c.Client
 	}
-	response := GetOrderListResponse{}
-	if c.Err = json.Unmarshal(c.HttpReq.Result, &response); c.Err != nil {
-		return &c.Client
-	}
-	c.Client.Response.Response.DataTo = response
-	return &c.Client
-}
-
-func (p *Api) GetOrderDetail(Body model.BodyMap) *model.Client {
-	c := NewClient(p.Setting)
-	c.SetPath(fmt.Sprintf("/orders/v0/orders/%s", Body["orderId"])).
-		SetMethod(http.GET).
-		SetParams(Body)
-
-	if c.Err = Body.CheckEmptyError("orderId"); c.Err != nil {
-		return &c.Client
-	}
-
-	c.Execute()
-	if c.Err != nil {
-		return &c.Client
-	}
-	response := GetOrderDetailResponse{}
+	response := GetOrdersResponse{}
 	if c.Err = json.Unmarshal(c.HttpReq.Result, &response); c.Err != nil {
 		return &c.Client
 	}
