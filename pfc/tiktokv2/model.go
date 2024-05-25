@@ -18,6 +18,36 @@ const (
 
 	GET_AUTHORIZED_SHOP = "/authorization/202309/shops" // 获取店铺信息
 	GET_SELLER_SHOP     = "/seller/202309/shops"        // 获取授权店铺与卖家关联的所有商店
+
+	// 获取包裹详情
+	GET_SHIPPING_SERVICES = "/fulfillment/202309/orders/%s/shipping_services/query"
+
+	// 获取包裹详情
+	GET_PACKAGE_DETAIL_BY_PACKAGEID = "/fulfillment/202309/packages/%s"
+
+	// 运单号回填（原发货功能）
+	SHIP_PACKAGE = "/fulfillment/202309/packages/ship"
+
+	// 获取卖家关联的所有仓库信息
+	LOGISTICS_WAREHOUSES = "/logistics/202309/warehouses"
+
+	// 获取卖家指定仓库订阅的配送选项列表  %s == warehouse_id
+	LOGISTICS_WAREHOUSES_DELIVERY_OPTIONS = "/logistics/202309/warehouses/%s/delivery_options"
+
+	// 获取指定配送选项对应的配送商  %s = delivery_option_id
+	LOGISTICS_DELIVERY_OPTIONS_SHIP = "/logistics/202309/delivery_options/%s/shipping_providers"
+
+	// 订单级结算
+	STATEMENT_ORDER_TRANSACTIONS_GET_URL = "/finance/202309/orders/%s/statement_transactions"
+
+	// 结算交易明细
+	STATEMENT_TRANSACTIONS_GET_URL = "/finance/202309/statements/%s/statement_transactions"
+
+	// 获取结算交易记录
+	STATEMENT_GET_URL = "/finance/202309/statements"
+
+	// 获取付款交易记录
+	STATEMENT_PAYMENTS = "/finance/202309/payments"
 )
 
 type Response struct {
@@ -522,4 +552,409 @@ type ImageEx struct {
 	ThumbUrlList []string `json:"thumb_url_list"`
 	Id           string   `json:"id"`
 	UrlList      []string `json:"url_List"`
+}
+
+// 订单级交易记录（TikTok订单级结算）
+type OrderStatementTransactionsResponse struct {
+	OrderCreateTime            int64                      `json:"order_create_time"`      // 订单创建时间
+	OrderId                    string                     `json:"order_id"`               // 订单编号
+	OrderStatementTransactions OrderStatementTransactions `json:"statement_transactions"` // 对账单交易列表
+}
+
+type OrderStatementTransactions []OrderStatementTransaction
+
+// 对账单交易列表
+type OrderStatementTransaction struct {
+	OrderStatementId                   string                   `json:"id"`                                     // 事务唯一键
+	StatementId                        string                   `json:"statement_id"`                           // 结算ID
+	Currency                           string                   `json:"currency"`                               // 币种
+	ActualReturnShippingFeeAmount      decimal.Decimal          `json:"actual_return_shipping_fee_amount"`      // 实际退货运费金额
+	ActualShippingFeeAmount            decimal.Decimal          `json:"actual_shipping_fee_amount"`             // 实际运费金额
+	AdjustmentAmount                   decimal.Decimal          `json:"adjustment_amount"`                      // 调整金额
+	AffiliateCommissionAmount          decimal.Decimal          `json:"affiliate_commission_amount"`            // 会员佣金金额
+	AffiliatePartnerCommissionAmount   decimal.Decimal          `json:"affiliate_partner_commission_amount"`    // 会员合作伙伴佣金金额
+	AfterSellerDiscountsSubtotalAmount decimal.Decimal          `json:"after_seller_discounts_subtotal_amount"` // 卖家折扣后小计金额
+	CustomerOrderRefundAmount          decimal.Decimal          `json:"customer_order_refund_amount"`           // 客户订单退款金额
+	CustomerPaymentAmount              decimal.Decimal          `json:"customer_payment_amount"`                // 客户付款金额
+	CustomerRefundAmount               decimal.Decimal          `json:"customer_refund_amount"`                 // 客户退款金额
+	CustomerShippingFeeAmount          decimal.Decimal          `json:"customer_shipping_fee_amount"`           // 自定义运费金额
+	FeeAmount                          decimal.Decimal          `json:"fee_amount"`                             // 费用金额
+	PlatformCommissionAmount           decimal.Decimal          `json:"platform_commission_amount"`             // 平台佣金金额
+	PlatformDiscountAmount             decimal.Decimal          `json:"platform_discount_amount"`               // 平台折扣金额
+	PlatformDiscountRefundAmount       decimal.Decimal          `json:"platform_discount_refund_amount"`        // 平台折扣退款金额
+	PlatformRefundSubsidyAmount        decimal.Decimal          `json:"platform_refund_subsidy_amount"`         // 平台退款补贴金额
+	PlatformShippingFeeDiscountAmount  decimal.Decimal          `json:"platform_shipping_fee_discount_amount"`  // 平台运费折扣金额
+	ReferralFeeAmount                  decimal.Decimal          `json:"referral_fee_amount"`                    // 销售佣金金额
+	RetailDeliveryFeeAmount            decimal.Decimal          `json:"retail_delivery_fee_amount"`             // 零售配送费金额
+	RetailDeliveryFeePaymentAmount     decimal.Decimal          `json:"retail_delivery_fee_payment_amount"`     // 零售配送费支付金额
+	RetailDeliveryFeeRefundAmount      decimal.Decimal          `json:"retail_delivery_fee_refund_amount"`      // 零售配送费退款金额
+	RevenueAmount                      decimal.Decimal          `json:"revenue_amount"`                         // 收入金额
+	SalesTaxAmount                     decimal.Decimal          `json:"sales_tax_amount"`                       // 销售税金额
+	SalesTaxPaymentAmount              decimal.Decimal          `json:"sales_tax_payment_amount"`               // 销售税缴纳金额
+	SalesTaxRefundAmount               decimal.Decimal          `json:"sales_tax_refund_amount"`                // 销售税退税金额
+	SettlementAmount                   decimal.Decimal          `json:"settlement_amount"`                      // 结算金额
+	ShippingFeeAmount                  decimal.Decimal          `json:"shipping_fee_amount"`                    // 运费金额
+	ShippingFeeSubsidyAmount           decimal.Decimal          `json:"shipping_fee_subsidy_amount"`            // 运费补贴金额
+	TransactionFeeAmount               decimal.Decimal          `json:"transaction_fee_amount"`                 // 交易费用金额
+	StatementTime                      int64                    `json:"statement_time"`                         // 结算时间
+	Status                             string                   `json:"status"`                                 // 状态 事务的状态。在正常情况下，响应中仅包含已结算的订单。
+	SkuStatementTransactions           SkuStatementTransactions `json:"sku_statement_transactions"`             // SKU 对帐单交易记录
+}
+
+type SkuStatementTransactions []SkuStatementTransaction
+
+// SKU 对帐单交易记录
+type SkuStatementTransaction struct {
+	SkuId                              string          `json:"sku_id"`                                 // skuId
+	SkuName                            string          `json:"sku_name"`                               // sku名称
+	ProductName                        string          `json:"product_name"`                           // 商品名称
+	Currency                           string          `json:"currency"`                               // 币种
+	Quantity                           int64           `json:"quantity"`                               // 数量
+	ActualReturnShippingFeeAmount      decimal.Decimal `json:"actual_return_shipping_fee_amount"`      // 实际退货运费金额
+	ActualShippingFeeAmount            decimal.Decimal `json:"actual_shipping_fee_amount"`             // 实际运费金额
+	AdjustmentAmount                   decimal.Decimal `json:"adjustment_amount"`                      // 调整金额
+	AffiliateCommissionAmount          decimal.Decimal `json:"affiliate_commission_amount"`            // 会员佣金金额
+	AffiliatePartnerCommissionAmount   decimal.Decimal `json:"affiliate_partner_commission_amount"`    // 会员合作伙伴佣金金额
+	AfterSellerDiscountsSubtotalAmount decimal.Decimal `json:"after_seller_discounts_subtotal_amount"` // 卖家折扣后小计金额
+	CustomerOrderRefundAmount          decimal.Decimal `json:"customer_order_refund_amount"`           // 客户订单退款金额
+	CustomerPaymentAmount              decimal.Decimal `json:"customer_payment_amount"`                // 客户付款金额
+	CustomerRefundAmount               decimal.Decimal `json:"customer_refund_amount"`                 // 客户退款金额
+	CustomerShippingFeeAmount          decimal.Decimal `json:"customer_shipping_fee_amount"`           // 自定义运费金额
+	FeeAmount                          decimal.Decimal `json:"fee_amount"`                             // 费用金额
+	PlatformCommissionAmount           decimal.Decimal `json:"platform_commission_amount"`             // 平台佣金金额
+	PlatformDiscountAmount             decimal.Decimal `json:"platform_discount_amount"`               // 平台折扣金额
+	PlatformDiscountRefundAmount       decimal.Decimal `json:"platform_discount_refund_amount"`        // 平台折扣退款金额
+	PlatformRefundSubsidyAmount        decimal.Decimal `json:"platform_refund_subsidy_amount"`         // 平台退款补贴金额
+	PlatformShippingFeeDiscountAmount  decimal.Decimal `json:"platform_shipping_fee_discount_amount"`  // 平台运费折扣金额
+	ReferralFeeAmount                  decimal.Decimal `json:"referral_fee_amount"`                    // 销售佣金金额
+	RetailDeliveryFeeAmount            decimal.Decimal `json:"retail_delivery_fee_amount"`             // 零售配送费金额
+	RetailDeliveryFeePaymentAmount     decimal.Decimal `json:"retail_delivery_fee_payment_amount"`     // 零售配送费支付金额
+	RetailDeliveryFeeRefundAmount      decimal.Decimal `json:"retail_delivery_fee_refund_amount"`      // 零售配送费退款金额
+	RevenueAmount                      decimal.Decimal `json:"revenue_amount"`                         // 收入金额
+	SalesTaxAmount                     decimal.Decimal `json:"sales_tax_amount"`                       // 销售税金额
+	SalesTaxPaymentAmount              decimal.Decimal `json:"sales_tax_payment_amount"`               // 销售税缴纳金额
+	SalesTaxRefundAmount               decimal.Decimal `json:"sales_tax_refund_amount"`                // 销售税退税金额
+	SettlementAmount                   decimal.Decimal `json:"settlement_amount"`                      // 结算金额
+	ShippingFeeAmount                  decimal.Decimal `json:"shipping_fee_amount"`                    // 运费金额
+	ShippingFeeSubsidyAmount           decimal.Decimal `json:"shipping_fee_subsidy_amount"`            // 运费补贴金额
+	TransactionFeeAmount               decimal.Decimal `json:"transaction_fee_amount"`                 // 交易费用金额
+}
+
+type StatementTransactionRequest struct {
+	StatementId *string `json:"statement_id"` // 结算ID
+	PageToken   *string `json:"page_token"`   // 本页访问token (非必要)
+	SortOrder   *string `json:"sort_order"`   // 正序ASC 倒叙DESC  (非必要)
+	PageSize    *int64  `json:"page_size"`    // 页码 (非必要)
+}
+
+// 结算交易记录
+type StatementTransactionResponse struct {
+	AdjustmentAmount      decimal.Decimal       `json:"adjustment_amount"` // 调整金额
+	Currency              string                `json:"currency"`          // 币种
+	FeeAmount             decimal.Decimal       `json:"fee_amount"`        // 费用金额
+	NextPageToken         string                `json:"next_page_token"`   // 下一页访问token
+	RevenueAmount         decimal.Decimal       `json:"revenue_amount"`    // 收入金额
+	SettlementAmount      decimal.Decimal       `json:"settlement_amount"` // 结算金额
+	StatementId           string                `json:"statement_id"`      // 结算ID
+	StatementTime         int64                 `json:"statement_time"`    // 结算时间
+	StatementTransactions StatementTransactions `json:"statement_transactions"`
+	TotalCount            int                   `json:"total_count"`
+}
+
+type StatementTransactions []StatementTransaction
+
+type StatementTransaction struct {
+	StatementTransactionId string `json:"id"`                  // 事务唯一键
+	OrderId                string `json:"order_id"`            // 订单ID
+	AdjustmentId           string `json:"adjustment_id"`       // 调整ID
+	AdjustmentOrderId      string `json:"adjustment_order_id"` // 调整订单ID
+	Currency               string `json:"currency"`            // 币种
+	/*
+		调整类型 100 -->SHIPPING_FEE_ADJUSTMENT 		 						(当卖家支付的运费存在差异或错误时进行调整)
+				110 -->SHIPPING_FEE_COMPENSATION 	 						(因实际运费与预付运费之间的差额而给予卖家的补偿)
+				120 -->CHARGE_BACK 					 						(在客户成功对账户对账单或交易报告中的项目提出异议后，退还到支付卡的扣款)
+				130 -->CUSTOMER_SERVICE_COMPENSATION 						(这是客服在售后期后支付给客户的额外补偿或补偿)
+				140 -->PROMOTION_ADJUSTMENT  								(当卖家参与平台促销活动时，促销价格与卖家实际支付的金额之间存在差异时的调整)
+	*/
+	Type                               string          `json:"type"`
+	ActualReturnShippingFeeAmount      decimal.Decimal `json:"actual_return_shipping_fee_amount"`      // 实际退货运费金额
+	ActualShippingFeeAmount            decimal.Decimal `json:"actual_shipping_fee_amount"`             // 实际运费金额
+	AdjustmentAmount                   decimal.Decimal `json:"adjustment_amount"`                      // 调整金额
+	AffiliateCommissionAmount          decimal.Decimal `json:"affiliate_commission_amount"`            // 会员佣金金额
+	AffiliatePartnerCommissionAmount   decimal.Decimal `json:"affiliate_partner_commission_amount"`    // 会员合作伙伴佣金金额
+	AfterSellerDiscountsSubtotalAmount decimal.Decimal `json:"after_seller_discounts_subtotal_amount"` // 卖家折扣后小计金额
+	CustomerOrderRefundAmount          decimal.Decimal `json:"customer_order_refund_amount"`           // 客户订单退款金额
+	CustomerPaymentAmount              decimal.Decimal `json:"customer_payment_amount"`                // 客户付款金额
+	CustomerRefundAmount               decimal.Decimal `json:"customer_refund_amount"`                 // 客户退款金额
+	CustomerShippingFeeAmount          decimal.Decimal `json:"customer_shipping_fee_amount"`           // 自定义运费金额
+	FeeAmount                          decimal.Decimal `json:"fee_amount"`                             // 费用金额
+	PlatformCommissionAmount           decimal.Decimal `json:"platform_commission_amount"`             // 平台佣金金额
+	PlatformDiscountAmount             decimal.Decimal `json:"platform_discount_amount"`               // 平台折扣金额
+	PlatformDiscountRefundAmount       decimal.Decimal `json:"platform_discount_refund_amount"`        // 平台折扣退款金额
+	PlatformRefundSubsidyAmount        decimal.Decimal `json:"platform_refund_subsidy_amount"`         // 平台退款补贴金额
+	PlatformShippingFeeDiscountAmount  decimal.Decimal `json:"platform_shipping_fee_discount_amount"`  // 平台运费折扣金额
+	ReferralFeeAmount                  decimal.Decimal `json:"referral_fee_amount"`                    // 销售佣金金额
+	RetailDeliveryFeeAmount            decimal.Decimal `json:"retail_delivery_fee_amount"`             // 零售配送费金额
+	RetailDeliveryFeePaymentAmount     decimal.Decimal `json:"retail_delivery_fee_payment_amount"`     // 零售配送费支付金额
+	RetailDeliveryFeeRefundAmount      decimal.Decimal `json:"retail_delivery_fee_refund_amount"`      // 零售配送费退款金额
+	RevenueAmount                      decimal.Decimal `json:"revenue_amount"`                         // 收入金额
+	SalesTaxAmount                     decimal.Decimal `json:"sales_tax_amount"`                       // 销售税金额
+	SalesTaxPaymentAmount              decimal.Decimal `json:"sales_tax_payment_amount"`               // 销售税缴纳金额
+	SalesTaxRefundAmount               decimal.Decimal `json:"sales_tax_refund_amount"`                // 销售税退税金额
+	SettlementAmount                   decimal.Decimal `json:"settlement_amount"`                      // 结算金额
+	ShippingFeeAmount                  decimal.Decimal `json:"shipping_fee_amount"`                    // 运费金额
+	ShippingFeeSubsidyAmount           decimal.Decimal `json:"shipping_fee_subsidy_amount"`            // 运费补贴金额
+	TransactionFeeAmount               decimal.Decimal `json:"transaction_fee_amount"`                 // 交易费用金额
+	OrderCreateTime                    int             `json:"order_create_time"`                      // 订单创建时间
+}
+
+type StatementRequest struct {
+	/*
+		- PAID：the payment has been transferred to the Seller
+		- FAILED：the payment failed
+		- PROCESSING：the payment is currently processing. If the payment is successful, the status will transition to PAID. If not, it will be FAILED.
+	*/
+	PaymentStatus   *string `json:"payment_status"`    // 支付状态 (非必要)
+	StatementTimeIt *int64  `json:"statement_time_it"` // 结算开始时间 (非必要)
+	StatementTimeGe *int64  `json:"statement_time_ge"` // 结算结束时间 (非必要)
+	PageToken       *string `json:"page_token"`        // 本页访问token (非必要)
+	SortOrder       *string `json:"sort_order"`        // 正序ASC 倒叙DESC  (非必要)
+	PageSize        *int64  `json:"page_size"`         // 页码 (非必要)
+}
+
+// 结算
+type StatementResponse struct {
+	NextPageToken string     `json:"next_page_token"`
+	Statements    Statements `json:"statements"`
+}
+
+type Statements []Statement
+
+type Statement struct {
+	AdjustmentAmount decimal.Decimal `json:"adjustment_amount"`
+	Currency         string          `json:"currency"`
+	FeeAmount        decimal.Decimal `json:"fee_amount"`
+	Id               string          `json:"id"`
+	PaymentId        string          `json:"payment_id"`
+	PaymentStatus    string          `json:"payment_status"`
+	RevenueAmount    decimal.Decimal `json:"revenue_amount"`
+	SettlementAmount decimal.Decimal `json:"settlement_amount"`
+	StatementTime    int64           `json:"statement_time"`
+}
+
+type PaymentsResponse struct {
+	NextPageToken string `json:"next_page_token"`
+	Payments      []struct {
+		Amount struct {
+			Currency string          `json:"currency"`
+			Value    decimal.Decimal `json:"value"`
+		} `json:"amount"`
+		BankAccount                 string          `json:"bank_account"`
+		CreateTime                  int64           `json:"create_time"`
+		ExchangeRate                decimal.Decimal `json:"exchange_rate"`
+		Id                          string          `json:"id"`
+		PaidTime                    int             `json:"paid_time"`
+		PaymentAmountBeforeExchange struct {
+			Currency string          `json:"currency"`
+			Value    decimal.Decimal `json:"value"`
+		} `json:"payment_amount_before_exchange"`
+		ReserveAmount struct {
+			Currency string          `json:"currency"`
+			Value    decimal.Decimal `json:"value"`
+		} `json:"reserve_amount"`
+		SettlementAmount struct {
+			Currency string          `json:"currency"`
+			Value    decimal.Decimal `json:"value"`
+		} `json:"settlement_amount"`
+		Status string `json:"status"`
+	} `json:"payments"`
+}
+
+type OrderShipPackageParams []OrderShipPackage
+
+type OrderShipPackage struct {
+	PackageId      string       `json:"id"`              // 包裹ID
+	HandoverMethod string       `json:"handover_method"` // PICKUP 运输提供商将从卖家的取件地址取件 DROP_OFF 卖家需要将包裹投递到指定地点
+	PickupSlot     PickupSlot   `json:"pickup_slot"`     // 包裹取件时间段
+	SelfShipment   SelfShipment `json:"self_shipment"`   // 仅卖家运输包裹需要
+}
+type PickupSlot struct {
+	StartTime int64 `json:"start_time"` // 包裹取件时间段的开始日期
+	EndTime   int64 `json:"end_time"`   // 包裹取件时间段的结束日期
+}
+type SelfShipment struct {
+	TrackingNumber     string `json:"tracking_number"`
+	ShippingProviderId string `json:"shipping_provider_id"`
+}
+
+// 获取店铺关联仓库列表
+type LogisticsWarehousesResult struct {
+	Warehouses []LogisticsWarehouses `json:"warehouses"`
+}
+type LogisticsWarehouses struct {
+	WarehousesId string                     `json:"id"`         // 物流仓库ID
+	IsDefault    bool                       `json:"is_default"` // 默认仓库。如果商品发布时没有指定仓库，则将使用默认仓库
+	Name         string                     `json:"name"`       // 仓库名称
+	Address      LogisticsWarehousesAddress `json:"address"`    // 仓库地址
+	/*
+		SubType：
+		- DOMESTIC_WAREHOUSE ;既是目标市场又是卖方基地的国家/地区的仓库。
+		- of a domestic seller ;国内卖家。
+		- CB_OVERSEA_WAREHOUSE ;对于跨境卖家，目标市场的本地仓库。
+		- CB_DIRECT_SHIPPING_WAREHOUSE ;对于跨境卖家，卖家在基地国家/地区（例如中国大陆或香港）的仓库
+	*/
+	SubType string `json:"sub_type"`
+	/*
+		Type：
+		- SALES_WAREHOUSE：运输产品的仓库。
+		- RETURN_WAREHOUSE：用于接收退货的仓库。
+		您可以为发货和收货使用相同的仓库，但它们将是具有相同地址的不同仓库 ID
+	*/
+	Type string `json:"type"`
+	/*
+		EffectStatus:
+			-ENABLED：(启用) 所有库存产品均可出售。
+			-DISABLED：(已禁用) 所有库存产品均无法销售。
+			-RESTRICTED：(受限) 仓库处于假期模式或订单限制状态。所有库存产品均无法销售。
+			-Holiday mode ：(假期模式) 当卖家无法履行某个仓库的订单时，卖家可以在卖家中心为该仓库开启假期模式。
+			-Order limit mode ：(订单限制模式) 当卖家违反抖音商城政策时，抖音商城将限制仓库可履行的订单量
+	*/
+	EffectStatus string `json:"effect_status"`
+}
+type LogisticsWarehousesAddress struct {
+	City          string `json:"city"`           // 国家
+	ContactPerson string `json:"contact_person"` // 联络人
+	Distict       string `json:"distict"`        // 地区
+	FullAddress   string `json:"full_address"`   // 完整地址
+	PhoneNumber   string `json:"phone_number"`   // 手机号
+	PostalCode    string `json:"postal_code"`    // 邮政编码
+	Region        string `json:"region"`         // 地区
+	RegionCode    string `json:"region_code"`    // 地区编码
+	State         string `json:"state"`          // 洲
+	Town          string `json:"town"`           // 镇
+}
+
+// 获取卖家指定仓库订阅的配送选项列表
+type LogisticsWarehousesDeliveryOptionsResult struct {
+	DeliveryOptions []LogisticsWarehousesDeliveryOptions `json:"delivery_options"`
+}
+type LogisticsWarehousesDeliveryOptions struct {
+	DeliveryOptionsId string                        `json:"id"`
+	Description       string                        `json:"description"` // 描述
+	Name              string                        `json:"name"`        // 名称
+	Type              string                        `json:"type"`
+	WeightLimit       DeliveryOptionsWeightLimit    `json:"weight_limit"`
+	DimensionLimit    DeliveryOptionsDimensionLimit `json:"dimension_limit"`
+}
+type DeliveryOptionsDimensionLimit struct {
+	MaxHeight int    `json:"max_height"` // 最大高度
+	MaxLength int    `json:"max_length"` // 最大长度
+	MaxWidth  int    `json:"max_width"`  // 最大宽度
+	Unit      string `json:"unit"`       // 单位 - CM - INCH
+}
+type DeliveryOptionsWeightLimit struct {
+	MaxWeight int    `json:"max_weight"` // 最大宽度
+	MinWeight int    `json:"min_weight"` // 最小宽度
+	Unit      string `json:"unit"`       // 单位 - GRAM - POUND
+}
+
+// 获取指定配送选项对应的配送商
+type LogisticsWarehousesDeliveryOptionsShipResult struct {
+	ShippingProviders []LogisticsWarehousesDeliveryOptionsShip `json:"shipping_providers"`
+}
+type LogisticsWarehousesDeliveryOptionsShip struct {
+	ShippingProviderId string `json:"id"`   // 供应商ID
+	Name               string `json:"name"` // 供应商名称
+}
+
+// 获取包裹详情
+type PackageDetail struct {
+	CreateTime         int    `json:"create_time"`
+	DeliveryOptionId   string `json:"delivery_option_id"`
+	DeliveryOptionName string `json:"delivery_option_name"`
+	Dimension          struct {
+		Height string `json:"height"`
+		Length string `json:"length"`
+		Unit   string `json:"unit"`
+		Width  string `json:"width"`
+	} `json:"dimension"`
+	HandoverMethod   string   `json:"handover_method"`
+	HasMultiSkus     bool     `json:"has_multi_skus"`
+	NoteTag          string   `json:"note_tag"`
+	OrderLineItemIds []string `json:"order_line_item_ids"`
+	Orders           []struct {
+		Id   string `json:"id"`
+		Skus []struct {
+			Id       string `json:"id"`
+			ImageUrl string `json:"image_url"`
+			Name     string `json:"name"`
+			Quantity int    `json:"quantity"`
+		} `json:"skus"`
+	} `json:"orders"`
+	PackageId     string `json:"package_id"`
+	PackageStatus string `json:"package_status"`
+	PickupSlot    struct {
+		EndTime   int `json:"end_time"`
+		StartTime int `json:"start_time"`
+	} `json:"pickup_slot"`
+	RecipientAddress struct {
+		AddressDetail string `json:"address_detail"`
+		AddressLine1  string `json:"address_line1"`
+		AddressLine2  string `json:"address_line2"`
+		AddressLine3  string `json:"address_line3"`
+		AddressLine4  string `json:"address_line4"`
+		FullAddress   string `json:"full_address"`
+		Name          string `json:"name"`
+		PhoneNumber   string `json:"phone_number"`
+		PostalCode    string `json:"postal_code"`
+		RegionCode    string `json:"region_code"`
+	} `json:"recipient_address"`
+	SenderAddress struct {
+		AddressDetail string `json:"address_detail"`
+		AddressLine1  string `json:"address_line1"`
+		AddressLine2  string `json:"address_line2"`
+		AddressLine3  string `json:"address_line3"`
+		AddressLine4  string `json:"address_line4"`
+		FullAddress   string `json:"full_address"`
+		Name          string `json:"name"`
+		PhoneNumber   string `json:"phone_number"`
+		PostalCode    string `json:"postal_code"`
+		RegionCode    string `json:"region_code"`
+	} `json:"sender_address"`
+	ShippingProviderId   string `json:"shipping_provider_id"`
+	ShippingProviderName string `json:"shipping_provider_name"`
+	ShippingType         string `json:"shipping_type"`
+	SplitAndCombineTag   string `json:"split_and_combine_tag"`
+	TrackingNumber       string `json:"tracking_number"`
+	UpdateTime           int    `json:"update_time"`
+	Weight               struct {
+		Unit  string `json:"unit"`
+		Value string `json:"value"`
+	} `json:"weight"`
+}
+
+type ShippingServices struct {
+	Dimension struct {
+		Height string `json:"height"`
+		Length string `json:"length"`
+		Unit   string `json:"unit"`
+		Width  string `json:"width"`
+	} `json:"dimension"`
+	OrderId          string   `json:"order_id"`
+	OrderLineId      []string `json:"order_line_id"`
+	ShippingServices []struct {
+		Currency             string `json:"currency"`
+		EarliestDeliveryDays int    `json:"earliest_delivery_days"`
+		Id                   string `json:"id"`
+		IsDefault            bool   `json:"is_default"`
+		LatestDeliveryDays   int    `json:"latest_delivery_days"`
+		Name                 string `json:"name"`
+		Price                string `json:"price"`
+		ShippingProviderId   string `json:"shipping_provider_id"`
+		ShippingProviderName string `json:"shipping_provider_name"`
+	} `json:"shipping_services"`
+	Weight struct {
+		Unit  string `json:"unit"`
+		Value string `json:"value"`
+	} `json:"weight"`
 }
