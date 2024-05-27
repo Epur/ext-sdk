@@ -107,6 +107,26 @@ func (p *Api) GetSeller() *model.Client {
 	return &c.Client
 }
 
+func (p *Api) GetOrders(Body model.BodyMap) *model.Client {
+	c := NewClient(p.Setting)
+	c.SetPath("/orders/v0/orders").
+		SetMethod(http.GET).
+		SetParams(Body)
+	if c.Err = Body.CheckEmptyError("MarketplaceIds"); c.Err != nil {
+		return &c.Client
+	}
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+	response := GetOrdersResponse{}
+	if c.Err = json.Unmarshal(c.HttpReq.Result, &response); c.Err != nil {
+		return &c.Client
+	}
+	c.Client.Response.Response.DataTo = response
+	return &c.Client
+}
+
 func (p *Api) GetOrder(Body model.BodyMap) *model.Client {
 	c := NewClient(p.Setting)
 	c.SetPath(fmt.Sprintf("/orders/v0/orders/%s", Body.Get("orderId"))).
@@ -128,19 +148,20 @@ func (p *Api) GetOrder(Body model.BodyMap) *model.Client {
 	return &c.Client
 }
 
-func (p *Api) GetOrderList(Body model.BodyMap) *model.Client {
+func (p *Api) GetOrderItems(Body model.BodyMap) *model.Client {
 	c := NewClient(p.Setting)
-	c.SetPath("/orders/v0/orders").
-		SetMethod(http.GET).
-		SetParams(Body)
-	if c.Err = Body.CheckEmptyError("MarketplaceIds"); c.Err != nil {
+	c.SetPath(fmt.Sprintf("/orders/v0/orders/%s/orderItems", Body.Get("orderId"))).
+		SetMethod(http.GET)
+
+	if c.Err = Body.CheckEmptyError("orderId"); c.Err != nil {
 		return &c.Client
 	}
+
 	c.Execute()
 	if c.Err != nil {
 		return &c.Client
 	}
-	response := GetOrdersResponse{}
+	response := GetOrderItemsResponse{}
 	if c.Err = json.Unmarshal(c.HttpReq.Result, &response); c.Err != nil {
 		return &c.Client
 	}
