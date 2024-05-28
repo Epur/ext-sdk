@@ -207,3 +207,95 @@ type Money struct {
 	CurrencyCode string `json:"CurrencyCode"`
 	Amount       string `json:"Amount"`
 }
+
+// 通用的通知结构体
+type Notification struct {
+	NotificationVersion  string      `json:"notificationVersion"`
+	NotificationType     string      `json:"notificationType"` // ORDER_CHANGE, REPORT_PROCESSING_FINISHED
+	PayloadVersion       string      `json:"payloadVersion"`
+	EventTime            time.Time   `json:"eventTime"`
+	Payload              interface{} `json:"payload"` // Payload可以是ReportProcessingFinishedPayload或OrderChangePayload
+	NotificationMetadata `json:"notificationMetadata"`
+}
+
+// 通用的通知元数据结构体
+type NotificationMetadata struct {
+	ApplicationId  string    `json:"applicationId"`
+	SubscriptionId string    `json:"subscriptionId"`
+	PublishTime    time.Time `json:"publishTime"`
+	NotificationId string    `json:"notificationId"`
+}
+
+// 报告完成的通知的Payload结构体
+type ReportProcessingFinishedPayload struct {
+	ReportProcessingFinishedNotification struct {
+		SellerId         string `json:"sellerId"`
+		AccountId        string `json:"accountId"`
+		ReportId         string `json:"reportId"`
+		ReportType       string `json:"reportType"`
+		ProcessingStatus string `json:"processingStatus"`
+		ReportDocumentId string `json:"reportDocumentId"`
+	} `json:"reportProcessingFinishedNotification"`
+}
+
+// 订单变更的通知的Payload结构体
+type OrderChangePayload struct {
+	OrderChangeNotification struct {
+		NotificationLevel  string `json:"notificationLevel"`
+		SellerId           string `json:"sellerId"`
+		AmazonOrderId      string `json:"amazonOrderId"`
+		OrderChangeType    string `json:"orderChangeType"`
+		OrderChangeTrigger struct {
+			TimeOfOrderChange time.Time `json:"timeOfOrderChange"`
+			ChangeReason      string    `json:"changeReason"`
+		} `json:"orderChangeTrigger"`
+		Summary struct {
+			MarketplaceId         string        `json:"marketplaceId"`
+			OrderStatus           string        `json:"orderStatus"`
+			PurchaseDate          time.Time     `json:"purchaseDate"`
+			DestinationPostalCode *string       `json:"destinationPostalCode"`
+			FulfillmentType       string        `json:"fulfillmentType"`
+			OrderType             string        `json:"orderType"`
+			OrderPrograms         []interface{} `json:"orderPrograms"`
+			ShippingPrograms      []interface{} `json:"shippingPrograms"`
+			OrderItems            []struct {
+				OrderItemId    string  `json:"orderItemId"`
+				SellerSKU      string  `json:"sellerSKU"`
+				SupplySourceId *string `json:"supplySourceId"`
+				Quantity       int     `json:"quantity"`
+			} `json:"orderItems"`
+		} `json:"summary"`
+	} `json:"orderChangeNotification"`
+}
+
+// 根据NotificationType确定Payload的具体类型
+func (n *Notification) UnmarshalJSON(data []byte) error {
+	// 定义一个辅助结构体，用于先解析除Payload外的其他字段
+	type Alias Notification
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(n),
+	}
+
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+
+	// 根据NotificationType字段来决定Payload的类型
+	switch n.NotificationType {
+	case "REPORT_PROCESSING_FINISHED":
+		n.Payload = &ReportProcessingFinishedPayload{}
+	case "ORDER_CHANGE":
+		n.Payload = &OrderChangePayload{}
+	default:
+		n.Payload = nil
+	}
+
+	// 如果Payload不为空，则继续解析Payload字段
+	if n.Payload != nil {
+		return json.Unmarshal(data, n.Payload)
+	}
+
+	return nil
+}
