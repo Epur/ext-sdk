@@ -273,6 +273,7 @@ func (n *Notification) UnmarshalJSON(data []byte) error {
 	// 定义一个辅助结构体，用于先解析除Payload外的其他字段
 	type Alias Notification
 	aux := &struct {
+		Payload json.RawMessage `json:"payload"`
 		*Alias
 	}{
 		Alias: (*Alias)(n),
@@ -294,7 +295,7 @@ func (n *Notification) UnmarshalJSON(data []byte) error {
 
 	// 如果Payload不为空，则继续解析Payload字段
 	if n.Payload != nil {
-		return json.Unmarshal(data, n.Payload)
+		return json.Unmarshal(aux.Payload, n.Payload)
 	}
 
 	return nil
