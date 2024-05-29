@@ -38,7 +38,12 @@ func (p *Store) AddJob(token *Token) error {
 	if token.Refresh.AccessTokenExpire <= 0 {
 		return errors.New("AccessTokenExpire is void.")
 	}
-	p.JobChan <- &Job{Method: "add", Token: token}
+
+	if p != nil && p.JobChan != nil {
+		p.JobChan <- &Job{Method: "add", Token: token}
+	} else {
+		log.Printf("指针未初始化，无法加入任务刷新Token，store.New()")
+	}
 	return nil
 }
 
