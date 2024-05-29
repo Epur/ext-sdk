@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/Epur/ext-sdk/api"
+	"github.com/Epur/ext-sdk/logger"
 	"github.com/Epur/ext-sdk/model"
 	"github.com/Epur/ext-sdk/utils"
-	"log"
 	"reflect"
 	"runtime"
 	"time"
@@ -42,7 +42,7 @@ func (p *Store) AddJob(token *Token) error {
 	if p != nil && p.JobChan != nil {
 		p.JobChan <- &Job{Method: "add", Token: token}
 	} else {
-		log.Printf("指针未初始化，无法加入任务刷新Token，请先store.New()")
+		logger.ErrorLogger.Error("指针未初始化，无法加入任务刷新Token，请先store.New()")
 	}
 	return nil
 }
@@ -122,10 +122,10 @@ func (p *Store) Listen() {
 	go func() {
 		for {
 			if len(p.ErrorList) > 0 {
-				log.Printf("Error Len[%d]", len(p.ErrorList))
+				logger.ErrorLogger.Errorf("Error Len[%d]", len(p.ErrorList))
 
 				for _, item := range p.ErrorList {
-					log.Printf("Error %s: Id [%s]",
+					logger.ErrorLogger.Errorf("Error %s: Id [%s]",
 						item.Refresh.PlatformCode, item.Id)
 				}
 			}
@@ -140,7 +140,7 @@ func (p *Store) Listen() {
 			if len(p.List) > 0 {
 				t1 := p.List[0]
 
-				log.Printf("%s: Id [%s] Trigger[%s] [%d-%d]",
+				logger.ErrorLogger.Errorf("%s: Id [%s] Trigger[%s] [%d-%d]",
 					t1.Refresh.PlatformCode, t1.Id,
 					time.Unix(t1.Refresh.AccessTokenExpire-t1.SecondsBeforeRefresh, 0).Format(
 						"2006-01-02 15:04:05"),
@@ -180,7 +180,7 @@ func (p *Store) RefreshRun(e *Event) {
 			if !ok {
 				err = fmt.Errorf("%v", r)
 			}
-			log.Println(err, "panic", "stack", "...\n"+string(buf))
+			logger.ErrorLogger.Error(err, "panic", "stack", "...\n"+string(buf))
 
 			e.Success = false
 			e.Msg = reflect.ValueOf(err).String()
@@ -230,7 +230,7 @@ func (p *Store) RefreshRun(e *Event) {
 					if !ok {
 						err = fmt.Errorf("%v", r)
 					}
-					log.Println(err, "panic", "stack", "...\n"+string(buf))
+					logger.ErrorLogger.Error(err, "panic", "stack", "...\n"+string(buf))
 				}
 			}()
 			e.Token.CallBack(e)
@@ -239,9 +239,9 @@ func (p *Store) RefreshRun(e *Event) {
 
 		select {
 		case _ = <-ch:
-			log.Printf("%s: ID [%s] 推送完成...", e.Token.Refresh.PlatformCode, e.Token.Id)
+			logger.ErrorLogger.Errorf("%s: ID [%s] 推送完成...", e.Token.Refresh.PlatformCode, e.Token.Id)
 		case <-time.After(time.Second * time.Duration(p.TimeOut)):
-			log.Printf("%s: ID [%s] 推送超时...", e.Token.Refresh.PlatformCode, e.Token.Id)
+			logger.ErrorLogger.Errorf("%s: ID [%s] 推送超时...", e.Token.Refresh.PlatformCode, e.Token.Id)
 		}
 
 		fmt.Println(2222)

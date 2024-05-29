@@ -17,6 +17,13 @@ const (
 	AuthURL = "https://sellercentral.amazon.com/apps/authorize/consent"
 )
 
+const (
+	REPORT_PROCESSING_FINISHED             = "REPORT_PROCESSING_FINISHED"
+	APPLICATION_OAUTH_CLIENT_SECRET_EXPIRY = "APPLICATION_OAUTH_CLIENT_SECRET_EXPIRY"
+	APPLICATION_OAUTH_CLIENT_NEW_SECRET    = "APPLICATION_OAUTH_CLIENT_NEW_SECRET"
+	ORDER_CHANGE                           = "ORDER_CHANGE"
+)
+
 type Setting struct {
 	ClientID        *string
 	ClientSecret    *string

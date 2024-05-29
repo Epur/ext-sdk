@@ -211,7 +211,7 @@ type Money struct {
 // 通用的通知结构体
 type Notification struct {
 	NotificationVersion  string      `json:"notificationVersion"`
-	NotificationType     string      `json:"notificationType"` // ORDER_CHANGE, REPORT_PROCESSING_FINISHED
+	NotificationType     string      `json:"notificationType"` // ORDER_CHANGE 等
 	PayloadVersion       string      `json:"payloadVersion"`
 	EventTime            time.Time   `json:"eventTime"`
 	Payload              interface{} `json:"payload"` // Payload可以是ReportProcessingFinishedPayload或OrderChangePayload
@@ -236,6 +236,25 @@ type ReportProcessingFinishedPayload struct {
 		ProcessingStatus string `json:"processingStatus"`
 		ReportDocumentId string `json:"reportDocumentId"`
 	} `json:"reportProcessingFinishedNotification"`
+}
+
+// 轮换LWA Secret的Payload结构体
+type ApplicationOauthClientSecretExpiryPayload struct {
+	ApplicationOAuthClientSecretExpiry struct {
+		ClientId                 string `json:"clientId"`
+		ClientSecretExpiryTime   string `json:"clientSecretExpiryTime"`
+		ClientSecretExpiryReason string `json:"clientSecretExpiryReason"`
+	} `json:"applicationOAuthClientSecretExpiry"`
+}
+
+// 获取最新LWA Secret 的Payload结构体
+type ApplicationOAuthClientNewSecretPayload struct {
+	ApplicationOAuthClientNewSecret struct {
+		ClientId                  string `json:"clientId"`
+		NewClientSecret           string `json:"newClientSecret"`
+		NewClientSecretExpiryTime string `json:"newClientSecretExpiryTime"`
+		OldClientSecretExpiryTime string `json:"oldClientSecretExpiryTime"`
+	} `json:"applicationOAuthClientNewSecret"`
 }
 
 // 订单变更的通知的Payload结构体
@@ -285,9 +304,13 @@ func (n *Notification) UnmarshalJSON(data []byte) error {
 
 	// 根据NotificationType字段来决定Payload的类型
 	switch n.NotificationType {
-	case "REPORT_PROCESSING_FINISHED":
+	case REPORT_PROCESSING_FINISHED:
 		n.Payload = &ReportProcessingFinishedPayload{}
-	case "ORDER_CHANGE":
+	case APPLICATION_OAUTH_CLIENT_SECRET_EXPIRY:
+		n.Payload = &ApplicationOauthClientSecretExpiryPayload{}
+	case APPLICATION_OAUTH_CLIENT_NEW_SECRET:
+		n.Payload = &ApplicationOAuthClientNewSecretPayload{}
+	case ORDER_CHANGE:
 		n.Payload = &OrderChangePayload{}
 	default:
 		n.Payload = nil
