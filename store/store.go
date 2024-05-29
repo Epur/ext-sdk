@@ -42,7 +42,7 @@ func (p *Store) AddJob(token *Token) error {
 	if p != nil && p.JobChan != nil {
 		p.JobChan <- &Job{Method: "add", Token: token}
 	} else {
-		log.Printf("指针未初始化，无法加入任务刷新Token，store.New()")
+		log.Printf("指针未初始化，无法加入任务刷新Token，请先store.New()")
 	}
 	return nil
 }
