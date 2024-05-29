@@ -14,17 +14,23 @@ type AmazonTest struct {
 }
 
 func main() {
-	set := new(model.Setting)
+	set := new(model.Setting).
+		SetKey("amzn1.application-oa2-client.60110a1e40a041779f11bb6c49c1fe26").
+		SetSecret("amzn1.oa2-cs.v1.fa9a3df6962f8443287b84628aff9dc91dc45624eb6eee5331f12e4c50aaa428").
+		SetAuthCallbackUrl("https://dev2.web.epur.cn/openapi/admin/v1/erp/platform/cross/auth/callback/Amazon").
+		SetAccessToken("Atza|IwEBIEOl7Kpnz-A1Jcucsxqj2KrC2e3fSudTEmE2ijRDSEff3W0oojDeUWTT2DIzzAWzn8PRPYIFIMjWbhhxbipN8wJMk8quyf5GITlzBO-vSMAP7f3WkUPNsDAADbSWYD8555O9C7i6NTr6RvTI4hcpeaog4RUB67QnKo5Olvi3nWhqKTzI8tUXPnnWm67h4NZ82IeOInllvEF2rDwVESE2I7Kn8iMiHwxf4PVErfH9m1EOPktgeVzW4TWqfnVyKG8WBDoz4dP30czW1vo90hU0usPW5M75PlIfH4bqEKop2pJ87IKDoeDn-11CpFmQcN5wLnXcFyPKKCjwiIf_V3TDlnF7").
+		SetServerUrl("https://dev2.web.epur.cn/#/to/enter-in").
+		SetDevelopId("amzn1.sp.solution.3dbb2269-d7a9-415d-802d-bf0c9ed40fe4")
 	api := amazon.New(set)
 	testApi := AmazonTest{api: api}
 	//testApi.GetAuthUrl()
 	//testApi.GetToken("")
-	//testApi.RefreshToken("Atzr|IwEBIJ7ZrNhqoJUmWD_s1RQC2hf8kS_j37fFAcNx0XYLWbUEA0r6GjXts5j45LGCS5mKpA1Hospv2ojIbHcp5Kn9ans61YF0p5WVMmKrDBXxvshzT0NB3EaY7g2YRwZiZ7iZnVdYKeyU273dzNEQKIALOld3kaNre_K8vbfO09tfPb3P_a4ZX240yUdMjDG3A2Jr_-z9q-j5tmkdK9-oISDnB-DCSdghtB_cRNvTXWOt5CM-M_MUS489AueTNuLwbsic2h6zt2FVpM4EYyjXAncfy0VgUtVVA_QYMdutJ_NKqD5zTeHrbDbzg04hsnlq6yaBeFw")
+	testApi.RefreshToken("Atzr|IwEBIJ7ZrNhqoJUmWD_s1RQC2hf8kS_j37fFAcNx0XYLWbUEA0r6GjXts5j45LGCS5mKpA1Hospv2ojIbHcp5Kn9ans61YF0p5WVMmKrDBXxvshzT0NB3EaY7g2YRwZiZ7iZnVdYKeyU273dzNEQKIALOld3kaNre_K8vbfO09tfPb3P_a4ZX240yUdMjDG3A2Jr_-z9q-j5tmkdK9-oISDnB-DCSdghtB_cRNvTXWOt5CM-M_MUS489AueTNuLwbsic2h6zt2FVpM4EYyjXAncfy0VgUtVVA_QYMdutJ_NKqD5zTeHrbDbzg04hsnlq6yaBeFw")
 	//testApi.GetSeller()
 	//testApi.GetOrderList()
 	//testApi.GetOrder("TEST_CASE_200")
 	//testApi.GetOrder("112-2041974-3583467")
-	testApi.GetOrderItems("112-2041974-3583467")
+	//testApi.GetOrderItems("112-2041974-3583467")
 }
 
 func (p *AmazonTest) GetAuthUrl() {
