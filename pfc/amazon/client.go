@@ -115,7 +115,7 @@ func (c *Client) getServerURL() string {
 	switch strings.ToUpper(*siteNo) {
 	case "US", "MX", "CA", "BR":
 		api = APIGatewayUS
-	case "ES", "UK", "FR", "BE", "NL", "DE", "IT", "SE", "ZA", "PL", "EG", "TR", "SA", "AE", "IN":
+	case "ES", "UK", "GB", "FR", "BE", "NL", "DE", "IT", "SE", "ZA", "PL", "EG", "TR", "SA", "AE", "IN":
 		api = APIGatewayEU
 	case "SG", "AU", "JP":
 		api = APIGatewayFE
