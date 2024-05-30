@@ -21,10 +21,11 @@ func main() {
 	//testApi.GetToken("")
 	//testApi.RefreshToken("Atzr|IwEBIJ7ZrNhqoJUmWD_s1RQC2hf8kS_j37fFAcNx0XYLWbUEA0r6GjXts5j45LGCS5mKpA1Hospv2ojIbHcp5Kn9ans61YF0p5WVMmKrDBXxvshzT0NB3EaY7g2YRwZiZ7iZnVdYKeyU273dzNEQKIALOld3kaNre_K8vbfO09tfPb3P_a4ZX240yUdMjDG3A2Jr_-z9q-j5tmkdK9-oISDnB-DCSdghtB_cRNvTXWOt5CM-M_MUS489AueTNuLwbsic2h6zt2FVpM4EYyjXAncfy0VgUtVVA_QYMdutJ_NKqD5zTeHrbDbzg04hsnlq6yaBeFw")
 	//testApi.GetSeller()
-	//testApi.GetOrderList()
+	//testApi.GetOrders()
 	//testApi.GetOrder("TEST_CASE_200")
-	testApi.GetOrder("112-2041974-3583467")
+	//testApi.GetOrder("112-2041974-3583467")
 	//testApi.GetOrderItems("112-2041974-3583467")
+	testApi.GetDestSub("Test")
 }
 
 func (p *AmazonTest) GetAuthUrl() {
@@ -120,4 +121,48 @@ func (p *AmazonTest) GetOrderItems(orderId string) {
 	by, _ := json.Marshal(result)
 	fmt.Println(string(by))
 	fmt.Println(result.Payload.AmazonOrderId)
+}
+
+func (p *AmazonTest) GetDestSub(env string) {
+	p.api.Setting.SetSiteNo("US")
+	c := p.api.NoToken()
+	accessToken := *p.api.Setting.AccessToken
+	noAccessToken := c.GetResponseTo().(amazon.GetTokenResponse).AccessToken
+	// 创建dest 无授权
+	p.api.Setting.SetAccessToken(noAccessToken)
+	c = p.api.GetDestinations()
+	destArr := c.GetResponseTo().(amazon.GetDestinationsResponse)
+	var destId string
+	if destArr.Payload == nil || len(destArr.Payload) < 1 {
+		cc := p.api.CreateDestination(model.BodyMap{
+			"name": "SQS-" + env,
+			"resourceSpecification": map[string]interface{}{
+				"arn": "arn:aws:sqs:us-east-1:381492270878:SQS-" + env},
+		})
+		destId = cc.GetResponseTo().(amazon.CreateDestinationResponse).Payload.DestinationId
+	} else {
+		destId = destArr.Payload[len(destArr.Payload)-1].DestinationId
+	}
+	//创建sub 授权
+	p.api.Setting.SetAccessToken(accessToken)
+	ccc := p.api.CreateSubscription(model.BodyMap{
+		"notificationType": amazon.ORDER_CHANGE,
+		"destinationId":    destId,
+		"payloadVersion":   "1.0",
+		"processingDirective": map[string]interface{}{
+			"eventFilter": map[string]interface{}{
+				"eventFilterType":  amazon.ORDER_CHANGE,
+				"orderChangeTypes": []string{"BuyerRequestedChange", "OrderStatusChange"}}},
+	})
+	csr := ccc.GetResponseTo().(amazon.CreateSubscriptionResponse)
+	if !ccc.Response.Success {
+		fmt.Println(ccc.Response)
+		if ccc.Response.HttpStatus == 409 {
+
+		} else if ccc.Response.HttpStatus == 403 {
+
+		}
+	} else {
+		fmt.Println(csr)
+	}
 }

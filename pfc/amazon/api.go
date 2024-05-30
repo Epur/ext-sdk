@@ -52,17 +52,28 @@ func (p *Api) GetToken(Body model.BodyMap) *model.Client {
 }
 
 func (p *Api) RefreshToken(Body model.BodyMap) *model.Client {
+	return p.token(Body, "refresh_token")
+}
+
+func (p *Api) NoToken() *model.Client {
+	return p.token(model.BodyMap{}, "client_credentials")
+}
+
+func (p *Api) token(Body model.BodyMap, grantType string) *model.Client {
 	c := NewClient(p.Setting)
-	Body.Set("grant_type", "refresh_token")
+	Body.Set("grant_type", grantType)
 	Body.Set("client_id", *p.Setting.Key)
 	Body.Set("client_secret", *p.Setting.Secret)
+	if grantType == "refresh_token" {
+		if c.Err = Body.CheckEmptyError("refresh_token"); c.Err != nil {
+			return &c.Client
+		}
+	} else if grantType == "client_credentials" {
+		Body.Set("scope", "sellingpartnerapi::notifications")
+	}
 	c.SetPath(TokenURL).
 		SetMethod(http.POST).
 		SetParams(Body)
-
-	if c.Err = Body.CheckEmptyError("refresh_token"); c.Err != nil {
-		return &c.Client
-	}
 
 	c.Execute()
 	if c.Err != nil {
@@ -162,6 +173,67 @@ func (p *Api) GetOrderItems(Body model.BodyMap) *model.Client {
 		return &c.Client
 	}
 	response := GetOrderItemsResponse{}
+	if c.Err = json.Unmarshal(c.HttpReq.Result, &response); c.Err != nil {
+		return &c.Client
+	}
+	c.Client.Response.Response.DataTo = response
+	return &c.Client
+}
+
+func (p *Api) GetDestinations() *model.Client {
+	c := NewClient(p.Setting)
+	c.SetPath(fmt.Sprintf("/notifications/v1/destinations")).
+		SetMethod(http.GET)
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+	response := GetDestinationsResponse{}
+	if c.Err = json.Unmarshal(c.HttpReq.Result, &response); c.Err != nil {
+		return &c.Client
+	}
+	c.Client.Response.Response.DataTo = response
+	return &c.Client
+}
+
+func (p *Api) CreateDestination(Body model.BodyMap) *model.Client {
+	c := NewClient(p.Setting)
+	c.SetPath(fmt.Sprintf("/notifications/v1/destinations")).
+		SetMethod(http.POST).
+		SetBody(Body)
+
+	if c.Err = Body.CheckEmptyError("resourceSpecification", "name"); c.Err != nil {
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+	response := CreateDestinationResponse{}
+	if c.Err = json.Unmarshal(c.HttpReq.Result, &response); c.Err != nil {
+		return &c.Client
+	}
+	c.Client.Response.Response.DataTo = response
+	return &c.Client
+}
+
+func (p *Api) CreateSubscription(Body model.BodyMap) *model.Client {
+	c := NewClient(p.Setting)
+	c.SetPath(fmt.Sprintf("/notifications/v1/subscriptions/%s", Body.Get("notificationType"))).
+		SetMethod(http.POST).
+		SetBody(Body)
+
+	if c.Err = Body.CheckEmptyError("notificationType", "payloadVersion", "destinationId"); c.Err != nil {
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+	response := CreateSubscriptionResponse{}
 	if c.Err = json.Unmarshal(c.HttpReq.Result, &response); c.Err != nil {
 		return &c.Client
 	}

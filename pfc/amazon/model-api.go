@@ -45,6 +45,21 @@ type GetOrderItemsResponse struct {
 	Payload OrderItemsPayload `json:"payload"`
 }
 
+type GetDestinationsResponse struct {
+	*Response
+	Payload []DestinationPayload `json:"payload"`
+}
+
+type CreateDestinationResponse struct {
+	*Response
+	Payload DestinationPayload `json:"payload"`
+}
+
+type CreateSubscriptionResponse struct {
+	*Response
+	Payload SubscriptionPayload `json:"payload"`
+}
+
 type MarketplaceParticipation struct {
 	Marketplace   Marketplace   `json:"marketplace"`
 	Participation Participation `json:"participation"`
@@ -75,6 +90,19 @@ type OrderItemsPayload struct {
 	NextToken     string      `json:"NextToken"`
 	AmazonOrderId string      `json:"AmazonOrderId"`
 	OrderItems    []OrderItem `json:"OrderItems"`
+}
+
+type DestinationPayload struct {
+	Name          string      `json:"name"`
+	DestinationId string      `json:"destinationId"`
+	Resource      interface{} `json:"resource"`
+}
+
+type SubscriptionPayload struct {
+	SubscriptionId      string      `json:"subscriptionId"`
+	PayloadVersion      string      `json:"payloadVersion"`
+	DestinationId       string      `json:"destinationId"`
+	ProcessingDirective interface{} `json:"processingDirective"`
 }
 
 type OrderItem struct {
