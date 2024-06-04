@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	github.com/deatil/go-cryptobin v1.0.2052
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/jinzhu/copier v0.4.0
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
