@@ -27,6 +27,7 @@ type Setting struct {
 	Id              *string //专用tk企业资源规划的id(逸采)
 	Key             *string // Key
 	Secret          *string // 密钥
+	Shop            *string //店铺名称（适用于shopify)
 	ShopId          *string // 店铺ID
 	RetryCount      *int    // 重试次数
 	AccessToken     *string // 刷新令牌
@@ -176,6 +177,13 @@ func (c *Setting) SetKey(data string) *Setting {
 func (c *Setting) SetSecret(data string) *Setting {
 	if len(data) > 0 {
 		c.Secret = &data
+	}
+	return c
+}
+
+func (c *Setting) SetShop(data string) *Setting {
+	if len(data) > 0 {
+		c.Shop = &data
 	}
 	return c
 }
