@@ -10,6 +10,7 @@ github.com/deatil/go-cryptobin v1.0.2021 h1:BD2SZFUD4uA3h/NUmntNNiAqFmdr18CQ8YC6
 github.com/deatil/go-cryptobin v1.0.2021/go.mod h1:yB6uMg/IWzy3PErhpcrJpczmBfBcFmU7WCk/7ttUbUc=
 github.com/deatil/go-cryptobin v1.0.2052 h1:g4JKr5vNZ7ZsR2Z+gzWiIJPl27/ZEFGblD2KouuP1RA=
 github.com/deatil/go-cryptobin v1.0.2052/go.mod h1:IQUoSfx2WJh9fzp/OkMOy9lm3pap8y+fnKXzDJsoMYE=
+github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=
 github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1mIlRU8Am5FuJP05cCM98=
 github.com/envoyproxy/protoc-gen-validate v0.1.0/go.mod h1:iSmxcyjqTsJpI2R4NaDN7+kN2VEUnK/pcBlmesArF7c=

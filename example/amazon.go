@@ -14,7 +14,13 @@ type AmazonTest struct {
 }
 
 func main() {
-	set := new(model.Setting)
+	set := new(model.Setting).
+		SetKey("amzn1.application-oa2-client.60110a1e40a041779f11bb6c49c1fe26").
+		SetSecret("amzn1.oa2-cs.v1.8e9d6a6c8cbd03dc8c88385386cf13ae3377d4d47a071d26ea52460a5ea59af9").
+		SetAuthCallbackUrl("https://dev2.web.epur.cn/openapi/admin/v1/erp/platform/cross/auth/callback/Amazon").
+		SetAccessToken("Atza|IwEBIFfmakf17-93zLFoF9Hdwm40lO1CZr3llpDTZpR_QTAFUxQppuOlVL3gcIGRqCNvmcMVJy0mN1MnsbL7auBf7h7UIlDXODNwk2PjET1Jk8W7Y-UzLxLOmh9v8ajOgrY2TJRPiomPuuTkQIGy5GJrD0bEh2x_jiy80cWgy2wA4IDZrLBfz71I0sFCA7Av_5c_BIRih1-K4KMNrBNtx3fCLjhXmIN_ifr9i0l0eOs_yK4aGmXG-UMgRccm2xJpQfB-YjQJkJI46mlnS2z3RgBJtF52e-PyFOatnuLmLaT_ahiW_y8kHYX2XDs2BHaXROWy6P1QJTUCIAy1CIbkZB-7EOa6").
+		SetServerUrl("https://dev2.web.epur.cn/#/to/enter-in").
+		SetDevelopId("amzn1.sp.solution.3dbb2269-d7a9-415d-802d-bf0c9ed40fe4")
 	api := amazon.New(set)
 	testApi := AmazonTest{api: api}
 	//testApi.GetAuthUrl()
