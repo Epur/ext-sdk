@@ -8,7 +8,7 @@ import (
 	"github.com/Epur/ext-sdk/pfc/go1688"
 	"github.com/Epur/ext-sdk/pfc/lazada"
 	"github.com/Epur/ext-sdk/pfc/shopee"
-	"github.com/Epur/ext-sdk/pfc/tiktok"
+	"github.com/Epur/ext-sdk/pfc/tiktokv2"
 )
 
 type PfcApi interface {
@@ -27,8 +27,8 @@ func New(pfc string, setting *model.Setting) *Api {
 
 	switch pfc {
 	case model.PFC_TIKTOK:
-		api.api = tiktok.New(setting)
-		//api.api = tiktokv2.New(setting)  去掉旧版本  逐渐使用最新版本
+		//api.api = tiktok.New(setting)  去掉旧版本  逐渐使用最新版本
+		api.api = tiktokv2.New(setting)
 	case model.PFC_EPUR:
 		api.api = epur.New(setting)
 	case model.PFC_LAZADA:
