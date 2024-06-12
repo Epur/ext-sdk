@@ -352,16 +352,16 @@ func (p *Api) GetProductList(Body model.BodyMap) *model.Client {
 	Response: GetProductDetailResponse
 */
 
-func (p *Api) GetProductDetail(Body model.BodyMap) *model.Client {
+func (p *Api) GetProductDetail(productsId string) *model.Client {
 
 	c := NewClient(p.Setting)
 	c.SetMethod("GET").
-		SetParams(Body)
+		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
 
-	if c.Err = Body.CheckEmptyError("product_id"); c.Err != nil {
-		return &c.Client
-	}
-	c.SetPath(fmt.Sprintf("/product/202309/products/%s", Body.Get("product_id")))
+	//if c.Err = Body.CheckEmptyError("product_id"); c.Err != nil {
+	//	return &c.Client
+	//}
+	c.SetPath(fmt.Sprintf("/product/202309/products/%s", productsId))
 
 	c.Execute()
 	if c.Err != nil {
@@ -376,7 +376,11 @@ func (p *Api) GetProductDetail(Body model.BodyMap) *model.Client {
 	return &c.Client
 }
 
-// 订单发货（运单号回填）
+/*
+订单发货（运单号回填）
+Url : https://partner.tiktokshop.com/docv2/page/6509d85b4a0bb702c057fdda?external_id=6509d85b4a0bb702c057fdda#Back%20To%20Top
+Response: GetProductDetailResponse
+*/
 func (p *Api) OrderShipPackage202309(body model.BodyMap) error {
 	logger.SdkLogger.Info("OrderShipPackage202309...")
 
@@ -395,7 +399,12 @@ func (p *Api) OrderShipPackage202309(body model.BodyMap) error {
 	return nil
 }
 
-// 获取店铺关联仓库
+//
+/*
+	获取店铺关联仓库
+	Url : https://partner.tiktokshop.com/docv2/page/6509d85b4a0bb702c057fdda?external_id=6509d85b4a0bb702c057fdda#Back%20To%20Top
+	Response: GetProductDetailResponse
+*/
 func (p *Api) LogisticsWarehouses202309() *model.Client {
 	logger.SdkLogger.Info("LogisticsWarehouses202309...")
 
