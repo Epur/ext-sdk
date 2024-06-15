@@ -43,8 +43,30 @@ type GetOrderListResponse struct {
 }
 
 type GetProductListResponse struct {
-	List  []ProductListResponse `json:"products"`
-	Total int                   `json:"total"`
+	NextPageToken string `json:"next_page_token"`
+	Products      []struct {
+		CreateTime             int      `json:"create_time"`
+		Id                     string   `json:"id"`
+		ProductSyncFailReasons string   `json:"product_sync_fail_reasons"`
+		SalesRegions           []string `json:"sales_regions"`
+		Skus                   []struct {
+			Id        string `json:"id"`
+			Inventory []struct {
+				Quantity    int    `json:"quantity"`
+				WarehouseId string `json:"warehouse_id"`
+			} `json:"inventory"`
+			Price struct {
+				Currency          string `json:"currency"`
+				SalePrice         string `json:"sale_price"`
+				TaxExclusivePrice string `json:"tax_exclusive_price"`
+			} `json:"price"`
+			SellerSku string `json:"seller_sku"`
+		} `json:"skus"`
+		Status     string `json:"status"`
+		Title      string `json:"title"`
+		UpdateTime int    `json:"update_time"`
+	} `json:"products"`
+	TotalCount int `json:"total_count"`
 }
 
 type GetProductDetailResponse struct {

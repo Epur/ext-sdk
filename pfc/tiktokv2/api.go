@@ -290,30 +290,23 @@ func (p *Api) PrintAwb(Param model.BodyMap, PackageId string) *model.Client {
 Url : https://partner.tiktokshop.com/docv2/page/65854ffb8f559302d8a6acda?external_id=6503081a56e2bb0289dd6d7d
 Response: GetProductListResponse
 */
-func (p *Api) GetProductList(Body model.BodyMap) *model.Client {
+func (p *Api) GetProductList(Body model.BodyMap, Params model.BodyMap) *model.Client {
 
-	/*
-		"1": "Published",
-		"2": "Created",
-		"3": "Draft",
-		"4": "Deleted"
-	*/
-
+	var cursor *string
 	c := NewClient(p.Setting)
 	c.SetPath(`/product/202309/products/search`).
 		SetMethod("POST").
-		SetBody(Body)
-
-	if c.Err = Body.CheckEmptyError("page_size"); c.Err != nil {
-		return &c.Client
-	}
+		SetBody(Body).
+		SetParams(Params)
 
 	result := GetProductListResponse{}
-	pageSize := Body.Get("page_size")
-
 	for {
 
-		c.Request.Params.Set("page_size", fmt.Sprintf("%s", pageSize))
+		if cursor != nil && len(*cursor) > 0 {
+			// 将page_token 参数 传给Query  page_token只能存在于params中
+			// 去掉地址符
+			c.Request.Params.Set("page_token", *cursor)
+		}
 
 		cResult := GetProductListResponse{}
 
@@ -326,18 +319,17 @@ func (p *Api) GetProductList(Body model.BodyMap) *model.Client {
 			return &c.Client
 		}
 
-		if len(cResult.List) > 0 {
-			for index := range cResult.List {
-				result.List = append(result.List, cResult.List[index])
+		if cResult.Products != nil && len(cResult.Products) > 0 {
+			for index := range cResult.Products {
+				result.Products = append(result.Products, cResult.Products[index])
 			}
 		}
 
-		//page++
-
-		//fmt.Println(page, len(cResult.List), cResult.Total)
-
-		if len(result.List) >= cResult.Total {
+		if cResult.NextPageToken == "" {
+			result.TotalCount = cResult.TotalCount
 			break
+		} else {
+			cursor = &cResult.NextPageToken
 		}
 	}
 
