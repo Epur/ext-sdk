@@ -1140,3 +1140,23 @@ type CategoriesAttributes struct {
 		} `json:"values"`
 	} `json:"attributes"`
 }
+
+type GetGlobalProductsCategories struct {
+	Id                 string   `json:"id"`
+	IsLeaf             bool     `json:"is_leaf"`
+	LocalName          string   `json:"local_name"`
+	ParentId           string   `json:"parent_id"`
+	PermissionStatuses []string `json:"permission_statuses"`
+}
+
+type GlobalProduct struct {
+	CreateTime int    `json:"create_time"`
+	Id         string `json:"id"`
+	Skus       []struct {
+		Id        string `json:"id"`
+		SellerSku string `json:"seller_sku"`
+	} `json:"skus"`
+	Status     string `json:"status"`
+	Title      string `json:"title"`
+	UpdateTime int    `json:"update_time"`
+}

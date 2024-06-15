@@ -377,6 +377,173 @@ func (p *Api) GetProductDetail(productsId string) *model.Client {
 }
 
 /*
+	上架产品
+	Url : https://partner.tiktokshop.com/docv2/page/650306ff5a12ff0294eab4a9?external_id=650306ff5a12ff0294eab4a9
+	Response: ActivateProductResponse
+*/
+
+func (p *Api) ActivateProduct(body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetMethod("POST").
+		SetBody(body).
+		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
+
+	c.SetPath("/product/202309/products/activate")
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+
+	response := ActivateProductResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+/*
+	关闭产品
+	Url : https://partner.tiktokshop.com/docv2/page/6509de450fcef602bf1d087c?external_id=6509de450fcef602bf1d087c#Back%20To%20Top
+	Response: DeactivateProductResponse
+*/
+
+func (p *Api) DeactivateProduct(body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetMethod("POST").
+		SetBody(body).
+		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
+
+	c.SetPath("/product/202309/products/deactivate")
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+
+	response := DeactivateProductResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+/*
+	创建产品
+	Url : https://partner.tiktokshop.com/docv2/page/6502fc8da57708028b42b18a?external_id=6502fc8da57708028b42b18a#Back%20To%20Top
+	Response: CreateProductResponse
+*/
+
+func (p *Api) CreateProduct(body model.BodyMap) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetMethod("POST").
+		SetBody(body).
+		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
+
+	c.SetPath("/product/202309/products")
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+
+	response := CreateProductResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+/*
+	编辑产品
+	Url : https://partner.tiktokshop.com/docv2/page/6509da7d0fcef602bf1caddf?external_id=6509da7d0fcef602bf1caddf#Back%20To%20Top
+	Response: CreateProductResponse
+*/
+
+func (p *Api) EditProduct(body model.BodyMap, productId string) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetMethod("PUT").
+		SetBody(body).
+		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
+
+	c.SetPath(fmt.Sprintf("/product/202309/products/%s", productId))
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+
+	response := CreateProductResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+/*
+	获取全球产品
+	Url : https://partner.tiktokshop.com/docv2/page/65854fa5a46cdd02bcbd0a18?external_id=65854fa5a46cdd02bcbd0a18#Back%20To%20Top
+	Response: GetGlobalProductListResponse
+*/
+
+func (p *Api) GetGlobalProductList(params model.BodyMap) *model.Client {
+
+	var cursor *string
+	c := NewClient(p.Setting)
+	c.SetMethod("GET").
+		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
+
+	c.SetPath("/product/202312/global_products/search")
+	response := GetGlobalProductListResponse{}
+	for {
+
+		c.Request.Params.Set("page_size", fmt.Sprintf("%s", "100"))
+		if cursor != nil && len(*cursor) > 0 {
+			// 将page_token 参数 传给Query  page_token只能存在于params中
+			// 去掉地址符
+			c.Request.Params.Set("page_token", *cursor)
+		}
+
+		cResult := GetGlobalProductListResponse{}
+
+		c.Execute()
+		if c.Err != nil || !c.Response.Success {
+			return &c.Client
+		}
+
+		if c.Err = c.Client.Response.To(&cResult); c.Err != nil {
+			return &c.Client
+		}
+
+		if len(cResult.GlobalProducts) > 0 {
+			for index := range cResult.GlobalProducts {
+				response.GlobalProducts = append(response.GlobalProducts, cResult.GlobalProducts[index])
+			}
+		}
+
+		if cResult.NextPageToken == "" {
+			response.TotalCount = cResult.TotalCount
+			break
+		} else {
+			cursor = &cResult.NextPageToken
+		}
+	}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+/*
 	获取全球产品详情
 	Url : https://partner.tiktokshop.com/docv2/page/6509e2b0bace3e02b7490c96?external_id=6509e2b0bace3e02b7490c96
 	Response: GetGlobalProductDetailResponse
@@ -434,26 +601,25 @@ func (p *Api) GetGlobalProductsAttributes(categoryId string) *model.Client {
 }
 
 /*
-	创建产品
-	Url : https://partner.tiktokshop.com/docv2/page/6502fc8da57708028b42b18a?external_id=6502fc8da57708028b42b18a#Back%20To%20Top
-	Response: CreateProductResponse
+	查找全局产品的属性和值
+	Url : https://partner.tiktokshop.com/docv2/page/6509e2b0bace3e02b7490c96?external_id=6509e2b0bace3e02b7490c96
+	Response: GetGlobalProductsCategoriesResponse
 */
 
-func (p *Api) CreateProduct(body model.BodyMap) *model.Client {
+func (p *Api) GetGlobalProductsCategories(body model.BodyMap) *model.Client {
 
 	c := NewClient(p.Setting)
-	c.SetMethod("POST").
-		SetBody(body).
+	c.SetMethod("GET").
 		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
 
-	c.SetPath("/product/202309/products")
+	c.SetPath("/product/202309/global_categories")
 
 	c.Execute()
 	if c.Err != nil {
 		return &c.Client
 	}
 
-	response := CreateProductResponse{}
+	response := GetGlobalProductsCategoriesResponse{}
 	if c.Err = c.Client.Response.To(&response); c.Err != nil {
 		return &c.Client
 	}
@@ -490,7 +656,35 @@ func (p *Api) CreateGlobalProduct(body model.BodyMap) *model.Client {
 }
 
 /*
-	创建全球产品
+	编辑全球产品
+	Url : https://partner.tiktokshop.com/docv2/page/6502fc8da57708028b42b18a?external_id=6502fc8da57708028b42b18a#Back%20To%20Top
+	Response: EditGlobalProductResponse
+*/
+
+func (p *Api) EditGlobalProduct(body model.BodyMap, globalProductId string) *model.Client {
+
+	c := NewClient(p.Setting)
+	c.SetMethod("PUT").
+		SetBody(body).
+		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
+
+	c.SetPath(fmt.Sprintf("/product/202309/global_products/%s", globalProductId))
+
+	c.Execute()
+	if c.Err != nil {
+		return &c.Client
+	}
+
+	response := EditGlobalProductResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+	return &c.Client
+}
+
+/*
+	发布全球产品
 	Url : https://partner.tiktokshop.com/docv2/page/650a64d6defece02be678fd6?external_id=650a64d6defece02be678fd6#Back%20To%20Top
 	Response: PublishGlobalProductResponse
 */

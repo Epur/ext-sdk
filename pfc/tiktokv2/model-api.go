@@ -79,3 +79,55 @@ type PublishGlobalProductResponse struct {
 type CategoriesAttributesResponse struct {
 	CategoriesAttributes
 }
+
+type GetGlobalProductsCategoriesResponse struct {
+	Categories []GetGlobalProductsCategories `json:"categories"`
+}
+
+type GetGlobalProductListResponse struct {
+	GlobalProducts []GlobalProduct `json:"global_products"`
+	NextPageToken  string          `json:"next_page_token"`
+	TotalCount     int             `json:"total_count"`
+}
+
+type EditGlobalProductResponse struct {
+	GlobalSkus []struct {
+		Id              string `json:"id"`
+		SalesAttributes []struct {
+			Id      string `json:"id"`
+			ValueId string `json:"value_id"`
+		} `json:"sales_attributes"`
+		SellerSku string `json:"seller_sku"`
+	} `json:"global_skus"`
+	PublishResults []struct {
+		FailReasons []struct {
+			Message string `json:"message"`
+		} `json:"fail_reasons"`
+		Region string `json:"region"`
+		Status string `json:"status"`
+	} `json:"publish_results"`
+}
+
+type ActivateProductResponse struct {
+	Errors []struct {
+		Code   int `json:"code"`
+		Detail struct {
+			ExtraErrors []struct {
+				Code    int    `json:"code"`
+				Message string `json:"message"`
+			} `json:"extra_errors"`
+			ProductId string `json:"product_id"`
+		} `json:"detail"`
+		Message string `json:"message"`
+	} `json:"errors"`
+}
+
+type DeactivateProductResponse struct {
+	Errors []struct {
+		Code   int `json:"code"`
+		Detail struct {
+			ProductId string `json:"product_id"`
+		} `json:"detail"`
+		Message string `json:"message"`
+	} `json:"errors"`
+}
