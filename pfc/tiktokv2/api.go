@@ -544,12 +544,8 @@ func (p *Api) GetGlobalProductList(params model.BodyMap) *model.Client {
 func (p *Api) GetGlobalProductDetail(productsId string) *model.Client {
 
 	c := NewClient(p.Setting)
-	c.SetMethod("GET").
-		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
+	c.SetMethod("GET")
 
-	//if c.Err = Body.CheckEmptyError("product_id"); c.Err != nil {
-	//	return &c.Client
-	//}
 	c.SetPath(fmt.Sprintf("/product/202309/global_products/%s", productsId))
 
 	c.Execute()
