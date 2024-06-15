@@ -53,8 +53,11 @@ func (p *Client) Execute() {
 		http.WithMethod(*p.Request.Method),
 	)
 	// 目前只用到 application/json 类型 后续根据业务处理
-	p.HttpReq.Header.Set("Content-Type", "application/json")
-
+	if p.Client.Request.Path != nil && *p.Client.Request.Path == UPLOAD_PRODUCT_IMAGES {
+		p.HttpReq.Header.Set("Content-Type", "multipart/form-data")
+	} else {
+		p.HttpReq.Header.Set("Content-Type", "application/json")
+	}
 	if *p.Request.Path != GETACCESS && *p.Request.Path != REFRESHTOKEN {
 		p.Request.Params.Set("sign", p.sign())
 	}

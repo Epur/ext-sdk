@@ -54,3 +54,28 @@ type GetProductDetailResponse struct {
 type GetOrderPrintAwbResponse struct {
 	DocUrl string `json:"doc_url"`
 }
+
+type GetGlobalProductDetailResponse struct {
+	GlobalProductDetailResponse
+}
+
+type CreateProductResponse struct {
+	CreateProduct
+}
+
+type CreateGlobalProductResponse struct {
+	GlobalProductId string      `json:"global_product_id"`
+	GlobalSkus      []GlobalSku `json:"global_skus"`
+}
+
+type UploadProductImageResponse struct {
+	UploadProductImage
+}
+
+type PublishGlobalProductResponse struct {
+	PublishGlobalProduct
+}
+
+type CategoriesAttributesResponse struct {
+	CategoriesAttributes
+}
