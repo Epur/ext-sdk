@@ -988,7 +988,7 @@ type GlobalProductDetailResponse struct {
 	GlobalSellerId string `json:"global_seller_id"`
 	Id             string `json:"id"`
 	MainImages     []struct {
-		Height string `json:"height"`
+		Height int    `json:"height"`
 		Uri    string `json:"uri"`
 		Width  int    `json:"width"`
 	} `json:"main_images"`
