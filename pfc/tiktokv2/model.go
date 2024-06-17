@@ -488,7 +488,7 @@ type ProductDetailResponse struct {
 	PackageLength  int64  `json:"package_length"`
 	PackageWidth   int64  `json:"package_width"`
 	PackageHeight  int64  `json:"package_height"`
-	PackageWeight  string `json:"package_weight"`
+	PackageWeight  int64  `json:"package_weight"`
 	Skus           []struct {
 		Id        string `json:"id"`
 		SellerSku string `json:"seller_sku"`
