@@ -491,7 +491,7 @@ func (p *Api) GetGlobalProductList(body model.BodyMap) *model.Client {
 	var cursor *string
 	c := NewClient(p.Setting)
 	c.SetMethod("POST").
-		SetBody(body)
+		SetBody(body).SetParams(model.BodyMap{})
 
 	c.SetPath("/product/202312/global_products/search")
 	response := GetGlobalProductListResponse{}
