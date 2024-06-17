@@ -529,9 +529,6 @@ func (p *Api) GetGlobalProductList(body, params model.BodyMap) *model.Client {
 			cursor = &cResult.NextPageToken
 		}
 	}
-	if c.Err = c.Client.Response.To(&response); c.Err != nil {
-		return &c.Client
-	}
 	c.Response.Response.DataTo = response
 	return &c.Client
 }
