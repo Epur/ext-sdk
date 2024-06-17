@@ -435,93 +435,72 @@ type ProductListResponse struct {
 }
 
 type ProductDetailResponse struct {
-
-	/*
-		status
-			1-draft、
-			2-pending、
-			3-failed(initial creation)、
-			4-live、
-			5-seller_deactivated、
-			6-platform_deactivated、
-			7-freeze
-			8-deleted
-	*/
-	ProductId     string `json:"product_id"`
-	ProductStatus int64  `json:"product_status"`
-	ProductName   string `json:"product_name"`
-	CategoryList  []struct {
-		Id       string `json:"id"`
-		ParentId string `json:"parent_id"`
-		Leaf     bool   `json:"is_leaf"`
-		Name     string `json:"local_display_name"`
-	} `json:"category_list"`
+	AuditFailedReasons []struct {
+		Position    string   `json:"position"`
+		Reasons     []string `json:"reasons"`
+		Suggestions []string `json:"suggestions"`
+	} `json:"audit_failed_reasons"`
 	Brand struct {
-		Id     string `json:"id"`
-		Name   string `json:"name"`
-		Status int64  `json:"status"`
+		Id   string `json:"id"`
+		Name string `json:"name"`
 	} `json:"brand"`
-	Images []ImageEx `json:"images"`
-	Video  struct {
-		Id         string      `json:"id"`
-		Duration   interface{} `json:"duration"`
-		PostUrl    string      `json:"post_url"`
-		MediaType  string      `json:"media_type"`
-		VideoInfos []struct {
-			MainUrl   string `json:"main_url"`
-			BackupUrl string `json:"backup_url"`
-			UrlExpire int64  `json:"url_expire"`
-			Width     int64  `json:"width"`
-			Height    int64  `json:"height"`
-			FileHash  string `json:"file_hash"`
-			Format    string `json:"format"`
-			Size      int64  `json:"size"`
-			Bitrate   int64  `json:"bitrate"`
-		} `json:"video_infos"`
-	} `json:"video"`
-	Description    string `json:"description"`
-	WarrantyPeriod struct {
-		WarrantyId          int64  `json:"warranty_id"`
-		WarrantyDescription string `json:"warranty_description"`
-	} `json:"warranty_period"`
-	WarrantyPolicy string `json:"warranty_policy"`
-	PackageLength  int64  `json:"package_length"`
-	PackageWidth   int64  `json:"package_width"`
-	PackageHeight  int64  `json:"package_height"`
-	PackageWeight  int64  `json:"package_weight"`
-	Skus           []struct {
+	CategoryChains []struct {
 		Id        string `json:"id"`
-		SellerSku string `json:"seller_sku"`
-		Price     struct {
-			OriginalPrice   decimal.Decimal `json:"original_price"`
-			PriceIncludeVat string          `json:"price_include_vat"`
-			Currency        string          `json:"currency"`
-		} `json:"price"`
-		StockInfos []struct {
-			AvailableStock int64  `json:"available_stock"`
-			WarehouseId    string `json:"warehouse_id"`
-		} `json:"stock_infos"`
-		SalesAttributes []struct {
-			Id        string  `json:"id"`
-			Name      string  `json:"name"`
-			ValueName string  `json:"value_name"`
-			ValueId   string  `json:"value_id"`
-			SkuImg    ImageEx `json:"sku_img"`
-		} `json:"sales_attributes"`
-	} `json:"skus"`
-	ProductCertifications []struct {
+		IsLeaf    bool   `json:"is_leaf"`
+		LocalName string `json:"local_name"`
+		ParentId  string `json:"parent_id"`
+	} `json:"category_chains"`
+	Certifications []struct {
 		Files []struct {
-			Id   string   `json:"id"`
-			Name string   `json:"name"`
-			Type string   `json:"type"`
-			List []string `json:"list"`
-		}
-		Id     string    `json:"id"`
-		Title  string    `json:"title"`
-		Images []ImageEx `json:"images"`
-	} `json:"product_certifications"`
-	SizeChart         ImageEx `json:"size_chart"`
-	IsCodOpen         bool    `json:"is_cod_open"`
+			Format string   `json:"format"`
+			Id     string   `json:"id"`
+			Name   string   `json:"name"`
+			Urls   []string `json:"urls"`
+		} `json:"files"`
+		Id     string `json:"id"`
+		Images []struct {
+			Height    int      `json:"height"`
+			ThumbUrls []string `json:"thumb_urls"`
+			Uri       string   `json:"uri"`
+			Urls      []string `json:"urls"`
+			Width     int      `json:"width"`
+		} `json:"images"`
+		Title string `json:"title"`
+	} `json:"certifications"`
+	CreateTime      int `json:"create_time"`
+	DeliveryOptions []struct {
+		Id          string `json:"id"`
+		IsAvailable bool   `json:"is_available"`
+		Name        string `json:"name"`
+	} `json:"delivery_options"`
+	Description       string `json:"description"`
+	ExternalProductId string `json:"external_product_id"`
+	Id                string `json:"id"`
+	IsCodAllowed      bool   `json:"is_cod_allowed"`
+	IsNotForSale      bool   `json:"is_not_for_sale"`
+	MainImages        []struct {
+		Height    int      `json:"height"`
+		ThumbUrls []string `json:"thumb_urls"`
+		Uri       string   `json:"uri"`
+		Urls      []string `json:"urls"`
+		Width     int      `json:"width"`
+	} `json:"main_images"`
+	Manufacturer struct {
+		Address     string `json:"address"`
+		Email       string `json:"email"`
+		Name        string `json:"name"`
+		PhoneNumber string `json:"phone_number"`
+	} `json:"manufacturer"`
+	PackageDimensions struct {
+		Height string `json:"height"`
+		Length string `json:"length"`
+		Unit   string `json:"unit"`
+		Width  string `json:"width"`
+	} `json:"package_dimensions"`
+	PackageWeight struct {
+		Unit  string `json:"unit"`
+		Value string `json:"value"`
+	} `json:"package_weight"`
 	ProductAttributes []struct {
 		Id     string `json:"id"`
 		Name   string `json:"name"`
@@ -530,22 +509,78 @@ type ProductDetailResponse struct {
 			Name string `json:"name"`
 		} `json:"values"`
 	} `json:"product_attributes"`
-	UpdateTime int64 `json:"update_time"`
-	CreateTime int64 `json:"create_time"`
-	QcReasons  []struct {
-		Reason     string   `json:"reason"`
-		SubReasons []string `json:"sub_reasons"`
-	} `json:"qc_reasons"`
-
-	DeliveryServices []struct {
-		DeliveryServiceId     interface{} `json:"delivery_service_id"`
-		DeliveryOptionName    string      `json:"delivery_option_name"`
-		DeliveryServiceStatus bool        `json:"delivery_service_status"`
-	} `json:"delivery_services"`
-	ExemptionOfIdentifierCode struct {
-		ExemptionReason []int64 `json:"exemption_reason"`
-	} `json:"exemption_of_identifier_code"`
-	PackageDimensionUnit string `json:"package_dimension_unit"`
+	ProductTypes string `json:"product_types"`
+	SizeChart    struct {
+		Image struct {
+			Height    int      `json:"height"`
+			ThumbUrls []string `json:"thumb_urls"`
+			Uri       string   `json:"uri"`
+			Urls      []string `json:"urls"`
+			Width     int      `json:"width"`
+		} `json:"image"`
+		Template struct {
+			Id string `json:"id"`
+		} `json:"template"`
+	} `json:"size_chart"`
+	Skus []struct {
+		CombinedSkus []struct {
+			ProductId string `json:"product_id"`
+			SkuCount  int    `json:"sku_count"`
+			SkuId     string `json:"sku_id"`
+		} `json:"combined_skus"`
+		ExternalSkuId       string `json:"external_sku_id"`
+		GlobalListingPolicy struct {
+			InventoryType   string `json:"inventory_type"`
+			PriceSync       bool   `json:"price_sync"`
+			ReplicateSource struct {
+				ProductId string `json:"product_id"`
+				ShopId    string `json:"shop_id"`
+				SkuId     string `json:"sku_id"`
+			} `json:"replicate_source"`
+		} `json:"global_listing_policy"`
+		Id             string `json:"id"`
+		IdentifierCode struct {
+			Code string `json:"code"`
+			Type string `json:"type"`
+		} `json:"identifier_code"`
+		Inventory []struct {
+			Quantity    int    `json:"quantity"`
+			WarehouseId string `json:"warehouse_id"`
+		} `json:"inventory"`
+		Price struct {
+			Currency          string `json:"currency"`
+			SalePrice         string `json:"sale_price"`
+			TaxExclusivePrice string `json:"tax_exclusive_price"`
+			UnitPrice         string `json:"unit_price"`
+		} `json:"price"`
+		SalesAttributes []struct {
+			Id     string `json:"id"`
+			Name   string `json:"name"`
+			SkuImg struct {
+				Height    int      `json:"height"`
+				ThumbUrls []string `json:"thumb_urls"`
+				Uri       string   `json:"uri"`
+				Urls      []string `json:"urls"`
+				Width     int      `json:"width"`
+			} `json:"sku_img"`
+			ValueId   string `json:"value_id"`
+			ValueName string `json:"value_name"`
+		} `json:"sales_attributes"`
+		SellerSku    string `json:"seller_sku"`
+		SkuUnitCount string `json:"sku_unit_count"`
+	} `json:"skus"`
+	Status     string `json:"status"`
+	Title      string `json:"title"`
+	UpdateTime int    `json:"update_time"`
+	Video      struct {
+		CoverUrl string `json:"cover_url"`
+		Format   string `json:"format"`
+		Height   int    `json:"height"`
+		Id       string `json:"id"`
+		Size     int    `json:"size"`
+		Url      string `json:"url"`
+		Width    int    `json:"width"`
+	} `json:"video"`
 }
 
 type ImageEx struct {
