@@ -486,12 +486,13 @@ func (p *Api) EditProduct(body model.BodyMap, productId string) *model.Client {
 	Response: GetGlobalProductListResponse
 */
 
-func (p *Api) GetGlobalProductList(params model.BodyMap) *model.Client {
+func (p *Api) GetGlobalProductList(body, params model.BodyMap) *model.Client {
 
 	var cursor *string
 	c := NewClient(p.Setting)
-	c.SetMethod("GET").
-		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
+	c.SetMethod("POST").
+		SetBody(body).
+		SetParams(params)
 
 	c.SetPath("/product/202312/global_products/search")
 	response := GetGlobalProductListResponse{}
