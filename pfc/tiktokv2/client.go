@@ -94,7 +94,7 @@ func (p *Client) Execute() {
 	}
 	// 新增错误返回
 	if result.Code != 0 {
-		p.Err = utils.Err(result.Message)
+		p.Err = utils.Err(fmt.Sprintf("msg:[%s], code:[%d]", result.Message, result.Code))
 	}
 
 	if p.Response.HttpStatus != 200 {
