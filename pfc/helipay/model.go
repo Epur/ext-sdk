@@ -186,14 +186,14 @@ type AppPayResponse struct {
  */
 
 type MerchantEntryResponse struct {
-	Success       bool            `json:"success"`       //交易类型
-	Code          string          `json:"code"`          //签名类型
-	Message       string          `json:"message"`       //时间戳
-	Data          json.RawMessage `json:"data"`          //是否需要验签
-	Sign          string          `json:"sign"`          //响应码
-	Hostname      string          `json:"hostname"`      //响应码
-	SignType      string          `json:"signType"`      //响应码
-	EncryptionKey string          `json:"encryptionKey"` //响应码
+	Success       bool              `json:"success"`       //交易类型
+	Code          string            `json:"code"`          //签名类型
+	Message       string            `json:"message"`       //时间戳
+	Data          *MdPdConfResponse `json:"data"`          //是否需要验签
+	Sign          string            `json:"sign"`          //响应码
+	Hostname      string            `json:"hostname"`      //响应码
+	SignType      string            `json:"signType"`      //响应码
+	EncryptionKey string            `json:"encryptionKey"` //响应码
 }
 
 type MdPdConfResponse struct {
