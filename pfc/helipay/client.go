@@ -270,12 +270,6 @@ func (p *client) responseMEntryParams() (model.BodyMap, error) {
 	//}
 	//sort.Strings(keys)
 
-	decrypted, err := desede.TripleEcbDesDecrypt([]byte(row["data"].(string)), []byte(p.key.EncryptKey))
-	if err != nil {
-		return nil, err
-	}
-	logger.HeliLogger.Infof("decrypted:[%s]", decrypted)
-
 	data := bytes.Buffer{}
 	for _, v := range PREPAY_MEntry_FIELDS {
 		vv := row.GetString(v)
@@ -290,6 +284,16 @@ func (p *client) responseMEntryParams() (model.BodyMap, error) {
 		return nil, errors.New("验签失败")
 	}
 	logger.HeliLogger.Infof("验签（MD5)成功：[%#v]\n", row)
+
+	encryptedStr, err := base64.StdEncoding.DecodeString(row.GetString("data"))
+	if err != nil {
+		return nil, err
+	}
+	decrypted, err := desede.TripleEcbDesDecrypt(encryptedStr, []byte(p.key.EncryptKey))
+	if err != nil {
+		return nil, err
+	}
+	logger.HeliLogger.Infof("decrypted:[%s]", decrypted)
 
 	return row, nil
 }
