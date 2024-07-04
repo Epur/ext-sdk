@@ -151,7 +151,16 @@ func (p *client) Execute() {
 	}
 
 	//p.Response.Response.RequestId = result.Rt9SerialNumber //合利宝支付流水号
-	p.Response.Response.Data = p.HttpReq.Result
+	if strings.Compare(*p.Request.Path, BIZ_TXN_PMENRY) == 0 {
+		str, err := json.Marshal(response)
+		if err != nil {
+			logger.HeliLogger.Error("反序列化失败，ERROR:", err.Error())
+			return
+		}
+		p.Response.Response.Data = str
+	} else {
+		p.Response.Response.Data = p.HttpReq.Result
+	}
 
 	p.Response.Response.Result = p.HttpReq.Result
 
