@@ -300,7 +300,7 @@ func (p *client) responseMEntryParams() (model.BodyMap, error) {
 		return nil, err
 	}
 	logger.HeliLogger.Infof("decrypted:[%s]", decrypted)
-
+	row.Set("data", decrypted)
 	return row, nil
 }
 
