@@ -271,9 +271,12 @@ func (p *client) responseMEntryParams() (model.BodyMap, error) {
 	//sort.Strings(keys)
 
 	data := bytes.Buffer{}
-	for _, v := range PREPAY_MEntry_FIELDS {
+	for _, v := range PREPAY_MEntryRsp_FIELDS {
 		vv := row.GetString(v)
 		data.WriteString(fmt.Sprintf("%s%s", vv, "&"))
+	}
+	if strings.Compare(p.Client.Request.Body.GetString("merchantNo"), "") != 0 {
+		data.WriteString(fmt.Sprintf("%s&", p.Client.Request.Body.GetString("merchantNo")))
 	}
 	if strings.Compare(p.key.MerchantKey, "") != 0 {
 		data.WriteString(fmt.Sprintf("%s", p.key.MerchantKey))

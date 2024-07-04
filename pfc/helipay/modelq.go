@@ -82,6 +82,10 @@ var PREPAY_MEntry_FIELDS = []string{
 	"merchantNo",
 }
 
+var PREPAY_MEntryRsp_FIELDS = []string{
+	"data",
+}
+
 // 公众号/JS/服务窗预下单接口响应验签字段
 
 var PREPAY_RSP_FIELDS = []string{
