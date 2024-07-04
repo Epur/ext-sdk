@@ -144,7 +144,10 @@ func (p *client) Execute() {
 		//进件接口
 		json.Unmarshal(p.HttpReq.Result, &smap)
 		p.Response.Response.Code = smap["code"].(string)
-		p.Response.Response.Message = smap["message"].(string)
+		if smap["message"] != nil {
+			p.Response.Response.Message = smap["message"].(string)
+		}
+
 	}
 
 	//p.Response.Response.RequestId = result.Rt9SerialNumber //合利宝支付流水号
