@@ -104,13 +104,25 @@ func (p *client) Execute() {
 		p.Err = errors.New(string(p.HttpReq.Result))
 		return
 	}
-
-	response, err := p.responseParams()
-	if err != nil {
-		logger.HeliLogger.Error("ERROR:", err.Error())
-		p.Err = err
-		return
+	response := model.BodyMap{}
+	if strings.Compare(*p.Request.Path, BIZ_TXN_PMENRY) == 0 {
+		response1, err := p.responseMEntryParams()
+		if err != nil {
+			logger.HeliLogger.Error("ERROR:", err.Error())
+			p.Err = err
+			return
+		}
+		response = response1
+	} else {
+		response1, err := p.responseParams()
+		if err != nil {
+			logger.HeliLogger.Error("ERROR:", err.Error())
+			p.Err = err
+			return
+		}
+		response = response1
 	}
+
 	logger.HeliLogger.Info(response)
 	result := new(Response)
 	smap := make(model.BodyMap)
@@ -132,11 +144,23 @@ func (p *client) Execute() {
 		//进件接口
 		json.Unmarshal(p.HttpReq.Result, &smap)
 		p.Response.Response.Code = smap["code"].(string)
-		p.Response.Response.Message = smap["message"].(string)
+		if smap["message"] != nil {
+			p.Response.Response.Message = smap["message"].(string)
+		}
+
 	}
 
 	//p.Response.Response.RequestId = result.Rt9SerialNumber //合利宝支付流水号
-	p.Response.Response.Data = p.HttpReq.Result
+	if strings.Compare(*p.Request.Path, BIZ_TXN_PMENRY) == 0 {
+		str, err := json.Marshal(response)
+		if err != nil {
+			logger.HeliLogger.Error("反序列化失败，ERROR:", err.Error())
+			return
+		}
+		p.Response.Response.Data = str
+	} else {
+		p.Response.Response.Data = p.HttpReq.Result
+	}
 
 	p.Response.Response.Result = p.HttpReq.Result
 
@@ -229,6 +253,64 @@ func (p *client) requestParams() (model.BodyMap, error) {
 	fmt.Println(body)
 
 	return body, nil
+}
+
+func (p *client) responseMEntryParams() (model.BodyMap, error) {
+	var signature string
+
+	row := model.BodyMap{}
+	err := json.Unmarshal(p.HttpReq.Result, &row)
+	if err != nil {
+		logger.HeliLogger.Error("ERROR:反序列化失败")
+		return nil, errors.New(fmt.Sprintf("反序列化失败:返回结果为[%s]", p.HttpReq.Result))
+	}
+
+	//row包含所有返回数据信息，从中可以拿到signature
+	if row["sign"] != nil {
+		signature = row["sign"].(string)
+		//fmt.Printf("签名:%v\n", signature)
+	} else {
+		fmt.Println("无需验签")
+		return row, nil
+	}
+
+	//var keys []string
+	//
+	////获取Key,并重排序
+	//for k, _ := range row {
+	//	keys = append(keys, k)
+	//}
+	//sort.Strings(keys)
+
+	data := bytes.Buffer{}
+	for _, v := range PREPAY_MEntryRsp_FIELDS {
+		vv := row.GetString(v)
+		data.WriteString(fmt.Sprintf("%s%s", vv, "&"))
+	}
+	//if strings.Compare(p.Client.Request.Body.GetString("merchantNo"), "") != 0 {
+	//	data.WriteString(fmt.Sprintf("%s&", p.Client.Request.Body.GetString("merchantNo")))
+	//}
+	if strings.Compare(p.key.MerchantKey, "") != 0 {
+		data.WriteString(fmt.Sprintf("%s", p.key.MerchantKey))
+	}
+	signData := data.String()
+	if !p.key.VerifyWithMD5(signData, signature) {
+		logger.HeliLogger.Error("ERROR:验签（md5)失败")
+		return nil, errors.New("验签失败")
+	}
+	logger.HeliLogger.Infof("验签（MD5)成功：[%#v]\n", row)
+
+	encryptedStr, err := base64.StdEncoding.DecodeString(row.GetString("data"))
+	if err != nil {
+		return nil, err
+	}
+	decrypted, err := desede.TripleEcbDesDecrypt(encryptedStr, []byte(p.key.EncryptKey))
+	if err != nil {
+		return nil, err
+	}
+	logger.HeliLogger.Infof("decrypted:[%s]", decrypted)
+	row.Set("data", string(decrypted))
+	return row, nil
 }
 
 func (p *client) responseParams() (model.BodyMap, error) {
