@@ -614,7 +614,7 @@ func (p *Api) GetGlobalProductsCategories(body model.BodyMap) *model.Client {
 
 /*
 	创建全球产品
-	Url : https://partner.tiktokshop.com/docv2/page/6502fc8da57708028b42b18a?external_id=6502fc8da57708028b42b18a#Back%20To%20Top
+	Url : https://partner.tiktokshop.com/docv2/page/6509de61bace3e02b7489cba?external_id=6509de61bace3e02b7489cba
 	Response: CreateGlobalProductResponse
 */
 
@@ -622,8 +622,8 @@ func (p *Api) CreateGlobalProduct(body model.BodyMap) *model.Client {
 
 	c := NewClient(p.Setting)
 	c.SetMethod("POST").
-		SetBody(body).
-		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
+		SetBody(body)
+	//SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
 
 	c.SetPath("/product/202309/global_products")
 
