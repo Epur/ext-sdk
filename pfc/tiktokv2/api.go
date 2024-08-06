@@ -594,8 +594,8 @@ func (p *Api) GetGlobalProductsAttributes(categoryId string) *model.Client {
 func (p *Api) GetGlobalProductsCategories(body model.BodyMap) *model.Client {
 
 	c := NewClient(p.Setting)
-	c.SetMethod("GET").
-		SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
+	c.SetMethod("GET")
+	//SetParams(model.BodyMap{}.Set("shop_cipher", *p.Setting.ShopCipher))
 
 	c.SetPath("/product/202309/global_categories")
 
