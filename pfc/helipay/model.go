@@ -200,3 +200,10 @@ type MdPdConfResponse struct {
 	MerchantNo string `json:"merchantNo"` //子商户编号
 	Status     string `json:"status"`     //状态
 }
+
+type AddAuthPayDirsDevConfigResponse struct {
+	MerchantNo               string `json:"merchantNo"`               //子商户编号
+	OrderNo                  string `json:"orderNo"`                  //订单号
+	Status                   string `json:"status"`                   //状态
+	WxPublicConfigChannelMsg string `json:"wxPublicConfigChannelMsg"` //结果
+}
