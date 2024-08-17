@@ -23,7 +23,7 @@ func New(setting *model.Setting) *Api {
 func (p *Api) GetAuthUrl(callbackParams string) string {
 
 	return fmt.Sprintf("%s%s?%s", SERVER_URL, AUTHSITE, model.BodyMap{}.
-		Set("appid", *p.Setting.Key).
+		Set("appid", *p.Setting.Key). //appid
 		//Set("redirectUrl", url.QueryEscape(callbackParams)).
 		Set("redirectUrl", base64.StdEncoding.EncodeToString([]byte(callbackParams))).
 		Set("state", "AUTH-SHEIN-"+strconv.FormatInt(utils.TimestampSecond(), 10)).EncodeURLParams())
