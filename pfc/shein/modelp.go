@@ -6,7 +6,7 @@ import (
 )
 
 type CommonResponse struct {
-	Code string `json:"code"`
+	Code string `json:"code" validate:"required"`
 	Msg  string `json:"msg"`
 }
 
@@ -99,7 +99,7 @@ type OrderGoodsInfo struct {
 	GoodsExchangeTag   int64          `json:"goodsExchangeTag"`
 	BeExchangeEntityId int64          `json:"beExchangeEntityId"`
 
-	OorderCurrency                string          `json:"orderCurrency"`
+	OrderCurrency                 string          `json:"orderCurrency"`
 	SellerCurrencyPrice           decimal.Decimal `json:"sellerCurrencyPrice"`
 	OrderCurrencyStoreCouponPrice decimal.Decimal `json:"orderCurrencyStoreCouponPrice"`
 	OrderCurrencyPromotionPrice   decimal.Decimal `json:"orderCurrencyPromotionPrice"`
@@ -150,8 +150,8 @@ type GetByTokenResponse struct {
 	Info *SecretKey `json:"info"`
 }
 type SecretKey struct {
-	SecretKey string `json:"secretKey"`
-	OpenKeyId string `json:"openKeyId"`
-	Appid     string `json:"appid"`
-	State     string `json:"state"`
+	SecretKey string `json:"secretKey" validate:"required"`
+	OpenKeyId string `json:"openKeyId" validate:"required"`
+	Appid     string `json:"appid" validate:"required"`
+	State     string `json:"state,omitempty"`
 }
