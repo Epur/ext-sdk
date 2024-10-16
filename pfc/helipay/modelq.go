@@ -16,10 +16,12 @@ const (
 	BIZ_TYPE_QR     = "AppPay"                  //扫码/下单接口
 	BIZ_TYPE_PREPAY = "AppPayPublic"            //公众号/JS/服务窗预下单接口
 	BIZ_TYPE_MPC    = "modifyProductConfig"     //产品手续费收取方式修改接口
+	BIZ_TYPE_MME    = "modifyMerchantInfoV2"    //商户信息修改(新)接口
 )
 
 const (
-	BIZ_TXN_PMENRY = "/trx/merchantEntry/interface.action" //进件接口
+	BIZ_TXN_PMENRY  = "/trx/merchantEntry/interface.action" //进件接口
+	BIZ_TXN_MOD_MER = "trx/merchantEntry/upload.action"     //商户信息修改(新)
 )
 
 // 扫码接口请求加签字段
