@@ -200,3 +200,31 @@ type MdPdConfResponse struct {
 	MerchantNo string `json:"merchantNo"` //子商户编号
 	Status     string `json:"status"`     //状态
 }
+
+type AddAuthPayDirsDevConfigResponse struct {
+	MerchantNo               string `json:"merchantNo"`               //子商户编号
+	OrderNo                  string `json:"orderNo"`                  //订单号
+	Status                   string `json:"status"`                   //状态
+	WxPublicConfigChannelMsg string `json:"wxPublicConfigChannelMsg"` //结果
+}
+
+/*
+ * 商户信息修改(新)
+ */
+
+type ModMerchantEntryResponse struct {
+	Success       bool            `json:"success"`       //交易类型
+	Code          string          `json:"code"`          //签名类型
+	Message       string          `json:"message"`       //时间戳
+	Data          json.RawMessage `json:"data"`          //是否需要验签
+	Sign          string          `json:"sign"`          //响应码
+	Hostname      string          `json:"hostname"`      //响应码
+	SignType      string          `json:"signType"`      //响应码
+	EncryptionKey string          `json:"encryptionKey"` //响应码
+}
+type MdMeResponse struct {
+	OrderNo          string `json:"orderNo"`          //订单号
+	MerchantNo       string `json:"merchantNo"`       //子商户编号
+	Result           string `json:"result"`           //审核状态结果
+	AlterationStatus string `json:"alterationStatus"` //审核状态
+}

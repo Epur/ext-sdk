@@ -296,3 +296,76 @@ func (p *Api) MdfyPdConf(Body model.BodyMap) *model.Client {
 
 	return &c.Client
 }
+
+/*
+**微信授权目录配置接口(单独增加单个支付目录)
+ */
+func (p *Api) AddAuthPayDirsDevConfig(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("微信授权目录配置接口(单独增加单个支付目录)...")
+
+	c := NewClient(p.Setting)
+	c.SetPath(BIZ_TXN_PMENRY).
+		SetMethod("POST").
+		SetBody(Body)
+
+	//if c.Err = Body.CheckEmptyError("merchantNo", "type", "productType",
+	//	"value"); c.Err != nil {
+	//	logger.HeliLogger.Error("ERROR:", c.Err.Error())
+	//	return &c.Client
+	//}
+
+	if c.Err = Body.CheckEmptyError("interfaceName", "merchantNo", "body"); c.Err != nil {
+		logger.HeliLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		logger.HeliLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	response := MerchantEntryResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.HeliLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+
+	return &c.Client
+}
+
+func (p *Api) ModifyMerchantEntry(Body model.BodyMap) *model.Client {
+	logger.CmbcLogger.Info("商户信息修改(新)...")
+
+	c := NewClient(p.Setting)
+	c.SetPath(BIZ_TXN_MOD_MER).
+		SetMethod("POST").
+		SetBody(Body)
+
+	//if c.Err = Body.CheckEmptyError("merchantNo", "type", "productType",
+	//	"value"); c.Err != nil {
+	//	logger.HeliLogger.Error("ERROR:", c.Err.Error())
+	//	return &c.Client
+	//}
+
+	if c.Err = Body.CheckEmptyError("interfaceName", "merchantNo", "body"); c.Err != nil {
+		logger.HeliLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	c.Execute()
+	if c.Err != nil {
+		logger.HeliLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+
+	response := ModMerchantEntryResponse{}
+	if c.Err = c.Client.Response.To(&response); c.Err != nil {
+		logger.HeliLogger.Error("ERROR:", c.Err.Error())
+		return &c.Client
+	}
+	c.Response.Response.DataTo = response
+
+	return &c.Client
+}

@@ -1,10 +1,10 @@
 package shein
 
 import (
+	"encoding/base64"
 	"fmt"
 	"github.com/Epur/ext-sdk/model"
 	"github.com/Epur/ext-sdk/utils"
-	"net/url"
 	"strconv"
 )
 
@@ -23,9 +23,10 @@ func New(setting *model.Setting) *Api {
 func (p *Api) GetAuthUrl(callbackParams string) string {
 
 	return fmt.Sprintf("%s%s?%s", SERVER_URL, AUTHSITE, model.BodyMap{}.
-		Set("appid", *p.Setting.UserId).
-		Set("redirectUrl", url.QueryEscape(callbackParams)).
-		Set("state", utils.TimestampSecond()).EncodeURLParams())
+		Set("appid", *p.Setting.Key). //appid
+		//Set("redirectUrl", url.QueryEscape(callbackParams)).
+		Set("redirectUrl", base64.StdEncoding.EncodeToString([]byte(callbackParams))).
+		Set("state", "AUTH-SHEIN-"+strconv.FormatInt(utils.TimestampSecond(), 10)).EncodeURLParams())
 }
 
 /*
@@ -113,6 +114,11 @@ func (p *Api) GetOrderDetail(Param model.BodyMap) *model.Client {
 	return &c.Client
 }
 
+/*
+获取卖家密钥账号、卖家账号openkeyId、开发者app_id
+Url :https://open.sheincorp.com/documents/apidoc/detail/3000051-1000012
+Response: OrderDetailResponse
+*/
 func (p *Api) GetByToken(Param model.BodyMap) *model.Client {
 
 	c := NewClient(p.Setting)

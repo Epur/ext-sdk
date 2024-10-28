@@ -49,10 +49,10 @@ func (p *client) Execute() {
 	p.HttpReq.Header.Set("Content-Type", "application/json;charset=UTF-8")
 	//卖家账号ID
 	if p.Request.Params.Get("openKeyId") != "" {
-		p.HttpReq.Header.Set("x-lt-openKeyId", p.Request.Params.Get("openKeyId"))
+		p.HttpReq.Header.Set("x-lt-openKeyId", p.Request.Params.Get("openKeyId")) // 访问用户隐私数据时的唯一权限标识 openKeyId
 	}
 	if *p.Request.Path == SELLER_SECRET {
-		p.HttpReq.Header.Set("x-lt-appid", *p.Setting.UserId)
+		p.HttpReq.Header.Set("x-lt-appid", *p.Setting.Key) //开发者平台appid
 	}
 	//当前时间戳（毫秒）
 	p.HttpReq.Header.Set("x-lt-timestamp", fmt.Sprintf("%d", time.Now().UnixMilli()))
