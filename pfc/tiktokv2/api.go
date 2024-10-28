@@ -910,7 +910,7 @@ func (p *Api) GetStatementTransaction202309(data StatementTransactionRequest) *m
 		param.Set("sort_order", *data.SortOrder)
 	}
 
-	result := StatementTransactionResponse{}
+	result := []StatementTransactionResponse{}
 	c := NewClient(p.Setting)
 	c.SetMethod("GET").
 		SetPath(fmt.Sprintf(STATEMENT_TRANSACTIONS_GET_URL, *data.StatementId)).
@@ -932,10 +932,10 @@ func (p *Api) GetStatementTransaction202309(data StatementTransactionRequest) *m
 		}
 
 		if len(cResult.StatementTransactions) > 0 {
-			result.StatementTransactions = append(result.StatementTransactions, cResult.StatementTransactions...)
+			result = append(result, cResult)
 		}
 
-		if len(result.StatementTransactions) >= cResult.TotalCount {
+		if len(result) >= cResult.TotalCount {
 			break
 		}
 	}
