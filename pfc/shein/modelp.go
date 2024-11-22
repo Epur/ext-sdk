@@ -147,11 +147,14 @@ type SkuAttribute struct {
 
 type GetByTokenResponse struct {
 	CommonResponse
-	Info *SecretKey `json:"info"`
+	Info    *SecretKey `json:"info"`
+	TraceId string     `json:"traceId"`
 }
 type SecretKey struct {
-	SecretKey string `json:"secretKey" validate:"required"`
-	OpenKeyId string `json:"openKeyId" validate:"required"`
-	Appid     string `json:"appid" validate:"required"`
-	State     string `json:"state,omitempty"`
+	SecretKey      string `json:"secretKey" validate:"required"`
+	OpenKeyId      string `json:"openKeyId" validate:"required"`
+	Appid          string `json:"appid" validate:"required"`
+	State          string `json:"state,omitempty"`
+	SupplierId     int64  `json:"supplierId" validate:"required"`
+	SupplierSource int64  `json:"supplierSource" validate:"required"`
 }

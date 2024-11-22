@@ -4,8 +4,8 @@ import (
 	"encoding/base64"
 	"fmt"
 	"github.com/Epur/ext-sdk/model"
-	"github.com/Epur/ext-sdk/utils"
 	"strconv"
+	"time"
 )
 
 type Api struct {
@@ -18,6 +18,7 @@ func New(setting *model.Setting) *Api {
 
 /* API授权（返回授权地址）
 ** 参考地址：https://open.sheincorp.com/documents/system/2169474d-1d4a-41a9-b9fd-427f63f54a63
+**  https://open.sheincorp.com/documents/system/2169474d-1d4a-41a9-b9fd-427f63f54a63
 **/
 
 func (p *Api) GetAuthUrl(callbackParams string) string {
@@ -26,7 +27,7 @@ func (p *Api) GetAuthUrl(callbackParams string) string {
 		Set("appid", *p.Setting.Key). //appid
 		//Set("redirectUrl", url.QueryEscape(callbackParams)).
 		Set("redirectUrl", base64.StdEncoding.EncodeToString([]byte(callbackParams))).
-		Set("state", "AUTH-SHEIN-"+strconv.FormatInt(utils.TimestampSecond(), 10)).EncodeURLParams())
+		Set("state", "AUTH-SHEIN-"+strconv.FormatInt(time.Now().UnixMilli(), 10)).EncodeURLParams())
 }
 
 /*
@@ -117,6 +118,7 @@ func (p *Api) GetOrderDetail(Param model.BodyMap) *model.Client {
 /*
 获取卖家密钥账号、卖家账号openkeyId、开发者app_id
 Url :https://open.sheincorp.com/documents/apidoc/detail/3000051-1000012
+入参:tempToken --临时token
 Response: OrderDetailResponse
 */
 func (p *Api) GetByToken(Param model.BodyMap) *model.Client {

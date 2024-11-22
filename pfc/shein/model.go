@@ -1,11 +1,11 @@
 package shein
 
 // 签名因子
-//var SignFactors = []string{
-//	"x-lt-appid",
-//	"x-lt-openKeyId",
-//	"x-lt-timestamp",
-//}
+var SignFactors = []string{
+	"x-lt-appid",
+	"x-lt-openKeyId",
+	"x-lt-timestamp",
+}
 
 type OrderListRequest struct {
 	QueryType   int64  `json:"queryType" validate:"required"`

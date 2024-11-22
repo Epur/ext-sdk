@@ -84,11 +84,11 @@ func (p *client) Execute() {
 	//p.Response.Response.RequestId = result.RequestId
 	p.Response.Response.Data = result.Info
 
-	if result.Code == "0" {
+	if result.Code == SUCCESS {
 		p.Response.Success = true
 	}
 	// 新增错误返回
-	if result.Code != "0" {
+	if result.Code != SUCCESS {
 		p.Err = utils.Err(result.Msg)
 	}
 
@@ -104,27 +104,33 @@ func (p *client) sign() string {
 
 	//获取contentType类型
 	var message bytes.Buffer
-	for key, value := range p.HttpReq.Header {
-		if value == nil {
+	for idx := range SignFactors {
+		v := p.HttpReq.Header.Get(SignFactors[idx])
+		if strings.Compare(strings.Trim(v, " "), "") == 0 {
 			continue
 		}
-		message.WriteString(fmt.Sprintf("%s&", p.HttpReq.Header.Get(key)))
+		message.WriteString(fmt.Sprintf("%s&", v))
 	}
+	//增加url:从域名com后开始截取到结尾，urlPath=/open-api/order/purchase-order-infos
+	message.WriteString(fmt.Sprintf("%s", *p.Request.Path))
 	msg := message.String()
+	//msg = msg[:len(msg)-1]
 
-	signedStr, _ := p.generateSHA256(msg)
 	randomKey := utils.GenerateRandomString(5)
-	//return hex.EncodeToString(hash.Sum(nil))
-	return fmt.Sprintf("%s%s", randomKey, signedStr)
+	//return  randomKey + hex.EncodeToString(hash.Sum(nil))
+	signedStr, _ := p.generateSHA256(msg, randomKey)
+
+	//return  randomKey + hex.EncodeToString(hash.Sum(nil))
+	return signedStr
 }
 
 // 参考地址：https://open.sheincorp.com/documents/system/passwdrule
-func (p *client) generateSHA256(input string) (string, error) {
-	hash := hmac.New(sha256.New, []byte(*p.Client.Setting.Secret))
+func (p *client) generateSHA256(input string, randomKey string) (string, error) {
+	hash := hmac.New(sha256.New, []byte(*p.Client.Setting.Secret+randomKey))
 	if _, err := hash.Write([]byte(input)); err != nil {
 		return "", err
 	}
-	return base64.StdEncoding.EncodeToString(hash.Sum(nil)), nil
+	return fmt.Sprintf("%s%s", randomKey, base64.StdEncoding.EncodeToString(hash.Sum(nil))), nil
 }
 
 func (p *client) urlParse() string {
