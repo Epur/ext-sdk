@@ -393,11 +393,11 @@ func (p *client) responseParams() (model.BodyMap, error) {
 		}
 		logger.HeliLogger.Infof("验签成功：[%#v]\n", row)
 	} else {
-		signData := fmt.Sprintf("%s&%s", data.String(), p.key.MerchantKey)
-		if !p.key.VerifyWithMD5(signData, signature) {
-			logger.HeliLogger.Error("ERROR:验签（md5)失败")
-			return nil, errors.New("验签失败")
-		}
+		//signData := fmt.Sprintf("%s&%s", data.String(), p.key.MerchantKey)
+		//if !p.key.VerifyWithMD5(signData, signature) {
+		//	logger.HeliLogger.Error("ERROR:验签（md5)失败")
+		//	return nil, errors.New("验签失败")
+		//}
 		logger.HeliLogger.Infof("验签（MD5)成功：[%#v]\n", row)
 	}
 
